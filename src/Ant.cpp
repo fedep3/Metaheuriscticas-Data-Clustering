@@ -6,8 +6,8 @@
  *
  * @section Descripción
  *
- * Clase concreta donde se definen las funciones y variables
- * necesarias para ejecutar la metaheurística K-means.
+ * Clase que representa una hormiga usada valga la redundancia en el algoritmo
+ * de Hormiga.
  */
 
 #include "Ant.h"
@@ -33,6 +33,10 @@ Ant::~Ant(){
 
 }
 
+/*
+ * Cambia el estado de la hormiga ya que tomó un pixel.
+ * @param p Pixel que agarró.
+ */
 void Ant::pick(int p){
 
     pixel = p;
@@ -40,6 +44,11 @@ void Ant::pick(int p){
     
 }
 
+/*
+ * Suelta el pixel que tiene y modifica su memoria agregando a ella
+ * donde lo dejó.
+ * @param cell Célula donde va a dejar el pixel.
+ */
 void Ant::drop(int cell){
 
     bool done = false;
@@ -79,24 +88,37 @@ void Ant::drop(int cell){
     }
 }
 
+/*
+ * Devuelve la posicion pos del arreglo de momoria.
+ * @param pos Posición a acceder.
+ */   
 int Ant::getPixel(){
 
     return pixel;
     
 }
 
+/*
+ * Devuelve el tamaño de la memoria.
+ */
 int Ant::getM(int pos){
 
     return memory[pos];
     
 }
 
+/*
+ * Devuelve el tamaño de la memoria.
+ */
 int Ant::getMSize(){
 
     return msize;
 
 }    
 
+/*
+ * Indica si la hormiga carga un pixel o no.
+ */
 bool Ant::isFree(){
 
     return free;

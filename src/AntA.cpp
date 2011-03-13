@@ -4,10 +4,10 @@
  * @author Alexander De Sousa 06-39439, 
  *         Federico Ponte     06-40108
  *
- * @section Descripci�n
+ * @section Descripción
  *
  * Clase concreta donde se definen las funciones y variables
- * necesarias para ejecutar la metaheur�stica K-means.
+ * necesarias para ejecutar el algoritmo hormiga.
  */
 
 #include "AntA.h"
@@ -16,12 +16,12 @@
  * Constructor de la clase AntA.
  *
  * @param _d   Datos del problema.
- * @param _m   Dimensi�n de cada dato.
+ * @param _m   Dimensión de cada dato.
  * @param _n   Cantidad de datos.
  * @param _k   Cantidad de clusters (iniciales).
  * @param _nA  Cantidad de hormigas.
  * @param _it  Cantidad de iteraciones.
- * @param _met M�trica.
+ * @param _met Métrica.
  */
 AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
 : Metaheuristic(_d, _m, _n, _n, _met){
@@ -29,6 +29,36 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
     nA = _nA;
     maxit = _it;
     ac = false;
+
+    free = new int[N];
+    cells = new vector<int>[N];    
+    ants = new Ant[nA];
+
+    globalSize = 0;
+    globalMemory = new int[GM];
+
+}
+
+/**
+ * Constructor de la clase AntA.
+ *
+ * @param _d      Datos del problema.
+ * @param _m      Dimensión de cada dato.
+ * @param _n      Cantidad de datos.
+ * @param _k      Cantidad de clusters (iniciales).
+ * @param _nA     Cantidad de hormigas.
+ * @param _alpha2 Parametro usado para las probabilidades.
+ * @param _it     Cantidad de iteraciones.
+ * @param _met Métrica.
+ */
+AntA::AntA(float** _d, int _m, int _n, int _nA, float _alpha2, 
+                                                int _it, int _met)
+: Metaheuristic(_d, _m, _n, _n, _met){
+   
+    nA = _nA;
+    maxit = _it;
+    alpha2 = _alpha2;
+    ac = true;
 
     free = new int[N];
     cells = new vector<int>[N];    
@@ -87,6 +117,11 @@ void AntA::run(int type){
     
 }
 
+/*
+ * Va a buscar los pixeles que no estan siendo cargados y la hormiga va a inten-
+ * tar agarrarlo.
+ * @param Número de la hormiga.
+ */
 void AntA::pickAnt(int ra){
 
     int rp = 0, rc = 0;
@@ -115,6 +150,9 @@ void AntA::pickAnt(int ra){
     }
 }
 
+/*
+ * Se encarga de armar la solutción a partir de la células y las hormigas.
+ */
 void AntA::reconstruct(){
 
     float actual = 0.0, max = -1.0;
@@ -192,6 +230,27 @@ void AntA::reconstruct(){
 
 }
 
+/*
+ * Procedimiento que se encarga de soltar el pixel de una hormiga. Funciona
+ * del siguiente modo:
+ *
+ *    Si (Memoria global no esta llena)
+ *      entonces 
+ *          Si (memoria de la hormiga tiene por lo menos 1)
+ *              entonces Revisa la memoria local de la hormiga y elige la mejor 
+ *                       célula donde dejar, en caso que no logre soltar el
+ *                       pixel intenta en una ceĺula aleatoria
+ *              sino Dejar el pixel en una célula aleatoria
+ *      sino
+ *          Revisa la memoria global y elige la mejor célula donde dejar, en 
+ *          caso que no logre soltar el pixel, intenta revisando la 
+ *          memoria de la hormiga y si aún no lo logra, busca tratar
+ *          de dejarlo en una célula aleatoria.
+ *
+ *    Finalmente busca agregar la célula donde soltó en la memoria.
+ *
+ * @param ra Número de la hormiga que quiere soltar el pixel.
+ */
 void AntA::dropAnt(int ra){
 
     int j = 0, best = 0, rc = ants[ra].getPixel(), rp = 0, actual = 0;
@@ -219,6 +278,7 @@ void AntA::dropAnt(int ra){
 
                 free[rp] = rc;
                 ants[ra].drop(rc);
+                addMemory(rc);
                 done = true;
 
             }
@@ -235,6 +295,7 @@ void AntA::dropAnt(int ra){
 
                     free[rp] = rc;
                     ants[ra].drop(rc);
+                    addMemory(rc);
 
                 }
 
@@ -252,6 +313,7 @@ void AntA::dropAnt(int ra){
 
                 free[rp] = rc;
                 ants[ra].drop(rc);
+                addMemory(rc);
 
             }
 
@@ -276,6 +338,7 @@ void AntA::dropAnt(int ra){
 
             free[rp] = rc;
             ants[ra].drop(rc);
+            addMemory(rc);
             done = true;
 
         }
@@ -302,6 +365,7 @@ void AntA::dropAnt(int ra){
 
                     free[rp] = rc;
                     ants[ra].drop(rc);
+                    addMemory(rc);
                     done = true;
 
                 }
@@ -318,6 +382,7 @@ void AntA::dropAnt(int ra){
 
                         free[rp] = rc;
                         ants[ra].drop(rc);
+                        addMemory(rc);
 
                     }
 
@@ -335,6 +400,7 @@ void AntA::dropAnt(int ra){
 
                     free[rp] = rc;
                     ants[ra].drop(rc);
+                    addMemory(rc);
 
                 }
 
@@ -345,10 +411,12 @@ void AntA::dropAnt(int ra){
 
     }
 
-    addMemory(rc);
-
 }
 
+/*
+ * Agrega la célula cell a la memoria global en caso de no encontrarse.
+ * @param Célula que se quiere agregar.
+ */
 void AntA::addMemory(int cell){
 
     bool done = false;
@@ -386,6 +454,12 @@ void AntA::addMemory(int cell){
 
 }
 
+
+/*
+ * Calcula la probabilidad agarrar un pixel en la célula cell.
+ * @param pixel Pixel que se quiere agarrar.
+ * @param cell Célula donde donde se encuentra.
+ */
 float AntA::ppick(int pixel, int cell){
 
     int size = cells[cell].size();
@@ -399,6 +473,11 @@ float AntA::ppick(int pixel, int cell){
 
 }
 
+/*
+ * Calcula la probabilidad de dejar un pixel en la celula cell dada.
+ * @param pixel Pixel que se quiere soltar.
+ * @param cell Célula donde se quiere soltar.
+ */
 float AntA::pdrop(int pixel, int cell){
 
     return 1 - pow(cos(PIH * f(pixel, cell)),2 );
@@ -406,6 +485,12 @@ float AntA::pdrop(int pixel, int cell){
 }
 
 
+/*
+ * Funciones que devuelve el promedio de distancia entre el pixel y los
+ * que se encuentra en la célula cell.
+ * @param pixel Pixel que se quiere soltar.
+ * @param cell Célula donde se quiere soltar.
+ */
 float AntA::f(int pixel, int cell){
 
     float sum = 0.0;
@@ -426,11 +511,11 @@ float AntA::f(int pixel, int cell){
 }
 
 /**
- * Intercambio la posici�n f y s, del arreglo dado.
+ * Intercambio la posición f y s, del arreglo dado.
  *
  * @param array Arreglo a intercambiar.
- * @param f Primero posici�n.
- * @param s Segundo posici�n.
+ * @param f Primero posición.
+ * @param s Segundo posición.
  */
 inline void AntA::swap(int *array, int f, int s){
 
@@ -442,7 +527,8 @@ inline void AntA::swap(int *array, int f, int s){
 
 
 /**
- * Inicializa los centroides de los clusters.
+ * Inicializa las células donde las hormigas va a recoger y soltar
+ * los pixeles. También hace que cada hormiga recoga un pixel.
  */
 void AntA::initialize(){
 
@@ -477,6 +563,9 @@ void AntA::initialize(){
 
 }
 
+/*
+ * Calcula el parámetro alpha2 usado en las probabilidades.
+ */
 void AntA::calcAlpha(){
 
     int i, j;

@@ -6,8 +6,8 @@
  *
  * @section Descripción
  *
- * Clase concreta donde se definen las funciones y variables
- * necesarias para ejecutar el diferential evolution.
+ * Clase que representa una hormiga usada valga la redundancia en el algoritmo
+ * de Hormiga.
  */
 
 #ifndef _Ant_
@@ -23,35 +23,73 @@ using namespace std;
 #define MM 5
 
 
-using namespace std;
-
 class Ant{
     public:
 
+        /*
+         * Constructor de la clase Ant.
+         */
         Ant();
 
+        /*
+         * Destructor de la clase Ant.
+         */
         ~Ant();
 
+        /*
+         * Cambia el estado de la hormiga ya que tomó un pixel.
+         * @param p Pixel que agarró.
+         */
         void pick(int p);
 
+        /*
+         * Suelta el pixel que tiene y modifica su memoria agregando a ella
+         * donde lo dejó.
+         * @param cell Célula donde va a dejar el pixel.
+         */
         void drop(int cell);
-        
+
+        /*
+         * Devuelve el parámetro pixel de la clase.
+         */        
         int getPixel();
-        
+
+        /*
+         * Devuelve la posicion pos del arreglo de momoria.
+         * @param pos Posición a acceder.
+         */        
         int getM(int pos);
         
+        /*
+         * Devuelve el tamaño de la memoria.
+         */
         int getMSize();
 
+        /*
+         * Indica si la hormiga carga un pixel o no.
+         */
         bool isFree();
 
     private:
 
+        /*
+         * Pixel que carga.
+         */
         int pixel;
 
+        /*
+         * Booleano que indica si carga o no un pixel.
+         */
         bool free;
 
+        /*
+         * Arreglo de memoria.
+         */
         int *memory;
 
+        /*
+         * Tamaño actual de la memoria..
+         */
         int msize;
 
 
