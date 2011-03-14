@@ -24,7 +24,6 @@
 using namespace std;
 
 #define PIH 1.570796327
-#define GM 10
 
 class AntA : public Metaheuristic{
     public:
@@ -70,7 +69,9 @@ class AntA : public Metaheuristic{
         virtual void initialize();
 
         /**
-         * Ejecuta la metaheurística con los datos dados.
+         * Ejecuta la metaheurística con los datos dados. Además al final
+         * de ella ejecuta un K-means, ya que la imagen que genera tiene
+         * mucho ruido.
          *
          * @param type Si se utilizará una función objetivo de
          *             maximización o de minimización.
@@ -97,6 +98,7 @@ class AntA : public Metaheuristic{
         /*
          * Funciones que devuelve el promedio de distancia entre el pixel y los
          * que se encuentra en la célula cell.
+         *
          * @param pixel Pixel que se quiere soltar.
          * @param cell Célula donde se quiere soltar.
          */
@@ -104,6 +106,7 @@ class AntA : public Metaheuristic{
         
         /*
          * Calcula la probabilidad de dejar un pixel en la celula cell dada.
+         *
          * @param pixel Pixel que se quiere soltar.
          * @param cell Célula donde se quiere soltar.
          */
@@ -111,20 +114,16 @@ class AntA : public Metaheuristic{
         
         /*
          * Calcula la probabilidad agarrar un pixel en la célula cell.
+         *
          * @param pixel Pixel que se quiere agarrar.
          * @param cell Célula donde donde se encuentra.
          */
         float ppick(int pixel, int cell);
 
         /*
-         * Agrega la célula cell a la memoria global en caso de no encontrarse.
-         * @param Célula que se quiere agregar.
-         */
-        void addMemory(int cell);
-        
-        /*
          * Va a buscar los pixeles que no estan siendo cargados y la hormiga va a inten-
          * tar agarrarlo.
+         *
          * @param Número de la hormiga.
          */
         void pickAnt(int ra);
@@ -138,20 +137,11 @@ class AntA : public Metaheuristic{
          * Procedimiento que se encarga de soltar el pixel de una hormiga. Funciona
          * del siguiente modo:
          *
-         *    Si (Memoria global no esta llena)
-         *      entonces 
-         *          Si (memoria de la hormiga tiene por lo menos 1)
-         *              entonces Revisa la memoria local de la hormiga y elige la mejor 
-         *                       célula donde dejar, en caso que no logre soltar el
-         *                       pixel intenta en una ceĺula aleatoria
-         *              sino Dejar el pixel en una célula aleatoria
-         *      sino
-         *          Revisa la memoria global y elige la mejor célula donde dejar, en 
-         *          caso que no logre soltar el pixel, intenta revisando la 
-         *          memoria de la hormiga y si aún no lo logra, busca tratar
-         *          de dejarlo en una célula aleatoria.
-         *
-         *    Finalmente busca agregar la célula donde soltó en la memoria.
+         * Si (memoria de la hormiga tiene por lo menos 1)
+         *     entonces Revisa la memoria local de la hormiga y elige la mejor 
+         *         célula donde dejar, en caso que no logre soltar el
+         *         pixel intenta en una ceĺula aleatoria
+         * sino Dejar el pixel en una célula aleatoria
          *
          * @param ra Número de la hormiga que quiere soltar el pixel.
          */
@@ -191,16 +181,6 @@ class AntA : public Metaheuristic{
          * Booleano que indica si el parámetro alpha2 fue dado.
          */
         bool ac;
-
-        /*
-         * Arreglo para la memoria global.
-         */
-        int* globalMemory;
-
-        /*
-         * Tamaño actual de la memoria global.
-         */
-        int globalSize;
 
 };
 #endif
