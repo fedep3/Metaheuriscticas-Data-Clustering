@@ -151,6 +151,17 @@ class Metaheuristic{
         int bestCluster(int i, int e);
 
         /**
+         * Busca el mejor cluster para un objeto.
+         *
+         * @param solution Solución.
+         * @param centroids Centroides.
+         * @param e Objeto.
+         *
+         * @return Mejor cluster para el objeto.
+         */
+        int bestCluster(float **centroid, int e);
+
+        /**
          * Métrica DB. A menor valor de DB, mejor es la solución.
          *
          * @param i Individuo.

@@ -1,6 +1,7 @@
 CC       := gcc
 CFLAGS   := -c -Wall -O2
 LDFLAGS  := -lstdc++ -ltiff
+DGLAG    := -c -g
 OBJFILES := $(patsubst src/%.cpp,obj/%.o,$(wildcard src/*.cpp))
 RM       := rm -f
 

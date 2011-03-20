@@ -28,7 +28,7 @@
 #include "PSO.h"
 #include "AntA.h"
 #include "DE.h"
-#include "DEKMax.h"
+#include "Bee.h"
 
 #ifndef _HELPERS_
 #define _HELPERS_

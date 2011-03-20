@@ -23,13 +23,18 @@
  * @param _t   Número de iteraciones.
  * @param _met Métrica.
  */
-DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float *_zmx,
-                                                  float *_zmn, int _met)
-: Metaheuristic(_d, _m, _n, _k, _met){
+DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
+       float _w2, float _w3, float *_zmx, float *_zmn)
+: Metaheuristic(_d, _m, _n, _k, 0){
 
     int i, j;
 
     I = _i;
+    maxit = _it;
+    var = true;
+    w1 = _w1;
+    w2 = _w2;
+    w3 = _w3;
 
     Zmax = 0.0;
     for(i = 0; i < M; ++i)
@@ -54,8 +59,6 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float *_zmx,
 
     of = new float[I]; //Valor de las funciones objetivo.
 
-    maxit = _it;
-    var = true;
 }
 
 /**
@@ -73,11 +76,18 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float *_zmx,
  * @param _met Métrica.
  */
 DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr, 
-                                   float _F, float *_zmx, float *_zmn, int _met)
-: Metaheuristic(_d, _m, _n, _k, _met){
+       float _F, float _w1, float _w2, float _w3, float *_zmx, float *_zmn)
+: Metaheuristic(_d, _m, _n, _k, 0){
     int i, j;
 
     I = _i;
+    w1 = _w1;
+    w2 = _w2;
+    w3 = _w3;
+    maxit = _it;
+    F = _F;
+    Cr = _Cr;
+    var = false;
 
     Zmax = 0.0;
     for(i = 0; i < M; ++i)
@@ -102,10 +112,6 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr,
 
     of = new float[I]; //Valor de las funciones objetivo.
 
-    maxit = _it;
-    F = _F;
-    Cr = _Cr;
-    var = false;
 }
 
 /**
@@ -196,7 +202,7 @@ void DE::run(int type){
                 }
             }
 
-            assign(auxSol, auxCent);
+          assign(auxSol, auxCent);
 
             if((auxOf = foMin(auxSol, auxCent, K)) < of[i]){
             
@@ -280,32 +286,6 @@ int DE::countClust(int *solution){
 
 
 /**
- * Busca el mejor cluster para un objeto, tomando en cuanta los centroi-
- * des activados.
- *
- * @param centroid Centroides del individuo.
- * @param e Objeto.
- *
- * @return Mejor cluster para el objeto.
- */
-int DE::bestCluster( float **centroid, int e){
-
-    int j;
-    float mn = numeric_limits<float>::infinity();
-    float t;
-    int c = 0;
-    for(j = 0; j < Kmax; ++j){
-        t = d(centroid[j], data[e]);
-        if(mn > t){
-            mn = t;
-            c  = j;
-        }
-    }
-    return c;
-    
-}
-
-/**
  * Intercambio la posición f y s, del arreglo dado.
  *
  * @param array Arreglo a intercambiar.
@@ -362,26 +342,29 @@ int DE::getBetter(int type){
  * Inicializa los centroides de los clusters.
  */
 void DE::initialize(){
+
     int i, j, l;
-    int k, size = N;
+    int k, size;
 
     int done[N];
 
-    for(i = 0; i < N; ++i)
-        done[i] = i;
-
     for(i = 0; i < I ; ++i){
+
+        for(l = 0; l < N; ++l)
+            done[l] = l;
+        
+        size = N;
+
         for(j = 0; j < Kmax; ++j){
         
-            k = done[rand()%size];
-            swap(done, k, size);
+            k = rand()%size;
+            swap(done, k, size-1);
             size--;
 
             for(l = 0; l < M; ++l)
                 centroid[i][j][l] = data[k][l];
-            
-        }
 
+        }
 
     }
 
@@ -390,7 +373,8 @@ void DE::initialize(){
 /**
  * Reasigna los elementos a cada cluster en una partícula.
  *
- * @param p Párticula.
+ * @param solution Solucion.
+ * @param centroid Centroide.
  */
 void DE::assign(int *solution, float **centroid){
     int i, j;
@@ -478,6 +462,7 @@ float DE::deFO(int* sol, float** cent, int k){
     float je   = 0.0;
     float dmin = numeric_limits<float>::infinity();
     float t    = 0.0;
+    float res  = 0.0;
 
     float* sums = new float[k];
     for(i = 0; i < k; ++i){
@@ -502,7 +487,7 @@ float DE::deFO(int* sol, float** cent, int k){
             dmax = sums[i];
     }
 
-    dmax = (0.5 * dmax) / Zmax;
+    res += w1 * dmax;
 
     //Cálculo de dmin.
     for(i = 0; i < k; ++i){
@@ -515,14 +500,15 @@ float DE::deFO(int* sol, float** cent, int k){
         }
     }
 
-    dmin = dmin / Zmax;
+    res += w2 * ( Zmax - dmin );
 
     //Cálculo de Je.
     je = je / k;
-    je = (0.5 * je) / Zmax;
+
+    res += w3 * je;
 
     delete [] sums;
 
-    return ( (dmax + je) / dmin );
+    return res;
 
 }

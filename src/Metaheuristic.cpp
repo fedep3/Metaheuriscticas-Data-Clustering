@@ -177,12 +177,25 @@ float Metaheuristic::norm(float* vec, int dim, float q){
  * @return Mejor cluster para el objeto.
  */
 int Metaheuristic::bestCluster(int i, int e){
+    return bestCluster(centroid[i], e);
+}
+
+/**
+ * Busca el mejor cluster para un objeto.
+ *
+ * @param solution Solución.
+ * @param centroids Centroides.
+ * @param e Objeto.
+ *
+ * @return Mejor cluster para el objeto.
+ */
+int Metaheuristic::bestCluster(float **centroid, int e){
     int j;
     float mn = numeric_limits<float>::infinity();
     float t;
     int c = -1;
     for(j = 0; j < K; ++j){
-        t = d(centroid[i][j], data[e]);
+        t = d(centroid[j], data[e]);
         if(mn > t){
             mn = t;
             c  = j;

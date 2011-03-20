@@ -144,17 +144,34 @@ float _vmx = 0.0;
 bool weighted = false;
 
 ///////////////////////////////////////////
+// Opciones del Algoritmo Bee.
+/**
+ * Cantidad de sitios a explorar.
+ */
+int _m_sites = 0;
+
+/**
+ * Cantidad de sitios élite.
+ */
+int _e_sites = 0;
+
+/**
+ * Cantidad de abejas a sitios élite.
+ */
+int _e_bees = 0;
+
+/**
+ * Cantidad de abejas a sitios no-élite.
+ */
+int _o_bees = 0;
+
+///////////////////////////////////////////
 // Opciones del Algoritmo DE.
 
 /**
  * Parámetro de escalado de los vectores.
  */
 float _f = 0.0;
-
-/**
- * Si se usará la versión con máxima cantidad de clusters o no.
- */
-bool _kmax = false;
 
 /**
  * Inicializa el contador.
@@ -232,38 +249,26 @@ void help(bool fullhelp){
 
         //Opciones Poblacionales.
         printf("\n\033[34;1mOpciones Poblacionales\033[0m\n");
-        //Cantidad de individuos/partículas.
         printf("\t--i <Cantidad de individuos/partículas>\n");
 
 
         //Opciones Algoritmo Genético.
         printf("\n\033[34;1mOpciones Algoritmo Genético\033[0m\n");
-        //Probabilidad de mutación.
         printf("\t--pm <Probabilidad de mutación>\n");
-        //Probabilidad de cruce.
         printf("\t--pc <Probabilidad de cruce>\n");
-        //Tamaño del torneo.
         printf("\t--tt <Tamaño del torneo>\n");
 
         //Opciones Algoritmo PSO.
         printf("\n\033[34;1mOpciones Algoritmo PSO\033[0m\n");
-        //Probabilidad de mutación.
         printf("\t--c1 <Constante de la componente cognitiva>\n");
-        //Probabilidad de cruce.
         printf("\t--c2 <Constante de la componente social>\n");
-        //Tamaño del torneo.
         printf("\t--W <Peso inercial>\n");
-        //Peso de la distancia intracluster.
         printf("\t--w1 <Peso de la distancia intracluster>\n");
-        //Peso de la distancia intercluster.
         printf("\t--w2 <Peso de la distancia intercluster>\n");
-        //Peso del error.
         printf("\t--w3 <Peso del error>\n");
-        //Valor mínimo de un atributo.
         printf("\t--mx <Valor máximo de un atributo>\n\
 \t\t\033[34;1ma1,a2,...,am\033[0m - Donde ai es el máximo valor\n\
 \t\t\tpara el atributo i.\n");
-        //Valor máximo de un atributo.
         printf("\t--mn <Valor mínimo de un atributo>\n\
 \t\t\033[34;1ma1,a2,...,am\033[0m - Donde ai es el mínimo valor\n\
 \t\t\tpara el atributo i.\n");
@@ -273,12 +278,16 @@ void help(bool fullhelp){
 
         //Opciones Algoritmo DE.
         printf("\n\033[34;1mOpciones Algoritmo DE\033[0m\n");
-        //Probabilidad de mutación.
         printf("\t--f <Parámetro de escalado>\n");
-        //Probabilidad de cruce.
         printf("\t--pc <Probabilidad de cruce>\n");
-        //Tamaño del torneo.
         printf("\t--kmax - Si se utilizará una cantidad máxima de clusters.\n");
+
+        //Opciones Algoritmo Bee.
+        printf("\n\033[34;1mOpciones Algoritmo de Abeja\033[0m\n");
+        printf("\t--m <Cantidad de parches de exploración>\n");
+        printf("\t--e <Cantidad de parches élite>\n");
+        printf("\t--eb <Cantidad de abejas a parches élite>\n");
+        printf("\t--ob <Cantidad de abejas a parches no-élite>\n");
     }
 }
 
@@ -340,6 +349,8 @@ void initIt(int argc, char* argv[]){
     for(c = 0; c < 3; ++c) optga[c]  = false;
     bool* optpso = new bool[9];
     for(c = 0; c < 9; ++c) optpso[c] = false;
+    bool* optbee  = new bool[4];
+    for(c = 0; c < 9; ++c) optpso[c] = false;
     bool optde = false;
 
     //////////////////////////////////////////
@@ -377,8 +388,13 @@ void initIt(int argc, char* argv[]){
             {"vmx", required_argument, 0,'S'},
             {"weighted", no_argument, 0, 'T'},
             /* Opciones del DE */
-            {"kmax", no_argument, 0, 'U'}, //DE o DEKMax
-            {"f", required_argument, 0,'V'}
+            {"f", required_argument, 0,'U'},
+            //w1,w2,w3,pc
+            /* BEE */
+            {"m", required_argument, 0,'W'},
+            {"e", required_argument, 0,'X'},
+            {"eb", required_argument, 0,'Y'},
+            {"ob", required_argument, 0,'Z'}
 
             
         };
@@ -557,9 +573,6 @@ void initIt(int argc, char* argv[]){
                 weighted = true;
                 break;
             case 'U':
-                _kmax = true;
-                break;
-            case 'V':
                 _f = atof(optarg);
                 if(_f < 0.5 || _f > 1.0){
                     fprintf(stderr, "El parámetro de escalado f debe estar entre 0.5 y 1.0\n");
@@ -567,6 +580,22 @@ void initIt(int argc, char* argv[]){
                     noerror = false;
                 }
                 optde = true;
+                break;
+            case 'W':
+                _m_sites = atoi(optarg);
+                optbee[0] = true;
+                break;
+            case 'X':
+                _e_sites = atoi(optarg);
+                optbee[1] = true;
+                break;
+            case 'Y':
+                _e_bees = atoi(optarg);
+                optbee[2] = true;
+                break;
+            case 'Z':
+                _o_bees = atoi(optarg);
+                optbee[3] = true;
                 break;
             case '?':
                 help(true);
@@ -589,6 +618,14 @@ void initIt(int argc, char* argv[]){
             for(c = 0; c < 6; ++c)
                 if(c != 4)
                     optgen[0] = optgen[0] && optgen[c];
+            break;
+        case M_DE:
+        case M_PSO:
+            for(c = 2; c < 6; ++c)
+                if(c != 4)
+                    optgen[1] = optgen[1] && optgen[c];
+
+            optgen[0] = optgen[1];
             break;
         default:
             for(c = 0; c < 6; ++c) optgen[0] = optgen[0] && optgen[c];
@@ -656,28 +693,33 @@ void initIt(int argc, char* argv[]){
             }
             break;
         case M_DE:
-            if(_kmax){
-                if(optde && optga[1])
-                    second = true;
-                algorithm = M_DEKMax;
-            }else{
-                if(!optpso[6] || !optpso[7]){
-                    fprintf(stderr, "Debe definir los vectores de máximo y mínimo\n");
-                    noerror = false;
-                }
-
-                if(r->M != mxs || r->M != mns){
-                    fprintf(stderr, "Los tamaños de los vectores máximo o mínimos valores de atributos\n");
-                    fprintf(stderr, "no concuerdan\n");
-                    fprintf(stderr, "Cantidad de Atributos: %d\n", r->M);
-                    fprintf(stderr, "Cantidad de Atributos del Máximo: %d\n", mxs);
-                    fprintf(stderr, "Cantidad de Atributos del Mínimo: %d\n", mns);
-                    noerror = false;
-                }
-
-                if(optde && optga[1])
-                    second = true;
+            if(!indiv){
+                fprintf(stderr, "Se necesita definir la cantidad de individuos.\n");
+                noerror = false;
             }
+
+            if(!optpso[3] || !optpso[4] || !optpso[5]){
+                fprintf(stderr, "Debe definir los 3 pesos requeridos\n");
+                noerror = false;
+            }
+
+
+            if(!optpso[6] || !optpso[7]){
+                fprintf(stderr, "Debe definir los vectores de máximo y mínimo\n");
+                noerror = false;
+            }
+
+            if(r->M != mxs || r->M != mns){
+                fprintf(stderr, "Los tamaños de los vectores máximo o mínimos valores de atributos\n");
+                fprintf(stderr, "no concuerdan\n");
+                fprintf(stderr, "Cantidad de Atributos: %d\n", r->M);
+                fprintf(stderr, "Cantidad de Atributos del Máximo: %d\n", mxs);
+                fprintf(stderr, "Cantidad de Atributos del Mínimo: %d\n", mns);
+                noerror = false;
+            }
+
+            if(optde && optga[1])
+                second = true;
             break;
         case M_ANT:
             printf("Se harán %d iteraciones.\n", _reps);
@@ -687,6 +729,23 @@ void initIt(int argc, char* argv[]){
             }
             break;
         case M_BEE:
+
+            if(!indiv){
+                fprintf(stderr, "Se necesita definir la cantidad de abejas.\n");
+                noerror = false;
+            }
+
+            if(_I < ( _e_bees + _o_bees )){
+                fprintf(stderr, "La suma entre las abejas élite y las no-élite\n");
+                fprintf(stderr, "debe ser menor o igual que la cantidad de individuos\n");
+                noerror = false;
+            }
+
+            if(_e_sites > _m_sites){
+                fprintf(stderr, "La suma entre las abejas élite y las no-élite\n");
+                fprintf(stderr, "debe ser menor o igual que la cantidad de individuos\n");
+                noerror = false;
+            }
             break;
         default:
             fprintf(stderr, "Algoritmo desconocido.\n");
@@ -725,30 +784,22 @@ void initIt(int argc, char* argv[]){
                 break;
             case M_DE:
                 if(second){
-                    m = new DE(r->data, r->M, r->N, _K, _I,
-                                _reps, _pc, _f,
-                                _mxv, _mnv, 0);
+                    m = new DE(r->data, r->M, r->N, _K, _I, 
+                                _reps, _pc, _f, _w1, _w2, _w3,
+                                _mxv, _mnv);
                 }else{
                     m = new DE(r->data, r->M, r->N, _K, _I,
-                                _reps, _mxv, _mnv, 0);
+                                _reps, _w1, _w2, _w3, _mxv, _mnv);
                 }
 
                 delete [] _mxv;
                 delete [] _mnv;
                 break;
-            case M_DEKMax:
-                if(second){
-                    m = new DEKMax(r->data, r->M, r->N, _K, _I, _reps, _pc, _f, M_DB);
-                }else{
-                    m = new DEKMax(r->data, r->M, r->N, _K, _I, _reps, M_DB);
-                }
-                break;
             case M_ANT:
                 m = new AntA(r->data, r->M, r->N, _I, _reps, M_DB);
                 break;
             case M_BEE:
-                printf("Bee: Algoritmo no implementado.\n");
-                exit(0);
+                m = new Bee(r->data, r->M, r->N, _K, _I, _m_sites, _e_sites, _e_bees, _o_bees, M_DB, _reps);
                 break;
             default:
                 fprintf(stderr, "Algoritmo desconocido.\n");
@@ -761,6 +812,7 @@ void initIt(int argc, char* argv[]){
 
     // FIN
 
+    delete [] optbee;
     delete [] optgen;
     delete [] optga;
     delete [] optpso;

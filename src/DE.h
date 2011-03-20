@@ -39,8 +39,8 @@ class DE : public Metaheuristic{
          * @param _it  Número de iteraciones.
          * @param _met Métrica.
          */
-        DE(float** _d, int _m, int _n, int _k, int _i, int _it, float *_zmx, 
-                                                       float *_zmn, int _met);
+        DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
+           float _w2, float _w3, float *_zmx, float *_zmn);
 
         /**
          * Constructor de la clase DE.
@@ -57,7 +57,7 @@ class DE : public Metaheuristic{
          * @param _met Métrica.
          */
         DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr, 
-                               float _F, float *_zmx, float *_zmn, int _met);
+           float _F, float _w1, float _w2, float _w3, float *_zmx, float *_zmn);
 
         /**
          * Inicializa la población. (Soluciones, centroides y
@@ -81,18 +81,6 @@ class DE : public Metaheuristic{
     protected:
 
         /**
-         * Busca el mejor cluster para un objeto, tomando en cuanta los centroi-
-         * des activados.
-         *
-         * @param centroid Centroides del individuo.
-         * @param activation Arreglo con los valores de activación de los centroides.
-         * @param e Objeto.
-         *
-         * @return Mejor cluster para el objeto.
-         */
-        int bestCluster( float **centroid, int e);
-
-        /**
          * Intercambio la posición f y s, del arreglo dado.
          *
          * @param array Arreglo a intercambiar.
@@ -101,6 +89,12 @@ class DE : public Metaheuristic{
          */
         void swap(int *array, int f, int s);
 
+        /**
+         * Reasigna los elementos a cada cluster en una partícula.
+         *
+         * @param solution Solucion.
+         * @param centroid Centroide.
+         */
         void assign(int *solution, float **centroid);
 
         /**
@@ -170,7 +164,25 @@ class DE : public Metaheuristic{
          */
         bool var;
 
+        /**
+         * Máxima distancia posible entre objetos.
+         */
         float Zmax;
+
+        /**
+         * Peso de la distacia entre elementos de un cluster.
+         */
+        float w1;
+
+        /**
+         * Peso de la distancia entre clusters.
+         */
+        float w2;
+
+        /**
+         * Peso del error.
+         */
+        float w3;
 
 };
 #endif
