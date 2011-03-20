@@ -99,8 +99,7 @@ void AntA::run(int type){
         
     }
 
-    reconstruct();
-
+    reconstruct(type);
 
     Kmeans *KA = new Kmeans(data, M, N, K, metric, 3);
 
@@ -158,7 +157,7 @@ void AntA::pickAnt(int ra){
 /*
  * Se encarga de armar la solutción a partir de la células y las hormigas.
  */
-void AntA::reconstruct(){
+void AntA::reconstruct(int type){
 
     float actual = 0.0, max = -1.0;
     int i = 0, j = 0, best = 0, rp = 0;

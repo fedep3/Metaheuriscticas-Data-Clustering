@@ -53,6 +53,11 @@ class GA : public Metaheuristic{
         virtual void run(int type);
 
         /**
+         * Reconstruye la solución.
+         */
+        virtual void reconstruct(int type);
+
+        /**
          * Destructor de la clase GA.
          */
         ~GA();

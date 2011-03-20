@@ -58,6 +58,11 @@ class Metaheuristic{
         virtual void initialize() = 0;
 
         /**
+         * Reconstruye la solución.
+         */
+        virtual void reconstruct(int type) = 0;
+
+        /**
          * Destructor de la clase Metaheuristic.
          */
         virtual ~Metaheuristic();

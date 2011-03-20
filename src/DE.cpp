@@ -146,9 +146,8 @@ void DE::run(int type){
     float **auxCent;
     int *auxSol;
     int auxOf = 0;
-    int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0, best = 0;
+    int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0;
 
-    
     auxCent = (float**) calloc(Kmax, sizeof(float*));
     if(auxCent == NULL) exit(1);
     for(j = 0; j < Kmax; ++j)
@@ -220,18 +219,7 @@ void DE::run(int type){
 
     }
 
-    best = getBetter(type);
-
-    for(j = 0; j < N; j++)
-        bestSolution[j] = solution[best][j];
-
-    for(j = 0; j < K; j++)
-        for(m = 0; m < M; m++)
-            bestCentroids[j][m] = centroid[best][j][m];
-
-    bestFO = of[best];
-
-    renamer(bestSolution, &K);
+    reconstruct(type);
 
     for(i = 0; i < K; i++)
         delete [] auxCent[i];
@@ -510,5 +498,27 @@ float DE::deFO(int* sol, float** cent, int k){
     delete [] sums;
 
     return res;
+
+}
+
+/**
+ * Reconstruye la solución.
+ */
+void DE::reconstruct(int type){
+
+    int j,m;
+    int best = getBetter(type);
+
+    for(j = 0; j < N; j++)
+        bestSolution[j] = solution[best][j];
+
+    for(j = 0; j < K; j++)
+        for(m = 0; m < M; m++)
+            bestCentroids[j][m] = centroid[best][j][m];
+
+    bestFO = of[best];
+
+    renamer(bestSolution, &K);
+
 
 }

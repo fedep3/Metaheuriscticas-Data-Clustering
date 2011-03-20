@@ -588,3 +588,5 @@ void GA::crossover(int p1, int p2, int type){
 
     delete [] temp;
 }
+
+void GA::reconstruct(int type){}

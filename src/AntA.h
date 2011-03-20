@@ -79,6 +79,11 @@ class AntA : public Metaheuristic{
         virtual void run(int type);
 
         /*
+         * Se encarga de armar la solutción a partir de la células y las hormigas.
+         */
+        virtual void reconstruct(int type);
+
+        /*
          * Calcula el parámetro alpha2 usado en las probabilidades.
          */
         void calcAlpha();
@@ -128,11 +133,6 @@ class AntA : public Metaheuristic{
          */
         void pickAnt(int ra);
         
-        /*
-         * Se encarga de armar la solutción a partir de la células y las hormigas.
-         */
-        void reconstruct();
-
         /*
          * Procedimiento que se encarga de soltar el pixel de una hormiga. Funciona
          * del siguiente modo:

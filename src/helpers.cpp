@@ -193,6 +193,10 @@ void endTime();
 void killIt(int sig){
     try{
         endTime();
+
+        if(algorithm == M_ANT || algorithm == M_DE)
+            m->reconstruct(_tf);
+
         printf("Cantidad de Clusters Final: %d\n", m->K);
         r->write(_output, m->bestSolution, m->K);
         signal(SIGINT, SIG_DFL);
@@ -280,7 +284,6 @@ void help(bool fullhelp){
         printf("\n\033[34;1mOpciones Algoritmo DE\033[0m\n");
         printf("\t--f <Parámetro de escalado>\n");
         printf("\t--pc <Probabilidad de cruce>\n");
-        printf("\t--kmax - Si se utilizará una cantidad máxima de clusters.\n");
 
         //Opciones Algoritmo Bee.
         printf("\n\033[34;1mOpciones Algoritmo de Abeja\033[0m\n");

@@ -582,3 +582,8 @@ float PSO::psoFO(int* sol, float** cent, int k){
             return res;
     }
 }
+
+/**
+ * Reconstruye la solución.
+ */
+void PSO::reconstruct(int type){}

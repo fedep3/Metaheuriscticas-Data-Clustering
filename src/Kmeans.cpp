@@ -142,3 +142,8 @@ void Kmeans::setCentroids(float** cent){
         for(j = 0; j < M; ++j)
             centroid[0][i][j] = cent[i][j];
 }
+
+/**
+ * Reconstruye la solución.
+ */
+void Kmeans::reconstruct(int type){}
