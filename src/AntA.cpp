@@ -101,23 +101,6 @@ void AntA::run(int type){
 
     reconstruct(type);
 
-    Kmeans *KA = new Kmeans(data, M, N, K, metric, 3);
-
-    KA->setCentroids(bestCentroids);
-
-    KA->run(type);
-
-    for(i = 0; i < N; i++)
-        bestSolution[i] = KA->bestSolution[i];
-
-    bestFO = KA->bestFO;
-
-    K = KA->K;
-
-    delete KA;
-
-
-    
 }
 
 /*
@@ -231,6 +214,21 @@ void AntA::reconstruct(int type){
             bestCentroids[i][j] = bestCentroids[i][j] / count[i];
             
     delete [] count;
+
+    Kmeans *KA = new Kmeans(data, M, N, K, metric, 3);
+
+    KA->setCentroids(bestCentroids);
+
+    KA->run(type);
+
+    for(i = 0; i < N; i++)
+        bestSolution[i] = KA->bestSolution[i];
+
+    bestFO = KA->bestFO;
+
+    K = KA->K;
+
+    delete KA;
 
 }
 
@@ -391,16 +389,19 @@ inline void AntA::swap(int *array, int f, int s){
  */
 void AntA::initialize(){
 
-    int i, k;
+    int i, k, c;
     int done[N];
     int size = N;
 
     for(i = 0; i < N; ++i){
         free[i] = i;
         done[i] = i;
-        cells[i].push_back(i);
     }
 
+    for(i = 0; i < N; i++){
+        c = rand()%N;
+        cells[c].push_back(i);
+    }
 
     for(i = 0; i < nA ; ++i){
     

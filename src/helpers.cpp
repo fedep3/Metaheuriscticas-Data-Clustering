@@ -618,9 +618,11 @@ void initIt(int argc, char* argv[]){
     //Opciones generales completas.
     switch(algorithm){
         case M_ANT:
-            for(c = 0; c < 6; ++c)
+            for(c = 2; c < 6; ++c)
                 if(c != 4)
-                    optgen[0] = optgen[0] && optgen[c];
+                    optgen[1] = optgen[1] && optgen[c];
+
+            optgen[0] = optgen[1];
             break;
         case M_DE:
         case M_PSO:
