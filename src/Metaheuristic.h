@@ -372,5 +372,10 @@ class Metaheuristic{
          * Arreglo necesario para el recálculo de centroides.
          */
         int* size;
+
+        /**
+         * Mejor valor heurístico usando la métrica DB.
+         */
+        float bestDB;
 }; 
 #endif
