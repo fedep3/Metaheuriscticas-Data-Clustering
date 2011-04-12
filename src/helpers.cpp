@@ -194,8 +194,7 @@ void killIt(int sig){
     try{
         endTime();
 
-        if(algorithm == M_ANT || algorithm == M_DE)
-            m->reconstruct(_tf);
+        m->reconstruct(_tf);
 
         printf("Cantidad de Clusters Final: %d\n", m->K);
         r->write(_output, m->bestSolution, m->K);

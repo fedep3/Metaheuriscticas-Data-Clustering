@@ -224,9 +224,14 @@ void AntA::reconstruct(int type){
     for(i = 0; i < N; i++)
         bestSolution[i] = KA->bestSolution[i];
 
-    bestFO = KA->bestFO;
+    for(i = 0; i < K; i++)
+        bestCentroids[i] = KA->bestCentroids[i];
 
     K = KA->K;
+
+    bestFO = KA->bestFO;
+
+    bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
 
     delete KA;
 
