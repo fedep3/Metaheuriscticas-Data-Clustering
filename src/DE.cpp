@@ -520,5 +520,7 @@ void DE::reconstruct(int type){
 
     renamer(bestSolution, &K);
 
+    bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
+
 
 }
