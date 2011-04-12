@@ -178,6 +178,8 @@ void GA::run(int type){
         //Actualización de parámetros si es necesaria.
         updateBetter(top, &best, &last, &count, type);
     }
+
+    bestDB = 1.0 / DB(bestSolution, bestCentroids, K);
 }
 
 /**

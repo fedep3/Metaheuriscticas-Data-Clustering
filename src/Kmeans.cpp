@@ -115,6 +115,8 @@ void Kmeans::run(int type){
         // Actualización del mejor.
         updateBetter(0, &best, &last, &count, type);
     }
+
+    bestDB = 1.0 / DB(bestSolution, bestCentroids, K);
 }
 
 /**

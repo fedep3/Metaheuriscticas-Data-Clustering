@@ -60,7 +60,7 @@ class Metaheuristic{
         /**
          * Reconstruye la solución.
          */
-        virtual void reconstruct(int type) = 0;
+        virtual void reconstruct(int type);
 
         /**
          * Destructor de la clase Metaheuristic.
@@ -86,6 +86,11 @@ class Metaheuristic{
          * Cantidad de clusters.
          */
         int K;
+
+        /**
+         * Mejor valor heurístico usando la métrica DB.
+         */
+        float bestDB;
 
     protected:
         /**
@@ -372,10 +377,5 @@ class Metaheuristic{
          * Arreglo necesario para el recálculo de centroides.
          */
         int* size;
-
-        /**
-         * Mejor valor heurístico usando la métrica DB.
-         */
-        float bestDB;
 }; 
 #endif

@@ -191,6 +191,8 @@ void Bee::run(int type){
         //Actualización de parámetros si es necesaria.
         updateBetter(top, &best, &last, &count, type);
     }
+
+    bestDB = 1.0 / DB(bestSolution, bestCentroids, K);
 }
 
 /**
@@ -348,8 +350,3 @@ void Bee::neighbor(int a, int type){
             of[a] = foMin(a, Ks[a], metric);
     }
 }
-
-/**
- * Reconstruye la solución.
- */
-void Bee::reconstruct(int type){}
