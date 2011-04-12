@@ -197,6 +197,11 @@ void killIt(int sig){
         m->reconstruct(_tf);
 
         printf("Cantidad de Clusters Final: %d\n", m->K);
+
+        printf("Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+
+        printf("Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+
         r->write(_output, m->bestSolution, m->K);
         signal(SIGINT, SIG_DFL);
         exit(0);
@@ -870,6 +875,10 @@ void runIt(){
     endTime();
     
     printf("Cantidad de Clusters Final: %d\n", m->K);
+
+    printf("Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+
+    printf("Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
     r->write(_output, m->bestSolution, m->K);
 }
