@@ -184,6 +184,32 @@ void initTime();
 void endTime();
 
 /**
+ * Mejora la solución que ya se tiene al aplicar un Kmeans.
+ */
+void improve(){
+    int i, j;
+
+    Kmeans *KA = new Kmeans(m->data, m->M, m->N, m->K, M_DB, 3);
+
+    KA->setCentroids(m->bestCentroids);
+
+    KA->run(_tf);
+
+    for(i = 0; i < KA->N; ++i)
+        m->bestSolution[i] = KA->bestSolution[i];
+
+    for(i = 0; i < KA->K; ++i)
+        for(j = 0; j < KA->M; ++j)
+            m->bestCentroids[i][j] = KA->bestCentroids[i][j];
+
+    m->K = KA->K;
+
+    m->bestFO = KA->bestFO;
+
+    delete KA;
+}
+
+/**
  * Hace varias cosas antes de terminar el programa:
  * - Muestra el tiempo.
  * - Genera una imagen con la mejor solución.
@@ -192,6 +218,17 @@ void endTime();
  */
 void killIt(int sig){
     try{
+        signal(SIGALRM, SIG_IGN);
+        signal(SIGINT, SIG_DFL);
+
+        endTime();
+        
+        printf("Mejorando solución...\n");
+
+        initTime();
+
+        improve();
+
         m->reconstruct(_tf);
 
         endTime();
@@ -203,13 +240,22 @@ void killIt(int sig){
         printf("Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
         r->write(_output, m->bestSolution, m->K);
-        signal(SIGINT, SIG_DFL);
+
         exit(0);
     }catch(exception& e){
         cout << e.what() << endl;
         signal(SIGINT, SIG_DFL);
         exit(1);
     }
+}
+
+/**
+ * Una vez pasado el tiempo MAXRUNTIME termina el programa haciendo
+ * la limpieza necesaria y guardando las mejores soluciones que
+ * se tengan hasta el momento.
+ */
+void longEnough(int sig){
+    killIt(SIGINT);
 }
 
 /**
@@ -869,8 +915,20 @@ void runIt(){
     initTime();
 
     signal(SIGINT, killIt);
+	signal(SIGALRM, longEnough);
+	alarm(MAXRUNTIME);
 
     m->run(_tf);
+
+    signal(SIGALRM, SIG_IGN);
+
+    endTime();
+    
+    printf("Mejorando solución...\n");
+
+    initTime();
+
+    m->reconstruct(_tf);
 
     endTime();
     

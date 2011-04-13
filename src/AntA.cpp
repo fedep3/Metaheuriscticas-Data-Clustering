@@ -214,27 +214,6 @@ void AntA::reconstruct(int type){
             bestCentroids[i][j] = bestCentroids[i][j] / count[i];
             
     delete [] count;
-
-    Kmeans *KA = new Kmeans(data, M, N, K, metric, 3);
-
-    KA->setCentroids(bestCentroids);
-
-    KA->run(type);
-
-    for(i = 0; i < N; i++)
-        bestSolution[i] = KA->bestSolution[i];
-
-    for(i = 0; i < K; i++)
-        bestCentroids[i] = KA->bestCentroids[i];
-
-    K = KA->K;
-
-    bestFO = KA->bestFO;
-
-    bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
-
-    delete KA;
-
 }
 
 /*
@@ -432,17 +411,16 @@ void AntA::initialize(){
  * Calcula el parámetro alpha2 usado en las probabilidades.
  */
 void AntA::calcAlpha(){
-
     int i, j;
 
     alpha2 = 0.0;
     
-    for(i = 0; i < N; i++)
-        for(j = i+1; j < N; j++)
-            alpha2 += 2*d(i,j);
+    for(i = 0; i < N; ++i)
+        for(j = i + 1; j < N; ++j)
+            alpha2 += 2.0 * d(i, j);
 
-    alpha2 = alpha2/(N*(N-1));
+    alpha2 = alpha2 / ( (float) (N * (N - 1)) );
 
-    alpha2 = pow(alpha2, 2);
+    alpha2 = alpha2 * alpha2;
 
 }

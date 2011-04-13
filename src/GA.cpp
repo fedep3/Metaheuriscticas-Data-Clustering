@@ -145,7 +145,9 @@ void GA::run(int type){
     float last  = best;
     int count   = 0;
 
-    int p1, p2, top;
+    int p1 = 0;
+    int p2 = 0;
+    int top;
     float cp, mut;
 
     ////////////////////////////

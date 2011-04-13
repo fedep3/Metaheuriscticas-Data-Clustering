@@ -92,6 +92,21 @@ class Metaheuristic{
          */
         float bestDB;
 
+        /**
+         * Cantidad de datos.
+         */
+        int N;
+
+        /**
+         * Dimensión de cada dato.
+         */
+        int M;
+
+        /**
+         * Datos.
+         */
+        float** data;
+
     protected:
         /**
          * Calcula la distancia entre dos objetos. 
@@ -329,16 +344,6 @@ class Metaheuristic{
         void updateBetter(int i, float* best, float* last, int* count, int type);
 
         /**
-         * Cantidad de datos.
-         */
-        int N;
-
-        /**
-         * Dimensión de cada dato.
-         */
-        int M;
-
-        /**
          * Cantidad de clusters inicial.
          */
         int Kmax;
@@ -347,11 +352,6 @@ class Metaheuristic{
          * Métrica a usar.
          */
         int metric;
-
-        /**
-         * Datos.
-         */
-        float** data;
 
         /**
          * (Mejor) solución.

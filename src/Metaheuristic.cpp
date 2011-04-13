@@ -672,6 +672,6 @@ void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, in
  * Reconstruye la solución.
  */
 void Metaheuristic::reconstruct(int type){
-    bestDB = 1.0 / DB(bestSolution, bestCentroids, K);
+    bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
 }
 
