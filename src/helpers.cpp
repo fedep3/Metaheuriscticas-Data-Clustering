@@ -192,9 +192,9 @@ void endTime();
  */
 void killIt(int sig){
     try{
-        endTime();
-
         m->reconstruct(_tf);
+
+        endTime();
 
         printf("Cantidad de Clusters Final: %d\n", m->K);
 
