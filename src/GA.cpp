@@ -25,8 +25,8 @@
  * @param _met Métrica.
  * @param _reps Repeticiones sin mejora.
  */
-GA::GA(float** _d, int _m, int _n, int _k, int _i,
-       float _cp, float _mut, int _ts,
+GA::GA(double** _d, int _m, int _n, int _k, int _i,
+       double _cp, double _mut, int _ts,
        int _met, int _reps)
 : Metaheuristic(_d, _m, _n, _k, _met){
     int i, j;
@@ -45,16 +45,16 @@ GA::GA(float** _d, int _m, int _n, int _k, int _i,
         solution[i] = new int[N];
 
     //Se reservan I arreglos de centroides.
-    centroid    = (float ***) calloc(I, sizeof(float**));
+    centroid    = (double ***) calloc(I, sizeof(double**));
     if(centroid == NULL) exit(1);
     for(i = 0; i < I; ++i){
-        centroid[i] = (float**) calloc(K, sizeof(float*));
+        centroid[i] = (double**) calloc(K, sizeof(double*));
         if(centroid[i] == NULL) exit(1);
         for(j = 0; j < K; ++j)
-            centroid[i][j] = new float[M];
+            centroid[i][j] = new double[M];
     }
 
-    of = new float[I]; //Valor de las funciones objetivo.
+    of = new double[I]; //Valor de las funciones objetivo.
     Ks = new int[I];   //Cantidad de clusters.
     for(i = 0; i < I; ++i)
         Ks[i] = K;
@@ -65,16 +65,16 @@ GA::GA(float** _d, int _m, int _n, int _k, int _i,
     // Reservas para los hijos.
 
     s1 = new int[N];
-    centroidS1 = (float**) calloc(K, sizeof(float*));
+    centroidS1 = (double**) calloc(K, sizeof(double*));
     if(centroidS1 == NULL) exit(1);
     for(j = 0; j < K; ++j)
-        centroidS1[j] = new float[M];
+        centroidS1[j] = new double[M];
 
     s2 = new int[N];
-    centroidS2 = (float**) calloc(K, sizeof(float*));
+    centroidS2 = (double**) calloc(K, sizeof(double*));
     if(centroidS2 == NULL) exit(1);
     for(j = 0; j < K; ++j)
-        centroidS2[j] = new float[M];
+        centroidS2[j] = new double[M];
 }
 
 /**
@@ -132,7 +132,7 @@ void GA::run(int type){
     }
 
     //Inicializaciones del mejor según el tipo de problema.
-    float best;
+    double best;
     switch(type){
         case T_MAX:
             //Maximización.
@@ -140,15 +140,15 @@ void GA::run(int type){
             break;
         default:
             //Minimización.
-            best = numeric_limits<float>::infinity();
+            best = numeric_limits<double>::infinity();
     }
-    float last  = best;
+    double last  = best;
     int count   = 0;
 
     int p1 = 0;
     int p2 = 0;
     int top;
-    float cp, mut;
+    double cp, mut;
 
     ////////////////////////////
     // Algoritmo Genético.
@@ -159,13 +159,13 @@ void GA::run(int type){
 
         ////////////////////////////
         // Crossover.
-        cp = ( (float)rand() )/( (float)RAND_MAX );
+        cp = ( (double)rand() )/( (double)RAND_MAX );
         if(cp > CP) continue;
         else{
             crossover(p1, p2, type);
             ////////////////////////////
             // Mutación.
-            mut = ( (float)rand() )/( (float)RAND_MAX );
+            mut = ( (double)rand() )/( (double)RAND_MAX );
             if(mut > MUT) continue;
             else{
                 mutation(type);
@@ -207,7 +207,7 @@ void GA::selection(int* p1, int* p2, int type){
 void GA::torneo(int* p, int type){
     int i;
 
-    float best;
+    double best;
     int current;
     
     switch(type){
@@ -217,7 +217,7 @@ void GA::torneo(int* p, int type){
             break;
         default:
             //Minimización.
-            best = numeric_limits<float>::infinity();
+            best = numeric_limits<double>::infinity();
     }
 
     for(i = 0; i < torneoSize; ++i){
@@ -331,7 +331,7 @@ void GA::merge(int i){
  * @return Número de individuo mejor de la población.
  */
 int GA::getBetter(int type){
-    float best;
+    double best;
     int top = 0;
     int i;
     switch(type){
@@ -339,7 +339,7 @@ int GA::getBetter(int type){
             best = -1.0;
             break;
         default:
-            best = numeric_limits<float>::infinity();
+            best = numeric_limits<double>::infinity();
     }
 
     for(i = 0; i < I; ++i){
@@ -416,7 +416,7 @@ void GA::crossover(int p1, int p2, int type){
         greater = Ks[p2];
     }
     int k1 = Kmax, k2 = Kmax;
-    float of1, of2;
+    double of1, of2;
     bool p1_p2;
 
     ////////////////
@@ -460,7 +460,7 @@ void GA::crossover(int p1, int p2, int type){
 
 
     //Cálculo de la función objetivo.
-    float pbest, sbest;
+    double pbest, sbest;
     int pbesti = 0, sbesti = 0;
     switch(type){
         case T_MAX:
@@ -476,13 +476,13 @@ void GA::crossover(int p1, int p2, int type){
             of2   = foMin(s2, centroidS2, k2, metric);
 
             p1_p2 = p1 < p2;
-            pbest = numeric_limits<float>::infinity();
-            sbest = numeric_limits<float>::infinity();
+            pbest = numeric_limits<double>::infinity();
+            sbest = numeric_limits<double>::infinity();
     }
 
     /////////////////
     // Sustitución.
-    float* temp = new float[4];
+    double* temp = new double[4];
     temp[0] = of1;
     temp[1] = of2;
     temp[2] = of[p1];

@@ -98,12 +98,12 @@ extern int _I;
 /**
  * Probabilidad de mutación.
  */
-extern float _pm;
+extern double _pm;
 
 /**
  * Probabilidad de cruce.
  */
-extern float _pc;
+extern double _pc;
 
 /**
  * Tamaño del torneo.
@@ -116,47 +116,47 @@ extern int _tt;
 /**
  * Constante de la componente cognitiva.
  */
-extern float _c1;
+extern double _c1;
 
 /**
  * Constante de la componente social.
  */
-extern float _c2;
+extern double _c2;
 
 /**
  * Peso inercial.
  */
-extern float _W;
+extern double _W;
 
 /**
  * Peso de la distancia intracluster.
  */
-extern float _w1;
+extern double _w1;
 
 /**
  * Peso de la distancia intercluster;
  */
-extern float _w2;
+extern double _w2;
 
 /**
  * Peso del error de la solución.
  */
-extern float _w3;
+extern double _w3;
 
 /**
  * Máximos valores de cada atributo.
  */
-extern float* _mxv;
+extern double* _mxv;
 
 /**
  * Mínimos valores de cada atributo.
  */
-extern float* _mnv;
+extern double* _mnv;
 
 /**
  * Velocidad máxima de las partículas.
  */
-extern float _vmx;
+extern double _vmx;
 
 /**
  * Si la función es weighted o no.

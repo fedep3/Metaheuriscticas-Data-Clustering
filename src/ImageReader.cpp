@@ -18,7 +18,7 @@
  * @param colors Arreglo de colores.
  * @param k      Cantidad de clusters.
  */
-void ImageReader::generateColors(float **colors, int k){
+void ImageReader::generateColors(double **colors, int k){
     int count = 0;
 
     //M = 3
@@ -26,8 +26,8 @@ void ImageReader::generateColors(float **colors, int k){
     int i, j, l;
 
     //M = 1
-    float c = 0.0;
-    float d = 255.0/( (float) k );
+    double c = 0.0;
+    double d = 255.0/( (double) k );
 
     switch(M){
         case 3:
@@ -40,9 +40,9 @@ void ImageReader::generateColors(float **colors, int k){
             for(i = 0; i < base && count < k; ++i){
                 for(j = 0; j < base && count < k; ++j){
                     for(l = 0; l < base && count < k; ++l){
-                        colors[count][0] = 255.0 * ( ( (float) i )/ ( (float) base) );
-                        colors[count][1] = 255.0 * ( ( (float) j )/ ( (float) base) );
-                        colors[count][2] = 255.0 * ( ( (float) l )/ ( (float) base) );
+                        colors[count][0] = 255.0 * ( ( (double) i )/ ( (double) base) );
+                        colors[count][1] = 255.0 * ( ( (double) j )/ ( (double) base) );
+                        colors[count][2] = 255.0 * ( ( (double) l )/ ( (double) base) );
                         ++count;
                     }
                 }
@@ -66,18 +66,18 @@ void ImageReader::generateColors(float **colors, int k){
  */
 void ImageReader::write(char* output, int* sol, int k){
     int i;
-    float **colors;
+    double **colors;
     vector<unsigned char> image;
     image.resize(N * 4);
     vector<unsigned char>::iterator imageIterator = image.begin();
 
-    if( (colors = (float **) calloc(k, sizeof(float *) )) == NULL){
+    if( (colors = (double **) calloc(k, sizeof(double *) )) == NULL){
         fprintf(stderr, "Error pidiendo memoria.\n");
         exit(1);
     }
 
     for(i = 0; i < k; ++i)
-        colors[i] = new float[M];
+        colors[i] = new double[M];
 
     generateColors(colors, k);
 

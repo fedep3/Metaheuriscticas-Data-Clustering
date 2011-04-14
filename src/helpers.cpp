@@ -78,12 +78,12 @@ int _I = 0;
 /**
  * Probabilidad de mutación.
  */
-float _pm = 0.0;
+double _pm = 0.0;
 
 /**
  * Probabilidad de cruce.
  */
-float _pc = 0.0;
+double _pc = 0.0;
 
 /**
  * Tamaño del torneo.
@@ -96,47 +96,47 @@ int _tt = 0;
 /**
  * Constante de la componente cognitiva.
  */
-float _c1 = 0.0;
+double _c1 = 0.0;
 
 /**
  * Constante de la componente social.
  */
-float _c2 = 0.0;
+double _c2 = 0.0;
 
 /**
  * Peso inercial.
  */
-float _W = 0.0;
+double _W = 0.0;
 
 /**
  * Peso de la distancia intracluster.
  */
-float _w1 = 0.0;
+double _w1 = 0.0;
 
 /**
  * Peso de la distancia intercluster;
  */
-float _w2 = 0.0;
+double _w2 = 0.0;
 
 /**
  * Peso del error de la solución.
  */
-float _w3 = 0.0;
+double _w3 = 0.0;
 
 /**
  * Máximos valores de cada atributo.
  */
-float* _mxv = NULL;
+double* _mxv = NULL;
 
 /**
  * Mínimos valores de cada atributo.
  */
-float* _mnv = NULL;
+double* _mnv = NULL;
 
 /**
  * Velocidad máxima de las partículas.
  */
-float _vmx = 0.0;
+double _vmx = 0.0;
 
 /**
  * Si la función es weighted o no.
@@ -168,12 +168,12 @@ int _o_bees = 0;
 ///////////////////////////////////////////
 // Opciones del Algoritmo Hormiga.
 
-float _alpha = 0.0;
+double _alpha = 0.0;
 
 /**
  * Parámetro de escalado de los vectores.
  */
-float _f = 0.0;
+double _f = 0.0;
 
 /**
  * Inicializa el contador.
@@ -386,8 +386,8 @@ int mns = 0;
 void parseVector(int t){
     int i;
     int vs;
-    vector<float> v;
-    float* temp;
+    vector<double> v;
+    double* temp;
 
     stringstream line(optarg);
     string str;
@@ -399,12 +399,12 @@ void parseVector(int t){
 
     switch(t){
         case V_MAX:
-            _mxv = new float[vs];
+            _mxv = new double[vs];
             mxs  = vs;
             temp = _mxv;
             break;
         case V_MIN:
-            _mnv = new float[vs];
+            _mnv = new double[vs];
             mns  = vs;
             temp = _mnv;
             break;

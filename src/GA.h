@@ -34,8 +34,8 @@ class GA : public Metaheuristic{
          * @param _met Métrica.
          * @param _reps Repeticiones sin mejora.
          */
-        GA(float** _d, int _m, int _n, int _k, int _i,
-           float _cp, float _mut, int _ts,
+        GA(double** _d, int _m, int _n, int _k, int _i,
+           double _cp, double _mut, int _ts,
            int _met, int _reps);
 
         /**
@@ -140,12 +140,12 @@ class GA : public Metaheuristic{
         /**
          * Porcentaje de cruce.
          */
-        float CP;
+        double CP;
 
         /**
          * Porcentaje de mutación.
          */
-        float MUT;
+        double MUT;
 
         /**
          * Tamaño del torneo en la selección.
@@ -160,7 +160,7 @@ class GA : public Metaheuristic{
         /**
          * Centroides de los hijos.
          */
-        float** centroidS1;
+        double** centroidS1;
 
         /**
          * Segundo hijo.
@@ -170,7 +170,7 @@ class GA : public Metaheuristic{
         /**
          * Centroides del segundo hijo.
          */
-        float** centroidS2;
+        double** centroidS2;
 
         /**
          * Cantidad de repeticiones sin mejora.

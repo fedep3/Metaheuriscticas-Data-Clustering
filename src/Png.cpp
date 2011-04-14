@@ -69,12 +69,12 @@ void Png::read(char* input){
             N = width * height;
     }
 
-    if((data = (float **) calloc(N, sizeof(float *))) == NULL){
+    if((data = (double **) calloc(N, sizeof(double *))) == NULL){
         fprintf(stderr, "Error pidiendo memoria.\n");
         exit(1);
     }
     for(i = 0; i < N; ++i)
-        data[i] = new float[M];
+        data[i] = new double[M];
 
     vector<unsigned char>::iterator imageIterator = image.begin();
 
@@ -84,7 +84,7 @@ void Png::read(char* input){
 
             while (imageIterator != image.end()) {
                 for(j = 0; j < 3; ++j){
-                    data[i][j] = (float) (*imageIterator);
+                    data[i][j] = (double) (*imageIterator);
                     imageIterator++;
                 }
                 imageIterator++; 
