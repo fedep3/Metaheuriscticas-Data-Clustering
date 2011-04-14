@@ -176,6 +176,11 @@ float _alpha = 0.0;
 float _f = 0.0;
 
 /**
+ * Si detiene definitivamente el programa o no.
+ */
+bool definitelyStopIt = false;
+
+/**
  * Inicializa el contador.
  */
 void initTime();
@@ -184,6 +189,49 @@ void initTime();
  * Guarda el tiempo del contador.
  */
 void endTime();
+
+/**
+ * Mejora la solución que ya se tiene al aplicar un Kmeans.
+ */
+void improve();
+
+/**
+ * Inicializa los handlers del programa.
+ */
+void initHandlers();
+
+/**
+ * Restaura los handlers originales del programa.
+ */
+void retoreHandlers();
+
+/**
+ * Hace varias cosas antes de terminar el programa:
+ * - Muestra el tiempo.
+ * - Genera una imagen con la mejor solución.
+ * - Dice la cantidad de clusters.
+ * @param sig Señal.
+ */
+void longEnough(int);
+
+/**
+ * Hace varias cosas antes de terminar el programa:
+ * - Muestra el tiempo.
+ * - Genera una imagen con la mejor solución.
+ * - Dice la cantidad de clusters.
+ * @param sig Señal.
+ */
+void killIt(int);
+
+/**
+ * Estructuras que controla la señal de SIGINT.
+ */
+struct sigaction new_sigint, old_sigint;
+
+/**
+ * Estructuras que controla la señal de SIGALRM.
+ */
+struct sigaction new_sigalrm, old_sigalrm;
 
 /**
  * Mejora la solución que ya se tiene al aplicar un Kmeans.
@@ -214,6 +262,37 @@ void improve(){
 }
 
 /**
+ * Inicializa los handlers del programa.
+ */
+void initHandlers(){
+    new_sigint.sa_handler = SIG_IGN;
+    sigemptyset(&new_sigint.sa_mask);
+    sigaction(SIGINT, &new_sigint, &old_sigint);
+
+    if(old_sigint.sa_handler != SIG_IGN){
+        new_sigint.sa_handler = killIt;
+        sigemptyset(&new_sigint.sa_mask);
+        sigaction(SIGINT, &new_sigint, &old_sigint);
+    }
+
+    new_sigalrm.sa_handler = longEnough;
+    sigemptyset(&new_sigalrm.sa_mask);
+	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
+	alarm(MAXRUNTIME);
+}
+
+/**
+ * Restaura los handlers originales del programa.
+ */
+void restoreHandlers(){
+    new_sigint.sa_handler = old_sigint.sa_handler;
+    sigemptyset(&new_sigint.sa_mask);
+    sigaction(SIGINT, &new_sigint, &old_sigint);
+
+	alarm(MAXRUNTIME);
+}
+
+/**
  * Hace varias cosas antes de terminar el programa:
  * - Muestra el tiempo.
  * - Genera una imagen con la mejor solución.
@@ -221,9 +300,14 @@ void improve(){
  * @param sig Señal.
  */
 void longEnough(int sig){
+    if(definitelyStopIt){
+        printf("Tiempo excedido de nuevo...\n");
+        exit(1);
+    }
+    definitelyStopIt = true;
+
     try{
-        signal(SIGALRM, SIG_IGN);
-        signal(SIGINT, SIG_DFL);
+        restoreHandlers();
 
         endTime();
         
@@ -242,7 +326,6 @@ void longEnough(int sig){
         exit(0);
     }catch(exception& e){
         cout << e.what() << endl;
-        signal(SIGINT, SIG_DFL);
         exit(1);
     }
 }
@@ -256,8 +339,7 @@ void longEnough(int sig){
  */
 void killIt(int sig){
     try{
-        signal(SIGALRM, SIG_IGN);
-        signal(SIGINT, SIG_DFL);
+        restoreHandlers();
 
         endTime();
         
@@ -282,7 +364,6 @@ void killIt(int sig){
         exit(0);
     }catch(exception& e){
         cout << e.what() << endl;
-        signal(SIGINT, SIG_DFL);
         exit(1);
     }
 }
@@ -956,13 +1037,11 @@ void runIt(){
 
     initTime();
 
-    signal(SIGINT, killIt);
-	signal(SIGALRM, longEnough);
-	alarm(MAXRUNTIME);
+    initHandlers();
 
     m->run(_tf);
 
-    signal(SIGINT, SIG_DFL);
+    restoreHandlers();
 
     endTime();
     
