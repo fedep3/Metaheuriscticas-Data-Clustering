@@ -51,10 +51,10 @@ class PSO : public Metaheuristic{
          * @param _fun Tipo de función objetivo.
          * @param _reps Repeticiones sin mejora.
          */
-        PSO(double** _d, int _m, int _n, int _k, int _p,
-                 double _c1, double _c2, int _w,
-                 double _w1, double _w2, double _w3,
-                 double* _zmx, double* _zmn, double _vmx,
+        PSO(float** _d, int _m, int _n, int _k, int _p,
+                 float _c1, float _c2, int _w,
+                 float _w1, float _w2, float _w3,
+                 float* _zmx, float* _zmn, float _vmx,
                  int _fun, int _reps);
 
         /**
@@ -76,9 +76,9 @@ class PSO : public Metaheuristic{
          * @param _fun Tipo de función objetivo.
          * @param _reps Repeticiones sin mejora.
          */
-        PSO(double** _d, int _m, int _n, int _k, int _p,
-                 double _c1, double _c2, int _w,
-                 double* _zmx, double* _zmn, double _vmx,
+        PSO(float** _d, int _m, int _n, int _k, int _p,
+                 float _c1, float _c2, int _w,
+                 float* _zmx, float* _zmn, float _vmx,
                  int _fun, int _reps);
 
         /**
@@ -120,7 +120,7 @@ class PSO : public Metaheuristic{
          * @param p  Partícula.
          * @param fo Valor de la función objetivo.
          */
-        void updateBestParticle(int p, double fo);
+        void updateBestParticle(int p, float fo);
 
         /**
          * Actualiza el mejor global de la población.
@@ -128,7 +128,7 @@ class PSO : public Metaheuristic{
          * @param p  Partícula.
          * @param fo Valor de la función objetivo.
          */
-        bool updateBest(int p, double fo);
+        bool updateBest(int p, float fo);
 
         /**
          * Reasigna los elementos a cada cluster en una partícula.
@@ -147,7 +147,7 @@ class PSO : public Metaheuristic{
          * @return Valor de la solución con función objetivo
          *         indicada.
          */
-        virtual double foMin(int i, int k, int fun);
+        virtual float foMin(int i, int k, int fun);
 
         /**
          * Función objetivo de la metaheurística PSO.
@@ -160,7 +160,7 @@ class PSO : public Metaheuristic{
          * @return Valor de la solución con función objetivo
          *         indicada.
          */
-        virtual double foMin(int* sol, double** cent, int k, int fun);
+        virtual float foMin(int* sol, float** cent, int k, int fun);
 
         /**
          * Función objetivo del algoritmo PSO.
@@ -171,7 +171,7 @@ class PSO : public Metaheuristic{
          *
          * @return Valor de la función objetivo.
          */
-        double psoFO(int* sol, double** cent, int k);
+        float psoFO(int* sol, float** cent, int k);
 
         /**
          * Cantidad de partículas.
@@ -181,12 +181,12 @@ class PSO : public Metaheuristic{
         /**
          * Velocidad de las partículas.
          */
-        double*** velocity;
+        float*** velocity;
 
         /**
          * Mejor posición de la partícula.
          */
-        double*** bestParticle;
+        float*** bestParticle;
 
         /**
          * Constante de la componente cognitiva de la partícula.
@@ -195,7 +195,7 @@ class PSO : public Metaheuristic{
          * [Van den Bergh 2002].
          * 
          */
-        double c1;
+        float c1;
 
         /**
          * Constante de la componente social de la partícula.
@@ -203,7 +203,7 @@ class PSO : public Metaheuristic{
          * Valor recomendado de 1.49 para asegurar convergencia
          * [Van den Bergh 2002].
          */
-        double c2;
+        float c2;
 
         /**
          * Peso inercial de partícula.
@@ -211,12 +211,12 @@ class PSO : public Metaheuristic{
          * Valor recomendado de 0.72 para asegurar convergencia
          * [Van den Bergh 2002].
          */
-        double W;
+        float W;
 
         /**
          * Máxima velocidad de las partículas.
          */
-        double Vmax;
+        float Vmax;
 
         ///////////////////////////////////////
         // Variables de la función objetivo.
@@ -224,22 +224,22 @@ class PSO : public Metaheuristic{
         /**
          * Peso de la distacia entre elementos de un cluster.
          */
-        double w1;
+        float w1;
 
         /**
          * Peso de la distancia entre clusters.
          */
-        double w2;
+        float w2;
 
         /**
          * Peso del error.
          */
-        double w3;
+        float w3;
 
         /**
          * Máxima distancia posible entre objetos.
          */
-        double Zmax;
+        float Zmax;
 
         /**
          * Cantidad de repeticiones sin mejora.

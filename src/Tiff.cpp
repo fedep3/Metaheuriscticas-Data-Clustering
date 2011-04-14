@@ -65,7 +65,7 @@ void Tiff::read(char* input){
         exit(1);
     }
 
-    if((data = (double **) calloc(N, sizeof(double *))) == NULL){
+    if((data = (float **) calloc(N, sizeof(float *))) == NULL){
         fprintf(stderr, "Error pidiendo memoria.\n");
         TIFFClose(image);
         exit(1);
@@ -75,28 +75,28 @@ void Tiff::read(char* input){
         switch(depth){
             case 3:
                 for(i = 0; i < N; ++i)
-                    data[i] = new double[3];
+                    data[i] = new float[3];
 
                 i = 0;
 
                 for(h = 0; h < height; ++h){
                     for(w = 0; w < width; ++w){
-                        data[i][0] = (double) TIFFGetR(raster[h * width + w]);
-                        data[i][1] = (double) TIFFGetG(raster[h * width + w]);
-                        data[i][2] = (double) TIFFGetB(raster[h * width + w]);
+                        data[i][0] = (float) TIFFGetR(raster[h * width + w]);
+                        data[i][1] = (float) TIFFGetG(raster[h * width + w]);
+                        data[i][2] = (float) TIFFGetB(raster[h * width + w]);
                         ++i;
                     }
                 }
                 break;
             case 1:
                 for(i = 0; i < N; ++i)
-                    data[i] = new double[1];
+                    data[i] = new float[1];
 
                 i = 0;
 
                 for(h = 0; h < height; ++h){
                     for(w = 0; w < width; ++w){
-                        data[i][0] = (double) TIFFGetR(raster[h * width + w]);
+                        data[i][0] = (float) TIFFGetR(raster[h * width + w]);
                         ++i;
                     }
                 }

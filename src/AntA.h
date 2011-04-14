@@ -39,7 +39,7 @@ class AntA : public Metaheuristic{
          * @param _it     Cantidad de iteraciones.
          * @param _met Métrica.
          */
-        AntA(double** _d, int _m, int _n, int _nAnt, int _it, int _met);
+        AntA(float** _d, int _m, int _n, int _nAnt, int _it, int _met);
 
         /**
          * Constructor de la clase AntA.
@@ -53,7 +53,7 @@ class AntA : public Metaheuristic{
          * @param _it     Cantidad de iteraciones.
          * @param _met Métrica.
          */
-        AntA(double** _d, int _m, int _n, int _nA, double _alpha2, 
+        AntA(float** _d, int _m, int _n, int _nA, float _alpha2, 
                                                         int _it, int _met);
         
         /**
@@ -107,7 +107,7 @@ class AntA : public Metaheuristic{
          * @param pixel Pixel que se quiere soltar.
          * @param cell Célula donde se quiere soltar.
          */
-        double f(int pixel, int cell);
+        float f(int pixel, int cell);
         
         /*
          * Calcula la probabilidad de dejar un pixel en la celula cell dada.
@@ -115,7 +115,7 @@ class AntA : public Metaheuristic{
          * @param pixel Pixel que se quiere soltar.
          * @param cell Célula donde se quiere soltar.
          */
-        double pdrop(int pixel, int cell);
+        float pdrop(int pixel, int cell);
         
         /*
          * Calcula la probabilidad agarrar un pixel en la célula cell.
@@ -123,7 +123,7 @@ class AntA : public Metaheuristic{
          * @param pixel Pixel que se quiere agarrar.
          * @param cell Célula donde donde se encuentra.
          */
-        double ppick(int pixel, int cell);
+        float ppick(int pixel, int cell);
 
         /*
          * Va a buscar los pixeles que no estan siendo cargados y la hormiga va a inten-
@@ -170,7 +170,7 @@ class AntA : public Metaheuristic{
         /*
          * Parámetro usado para calcular f.
          */
-        double alpha2;
+        float alpha2;
 
         /*
          * Arreglo de las hormigas.

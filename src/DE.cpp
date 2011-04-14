@@ -23,8 +23,8 @@
  * @param _t   Número de iteraciones.
  * @param _met Métrica.
  */
-DE::DE(double** _d, int _m, int _n, int _k, int _i, int _it, double _w1,
-       double _w2, double _w3, double *_zmx, double *_zmn)
+DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
+       float _w2, float _w3, float *_zmx, float *_zmn)
 : Metaheuristic(_d, _m, _n, _k, 0){
 
     int i, j;
@@ -48,16 +48,16 @@ DE::DE(double** _d, int _m, int _n, int _k, int _i, int _it, double _w1,
         solution[i] = new int[N];
 
     //Se reservan I arreglos de centroides.
-    centroid    = (double ***) calloc(I, sizeof(double**));
+    centroid    = (float ***) calloc(I, sizeof(float**));
     if(centroid == NULL) exit(1);
     for(i = 0; i < I; ++i){
-        centroid[i] = (double**) calloc(K, sizeof(double*));
+        centroid[i] = (float**) calloc(K, sizeof(float*));
         if(centroid[i] == NULL) exit(1);
         for(j = 0; j < K; ++j)
-            centroid[i][j] = new double[M];
+            centroid[i][j] = new float[M];
     }
 
-    of = new double[I]; //Valor de las funciones objetivo.
+    of = new float[I]; //Valor de las funciones objetivo.
 
 }
 
@@ -75,8 +75,8 @@ DE::DE(double** _d, int _m, int _n, int _k, int _i, int _it, double _w1,
  *             parámetro.
  * @param _met Métrica.
  */
-DE::DE(double** _d, int _m, int _n, int _k, int _i, int _it, double _Cr, 
-       double _F, double _w1, double _w2, double _w3, double *_zmx, double *_zmn)
+DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr, 
+       float _F, float _w1, float _w2, float _w3, float *_zmx, float *_zmn)
 : Metaheuristic(_d, _m, _n, _k, 0){
     int i, j;
 
@@ -101,16 +101,16 @@ DE::DE(double** _d, int _m, int _n, int _k, int _i, int _it, double _Cr,
         solution[i] = new int[N];
 
     //Se reservan I arreglos de centroides.
-    centroid    = (double ***) calloc(I, sizeof(double**));
+    centroid    = (float ***) calloc(I, sizeof(float**));
     if(centroid == NULL) exit(1);
     for(i = 0; i < I; ++i){
-        centroid[i] = (double**) calloc(K, sizeof(double*));
+        centroid[i] = (float**) calloc(K, sizeof(float*));
         if(centroid[i] == NULL) exit(1);
         for(j = 0; j < K; ++j)
-            centroid[i][j] = new double[M];
+            centroid[i][j] = new float[M];
     }
 
-    of = new double[I]; //Valor de las funciones objetivo.
+    of = new float[I]; //Valor de las funciones objetivo.
 
 }
 
@@ -143,15 +143,15 @@ DE::~DE(){
  */
 void DE::run(int type){
 
-    double **auxCent;
+    float **auxCent;
     int *auxSol;
     int auxOf = 0;
     int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0;
 
-    auxCent = (double**) calloc(Kmax, sizeof(double*));
+    auxCent = (float**) calloc(Kmax, sizeof(float*));
     if(auxCent == NULL) exit(1);
     for(j = 0; j < Kmax; ++j)
-        auxCent[j] = new double[M];
+        auxCent[j] = new float[M];
         
     auxSol = new int[N];
 
@@ -168,8 +168,8 @@ void DE::run(int type){
     for(int it  = 0; it < maxit; it++){
 
         if(var){
-            Cr = (CrMAX-CrMIN) * ((double) (maxit - it))/((double) maxit) + CrMIN;
-            F = 0.5 * ( 1.0 + ((double)rand())/((double)RAND_MAX) );
+            Cr = (CrMAX-CrMIN) * ((float) (maxit - it))/((float) maxit) + CrMIN;
+            F = 0.5 * ( 1.0 + ((float)rand())/((float)RAND_MAX) );
         }
 
         for(i = 0; i < I; i++){
@@ -192,7 +192,7 @@ void DE::run(int type){
             p = rand()%Kmax;
 
             for(l = 0; l < K; l++){
-                if(((double)rand())/((double)RAND_MAX) < Cr || l == p){
+                if(((float)rand())/((float)RAND_MAX) < Cr || l == p){
                     for(h = 0; h < M; h++)
                         auxCent[l][h] = centroid[m][l][h] + F*(centroid[j][l][h] - centroid[k][l][h]);
                 }else{
@@ -241,7 +241,7 @@ void DE::run(int type){
  * @return Valor de la solución con función objetivo
  *         indicada.
  */
-double DE::foMin(int* sol, double** cent, int k){
+float DE::foMin(int* sol, float** cent, int k){
     return ( deFO(sol, cent, k) );
 }
 
@@ -296,7 +296,7 @@ void DE::swap(int *array, int f, int s){
  * @return Número de individuo mejor de la población.
  */
 int DE::getBetter(int type){
-    double best;
+    float best;
     int top = 0;
     int i;
     switch(type){
@@ -304,7 +304,7 @@ int DE::getBetter(int type){
             best = -1.0;
             break;
         default:
-            best = numeric_limits<double>::infinity();
+            best = numeric_limits<float>::infinity();
     }
 
     for(i = 0; i < I; ++i){
@@ -364,12 +364,12 @@ void DE::initialize(){
  * @param solution Solucion.
  * @param centroid Centroide.
  */
-void DE::assign(int *solution, double **centroid){
+void DE::assign(int *solution, float **centroid){
     int i, j;
-    double ma = 0.0;
+    float ma = 0.0;
     int mai  = 0;
-    double t1  = 0.0;
-    double t2  = 0.0;
+    float t1  = 0.0;
+    float t2  = 0.0;
     int largest;
 
     for(i = 0; i < Kmax; ++i)
@@ -444,15 +444,15 @@ void DE::assign(int *solution, double **centroid){
  *
  * @return Valor de la función objetivo.
  */
-double DE::deFO(int* sol, double** cent, int k){
+float DE::deFO(int* sol, float** cent, int k){
     int i, j;
-    double dmax = 0.0;
-    double je   = 0.0;
-    double dmin = numeric_limits<double>::infinity();
-    double t    = 0.0;
-    double res  = 0.0;
+    float dmax = 0.0;
+    float je   = 0.0;
+    float dmin = numeric_limits<float>::infinity();
+    float t    = 0.0;
+    float res  = 0.0;
 
-    double* sums = new double[k];
+    float* sums = new float[k];
     for(i = 0; i < k; ++i){
         sums[i] = 0.0;
         size[i] = 0;
@@ -465,7 +465,7 @@ double DE::deFO(int* sol, double** cent, int k){
 
     for(i = 0; i < k; ++i){
         if(size[i] != 0) 
-            sums[i] = sums[i] / ( (double) size[i] );
+            sums[i] = sums[i] / ( (float) size[i] );
     }
 
     //Cálculo de dmax.

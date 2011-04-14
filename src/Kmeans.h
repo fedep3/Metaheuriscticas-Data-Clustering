@@ -30,7 +30,7 @@ class Kmeans : public Metaheuristic{
          * @param met Métrica.
          * @param reps Cantidad de repeticiones sin mejora.
          */
-        Kmeans(double** _d, int _m, int _n, int _k, int _met, int _reps);
+        Kmeans(float** _d, int _m, int _n, int _k, int _met, int _reps);
 
         /**
          * Toma un vector de centroides e inicializa el arreglo
@@ -38,7 +38,7 @@ class Kmeans : public Metaheuristic{
          *
          * @param cent Centroides. 
          */
-        void setCentroids(double** cent);
+        void setCentroids(float** cent);
 
         /**
          * Inicializa los centroides de los clusters. No se

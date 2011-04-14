@@ -36,7 +36,7 @@ class Bee : public Metaheuristic{
          * @param _met  Métrica.
          * @param _reps Repeticiones sin mejora.
          */
-        Bee(double** _d, int _m, int _n, int _k, int _i,
+        Bee(float** _d, int _m, int _n, int _k, int _i,
            int _ms, int _es, int _eb, int _ob,
            int _met, int _reps);
 

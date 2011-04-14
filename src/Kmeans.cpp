@@ -20,7 +20,7 @@
  * @param k   Cantidad de clusters (iniciales).
  * @param met Métrica.
  */
-Kmeans::Kmeans(double** _d, int _m,  int _n, int _k, int _met, int _reps)
+Kmeans::Kmeans(float** _d, int _m,  int _n, int _k, int _met, int _reps)
 : Metaheuristic(_d, _m, _n, _k, _met){
     int i;
     //Sólo se necesita una solución.
@@ -29,15 +29,15 @@ Kmeans::Kmeans(double** _d, int _m,  int _n, int _k, int _met, int _reps)
     solution[0] = new int[N];
 
     //Sólo necesita un arreglo de centroides.
-    centroid    = (double ***) calloc(1, sizeof(double**));
+    centroid    = (float ***) calloc(1, sizeof(float**));
     if(centroid == NULL) exit(1);
-    centroid[0] = (double**) calloc(K,sizeof(double*));
+    centroid[0] = (float**) calloc(K,sizeof(float*));
     if(centroid[0] == NULL) exit(1);
     for(i = 0; i < K; ++i){
-        centroid[0][i] = new double[M];
+        centroid[0][i] = new float[M];
     }
 
-    of = new double[1];
+    of = new float[1];
     Ks = new int[1];
 
     Ks[0] = K;
@@ -75,7 +75,7 @@ void Kmeans::run(int type){
     // Inicializaciones.
 
     //Inicializaciones del mejor según el tipo de problema.
-    double best;  
+    float best;  
     switch(type){
         case T_MAX:
             //Maximización.
@@ -83,9 +83,9 @@ void Kmeans::run(int type){
             break;
         default:
             //Minimización.
-            best = numeric_limits<double>::infinity();
+            best = numeric_limits<float>::infinity();
     }
-    double last  = best;
+    float last  = best;
     int count   = 0;
 
     ////////////////////////////
@@ -137,7 +137,7 @@ void Kmeans::initialize(){
  *
  * @param cent Centroides. 
  */
-void Kmeans::setCentroids(double** cent){
+void Kmeans::setCentroids(float** cent){
     int i, j;
 
     for(i = 0; i < K; ++i)

@@ -26,7 +26,7 @@
  * @param _met  Métrica.
  * @param _reps Repeticiones sin mejora.
  */
-Bee::Bee(double** _d, int _m, int _n, int _k, int _i,
+Bee::Bee(float** _d, int _m, int _n, int _k, int _i,
          int _ms, int _es, int _eb, int _ob,
          int _met, int _reps)
 : Metaheuristic(_d, _m, _n, _k, _met){
@@ -44,16 +44,16 @@ Bee::Bee(double** _d, int _m, int _n, int _k, int _i,
         solution[i] = new int[N];
 
     //Se reservan I arreglos de centroides.
-    centroid    = (double ***) calloc(I, sizeof(double**));
+    centroid    = (float ***) calloc(I, sizeof(float**));
     if(centroid == NULL) exit(1);
     for(i = 0; i < I; ++i){
-        centroid[i] = (double**) calloc(K, sizeof(double*));
+        centroid[i] = (float**) calloc(K, sizeof(float*));
         if(centroid[i] == NULL) exit(1);
         for(j = 0; j < K; ++j)
-            centroid[i][j] = new double[M];
+            centroid[i][j] = new float[M];
     }
 
-    of = new double[I]; //Valor de las funciones objetivo.
+    of = new float[I]; //Valor de las funciones objetivo.
     Ks = new int[I];   //Cantidad de clusters.
     for(i = 0; i < I; ++i)
         Ks[i] = K;
@@ -152,7 +152,7 @@ void Bee::run(int type){
     }
 
     //Inicializaciones del mejor según el tipo de problema.
-    double best;
+    float best;
     switch(type){
         case T_MAX:
             //Maximización.
@@ -160,9 +160,9 @@ void Bee::run(int type){
             break;
         default:
             //Minimización.
-            best = numeric_limits<double>::infinity();
+            best = numeric_limits<float>::infinity();
     }
-    double last  = best;
+    float last  = best;
     int count   = 0;
 
     int top = -1;

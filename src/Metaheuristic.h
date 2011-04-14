@@ -45,7 +45,7 @@ class Metaheuristic{
          * @param n Cantidad de datos.
          * @param k Cantidad de clusters (iniciales).
          */
-        Metaheuristic(double** _d, int _m, int _n, int _k, int _met);
+        Metaheuristic(float** _d, int _m, int _n, int _k, int _met);
 
         /**
          * Ejecuta la metaheurística con los datos dados.
@@ -75,12 +75,12 @@ class Metaheuristic{
         /**
          * Mejores centroides.
          */
-        double** bestCentroids;
+        float** bestCentroids;
 
         /**
          * Mejor valor de la función objetivo.
          */
-        double bestFO;
+        float bestFO;
 
         /**
          * Cantidad de clusters.
@@ -90,7 +90,7 @@ class Metaheuristic{
         /**
          * Mejor valor heurístico usando la métrica DB.
          */
-        double bestDB;
+        float bestDB;
 
         /**
          * Cantidad de datos.
@@ -105,7 +105,7 @@ class Metaheuristic{
         /**
          * Datos.
          */
-        double** data;
+        float** data;
 
     protected:
         /**
@@ -116,7 +116,7 @@ class Metaheuristic{
          *
          * @return Distancia entre los objetos.
          */
-        double d(int i, int j);
+        float d(int i, int j);
 
         /**
          * Distancia entre dos vectores cualesquiera.
@@ -126,7 +126,7 @@ class Metaheuristic{
          *
          * @return Distancia entre los vectores.
          */
-        double d(double* v1, double* v2);
+        float d(float* v1, float* v2);
 
         /**
          * Calcula la distancia del coseno entre dos vectores.
@@ -137,7 +137,7 @@ class Metaheuristic{
          * @return Distancia del coseno entre los dos vectores
          *         dados.
          */
-        double cosineDistance(double* v1, double* v2);
+        float cosineDistance(float* v1, float* v2);
 
         /**
          * Calcula la distancia euclideana entre dos vectores.
@@ -151,7 +151,7 @@ class Metaheuristic{
          * @return Distancia euclideana entre los dos vectores
          *         dados.
          */
-        double euclideanDistance(double* v1, double* v2, double q = 2.0);
+        float euclideanDistance(float* v1, float* v2, float q = 2.0);
 
         /**
          * Calcula la norma de un vector. Para calcular la norma
@@ -163,7 +163,7 @@ class Metaheuristic{
          *
          * @return Norma del vector.
          */
-        double norm(double* vec, int dim, double q = 2.0);
+        float norm(float* vec, int dim, float q = 2.0);
 
         /**
          * Busca el mejor cluster para un objeto.
@@ -184,7 +184,7 @@ class Metaheuristic{
          *
          * @return Mejor cluster para el objeto.
          */
-        int bestCluster(double **centroid, int e);
+        int bestCluster(float **centroid, int e);
 
         /**
          * Métrica DB. A menor valor de DB, mejor es la solución.
@@ -194,7 +194,7 @@ class Metaheuristic{
          *
          * @return Valor de métrica.
          */
-        double DB(int i, int k);
+        float DB(int i, int k);
 
         /**
          * Métrica DB. A menor valor de DB, mejor es la solución.
@@ -205,7 +205,7 @@ class Metaheuristic{
          *
          * @return Valor de métrica.
          */
-        double DB(int* sol, double** cent, int k);
+        float DB(int* sol, float** cent, int k);
 
         /**
          * Métrica CS. A menor valor de CS, mejor es la solución.
@@ -215,7 +215,7 @@ class Metaheuristic{
          *
          * @return Valor de métrica.
          */
-        double CS(int i, int k);
+        float CS(int i, int k);
 
         /**
          * Métrica CS. A menor valor de CS, mejor es la solución.
@@ -226,7 +226,7 @@ class Metaheuristic{
          *
          * @return Valor de métrica.
          */
-        double CS(int* sol, double** cent, int k);
+        float CS(int* sol, float** cent, int k);
 
         /**
          * Utiliza minimización de la métrica indicada. Si la métrica no
@@ -238,7 +238,7 @@ class Metaheuristic{
          *
          * @return Valor de la solución con la métrica indicada.
          */
-        virtual double foMin(int i, int k, int met);
+        virtual float foMin(int i, int k, int met);
 
         /**
          * Utiliza minimización de la métrica indicada. Si la métrica no
@@ -251,7 +251,7 @@ class Metaheuristic{
          *
          * @return Valor de la solución con la métrica indicada.
          */
-        virtual double foMin(int* sol, double** cent, int k, int met);
+        virtual float foMin(int* sol, float** cent, int k, int met);
 
         /**
          * Utiliza maximización de la métrica indicada. Si la métrica no
@@ -263,7 +263,7 @@ class Metaheuristic{
          *
          * @return Valor de la solución con la métrica indicada.
          */
-        virtual double foMax(int i, int k, int met);
+        virtual float foMax(int i, int k, int met);
 
         /**
          * Utiliza maximización de la métrica indicada. Si la métrica no
@@ -276,7 +276,7 @@ class Metaheuristic{
          *
          * @return Valor de la solución con la métrica indicada.
          */
-        virtual double foMax(int* sol, double** cent, int k, int met);
+        virtual float foMax(int* sol, float** cent, int k, int met);
 
         /**
          * Reasigna los objetos a los centroides.
@@ -285,7 +285,7 @@ class Metaheuristic{
          * @param cent  Centroides.
          * @param k     Cantidad de clusters.
          */
-        void reassign(int* sol, double** cent, int k);
+        void reassign(int* sol, float** cent, int k);
 
         /**
          * Renombra los elementos de un vector.
@@ -328,7 +328,7 @@ class Metaheuristic{
          * @return Devuelve la cantidad de clusters vacíos
          *         removidos.
          */
-        int renamer(int* sol, double** cent, int* k, int* size);
+        int renamer(int* sol, float** cent, int* k, int* size);
 
         /**
          * Actualiza el mejor encontrado en la población.
@@ -341,7 +341,7 @@ class Metaheuristic{
          *              solución en las últimas iteraciones.
          * @param type  Tipo de función objetivo.
          */
-        void updateBetter(int i, double* best, double* last, int* count, int type);
+        void updateBetter(int i, float* best, float* last, int* count, int type);
 
         /**
          * Cantidad de clusters inicial.
@@ -361,12 +361,12 @@ class Metaheuristic{
         /**
          * Centroides.
          */
-        double*** centroid;
+        float*** centroid;
 
         /**
          * Funciones objetivo de la población.
          */
-        double* of;
+        float* of;
 
         /**
          * Cantidad de clusters de la población.

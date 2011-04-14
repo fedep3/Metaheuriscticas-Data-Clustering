@@ -24,7 +24,7 @@
  * @param _n Cantidad de datos.
  * @param _k Cantidad de clusters (iniciales).
  */
-Metaheuristic::Metaheuristic(double** _d, int _m, int _n, int _k, int _met){
+Metaheuristic::Metaheuristic(float** _d, int _m, int _n, int _k, int _met){
     int i;
     data     = _d;
     M        = _m;
@@ -35,10 +35,10 @@ Metaheuristic::Metaheuristic(double** _d, int _m, int _n, int _k, int _met){
 
     bestSolution = new int[N];
 
-    bestCentroids = (double **) calloc(K, sizeof(double*));
+    bestCentroids = (float **) calloc(K, sizeof(float*));
     if(bestCentroids == NULL) exit(1);
     for(i = 0; i < K; ++i)
-        bestCentroids[i] = new double[M];
+        bestCentroids[i] = new float[M];
 
     size = new int[K];
 }
@@ -71,7 +71,7 @@ Metaheuristic::~Metaheuristic(){
  *
  * @return Distancia entre los objetos.
  */
-double Metaheuristic::d(int i, int j){
+float Metaheuristic::d(int i, int j){
     if(i == j) return 0.0;
 
     switch(DEFAULT_DISTANCE){
@@ -90,7 +90,7 @@ double Metaheuristic::d(int i, int j){
  *
  * @return Distancia entre los vectores.
  */
-double Metaheuristic::d(double* v1, double* v2){
+float Metaheuristic::d(float* v1, float* v2){
     switch(DEFAULT_DISTANCE){
         case COSINE_DISTANCE:
             return cosineDistance(v1, v2);
@@ -110,9 +110,9 @@ double Metaheuristic::d(double* v1, double* v2){
  *
  * @return Distancia del coseno entre los dos vectores dados.
  */
-double Metaheuristic::cosineDistance(double* v1, double* v2){
+float Metaheuristic::cosineDistance(float* v1, float* v2){
     int k;
-    double sum = 0.0;
+    float sum = 0.0;
 
     for(k = 0; k < M; ++k){
         sum += v1[k] * v2[k];
@@ -135,17 +135,17 @@ double Metaheuristic::cosineDistance(double* v1, double* v2){
  *
  * @return Distancia euclideana entre los dos vectores dados.
  */
-double Metaheuristic::euclideanDistance(double* v1, double* v2, double q){
+float Metaheuristic::euclideanDistance(float* v1, float* v2, float q){
     int k;
-    double sum = 0.0;
-    double t;
+    float sum = 0.0;
+    float t;
 
     for(k = 0; k < M; ++k){
         t = v1[k] - v2[k];
-        sum += pow(t, q);
+        sum += powf(t, q);
     }
 
-    return ( pow(sum, (1.0/q)) );
+    return ( powf(sum, (1.0/q)) );
 }
 
 /**
@@ -157,15 +157,15 @@ double Metaheuristic::euclideanDistance(double* v1, double* v2, double q){
  *
  * @return Norma del vector.
  */
-double Metaheuristic::norm(double* vec, int dim, double q){
+float Metaheuristic::norm(float* vec, int dim, float q){
     int k;
-    double sum = 0.0;
+    float sum = 0.0;
 
     for(k = 0; k < dim; ++k){
-        sum += pow(vec[k], q);
+        sum += powf(vec[k], q);
     }
 
-    return ( pow(sum, (1.0/q)) );
+    return ( powf(sum, (1.0/q)) );
 }
 
 /**
@@ -189,10 +189,10 @@ int Metaheuristic::bestCluster(int i, int e){
  *
  * @return Mejor cluster para el objeto.
  */
-int Metaheuristic::bestCluster(double **centroid, int e){
+int Metaheuristic::bestCluster(float **centroid, int e){
     int j;
-    double mn = numeric_limits<double>::infinity();
-    double t;
+    float mn = numeric_limits<float>::infinity();
+    float t;
     int c = -1;
     for(j = 0; j < K; ++j){
         t = d(centroid[j], data[e]);
@@ -216,7 +216,7 @@ int Metaheuristic::bestCluster(double **centroid, int e){
  *
  * @return Valor de métrica.
  */
-double Metaheuristic::DB(int i, int k){
+float Metaheuristic::DB(int i, int k){
     return ( DB(solution[i], centroid[i], k) );
 }
 
@@ -229,12 +229,12 @@ double Metaheuristic::DB(int i, int k){
  *
  * @return Valor de métrica.
  */
-double Metaheuristic::DB(int* sol, double** cent, int k){
+float Metaheuristic::DB(int* sol, float** cent, int k){
     int j, l, cluster;
-    double m, t1, t2;
+    float m, t1, t2;
 
 
-    double* S  = new double[k];
+    float* S  = new float[k];
     int* csize = new int[k];
 
     for(j = 0; j < k; ++j){
@@ -256,7 +256,7 @@ double Metaheuristic::DB(int* sol, double** cent, int k){
                 S[j] = S[j] / MIN_DIST;
                 break;
             default:
-                S[j] = S[j] / ( (double) csize[j] );
+                S[j] = S[j] / ( (float) csize[j] );
         }
     }
 
@@ -281,7 +281,7 @@ double Metaheuristic::DB(int* sol, double** cent, int k){
     delete [] S;
     delete [] csize;
 
-    return ( m / ( (double) k ) );
+    return ( m / ( (float) k ) );
 }
 
 /**
@@ -292,7 +292,7 @@ double Metaheuristic::DB(int* sol, double** cent, int k){
  *
  * @return Valor de métrica.
  */
-double Metaheuristic::CS(int i, int k){
+float Metaheuristic::CS(int i, int k){
     return ( CS(solution[i], centroid[i], k) );
 }
 
@@ -305,14 +305,14 @@ double Metaheuristic::CS(int i, int k){
  *
  * @return Valor de métrica.
  */
-double Metaheuristic::CS(int* sol, double** cent, int k){
-    double mn;
-    double mx;
-    double t;
+float Metaheuristic::CS(int* sol, float** cent, int k){
+    float mn;
+    float mx;
+    float t;
     int j, l;
     bool first;
 
-    double* MX  = new double[k];
+    float* MX  = new float[k];
     int* csize  = new int[k];
 
     for(j = 0; j < k; ++j){
@@ -320,8 +320,8 @@ double Metaheuristic::CS(int* sol, double** cent, int k){
         csize[j]  = 0;
     }
 
-    double denom = 0.0;
-    double numer = 0.0;
+    float denom = 0.0;
+    float numer = 0.0;
 
     //Cálculo del numerador.
     first = true;
@@ -345,14 +345,14 @@ double Metaheuristic::CS(int* sol, double** cent, int k){
                 MX[j] = MX[j] / MIN_DIST;
                 break;
             default:
-                MX[j] = ( MX[j] / ((double) csize[j]) );
+                MX[j] = ( MX[j] / ((float) csize[j]) );
         }
         numer += MX[j];
     }
 
     //Cálculo de denominador.
     for(j = 0; j < k; ++j){
-        mn = numeric_limits<double>::infinity();
+        mn = numeric_limits<float>::infinity();
         for(l = 0; l < k; ++l){
             if(j == l) continue;
 
@@ -385,7 +385,7 @@ double Metaheuristic::CS(int* sol, double** cent, int k){
  *
  * @return Valor de la solución con la métrica indicada.
  */
-double Metaheuristic::foMin(int i, int k, int met){
+float Metaheuristic::foMin(int i, int k, int met){
     switch(met){
         case M_DB:
             return DB(i, k);
@@ -409,7 +409,7 @@ double Metaheuristic::foMin(int i, int k, int met){
  *
  * @return Valor de la solución con la métrica indicada.
  */
-double Metaheuristic::foMin(int* sol, double** cent, int k, int met){
+float Metaheuristic::foMin(int* sol, float** cent, int k, int met){
     switch(met){
         case M_DB:
             return DB(sol, cent, k);
@@ -432,7 +432,7 @@ double Metaheuristic::foMin(int* sol, double** cent, int k, int met){
  *
  * @return Valor de la solución con la métrica indicada.
  */
-double Metaheuristic::foMax(int i, int k, int met){
+float Metaheuristic::foMax(int i, int k, int met){
     switch(met){
         case M_DB:
             return (1.0/DB(i, k));
@@ -456,7 +456,7 @@ double Metaheuristic::foMax(int i, int k, int met){
  *
  * @return Valor de la solución con la métrica indicada.
  */
-double Metaheuristic::foMax(int* sol, double** cent, int k, int met){
+float Metaheuristic::foMax(int* sol, float** cent, int k, int met){
     switch(met){
         case M_DB:
             return (1.0/DB(sol, cent, k));
@@ -480,14 +480,14 @@ double Metaheuristic::foMax(int* sol, double** cent, int k, int met){
  * @param cent  Centroides.
  * @param k     Cantidad de clusters.
  */
-void Metaheuristic::reassign(int* sol, double** cent, int k){
+void Metaheuristic::reassign(int* sol, float** cent, int k){
     int i, j;
     int l = 0;
-    double m;
-    double t = 0.0;
+    float m;
+    float t = 0.0;
 
     for(i = 0; i < N; ++i){
-        m = numeric_limits<double>::infinity();
+        m = numeric_limits<float>::infinity();
         for(j = 0; j < k; ++j){
             t = d(cent[j], data[i]);
             if(m > t){
@@ -558,16 +558,16 @@ int Metaheuristic::renamer(int i, int* k, int* csize){
  *
  * @return
  */
-int Metaheuristic::renamer(int* sol, double** cent, int* k, int* csize){
+int Metaheuristic::renamer(int* sol, float** cent, int* k, int* csize){
     int i, j;
     int index = 0;
     vector<int> v;
     int tk = *k;
 
     //Inicialización del arreglo de sumas de promedio.
-    double** sums = (double**) calloc(Kmax, sizeof(double*));
+    float** sums = (float**) calloc(Kmax, sizeof(float*));
     for(i = 0; i < Kmax; ++i)
-        sums[i] = new double[M];
+        sums[i] = new float[M];
 
     for(i = 0; i < Kmax; ++i){
         csize[i] = 0;
@@ -596,7 +596,7 @@ int Metaheuristic::renamer(int* sol, double** cent, int* k, int* csize){
     //Actualización de clusters.
     for(i = 0; i < index; ++i)
         for(j = 0; j < M; ++j)
-            cent[i][j] = sums[i][j] / ((double) csize[i]);
+            cent[i][j] = sums[i][j] / ((float) csize[i]);
 
     //Actualización de la cantidad de clusters.
     *k = index;
@@ -620,7 +620,7 @@ int Metaheuristic::renamer(int* sol, double** cent, int* k, int* csize){
  *              solución en las últimas iteraciones.
  * @param type  Tipo de función objetivo.
  */
-void Metaheuristic::updateBetter(int i, double* best, double* last, int* count, int type){
+void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, int type){
         bool update;
         int j, l;
 

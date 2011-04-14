@@ -33,7 +33,7 @@ void Csv::read(char* input){
     int i, j, k;
     bool first = true;
     ifstream lines(input);
-    vector<double> v;
+    vector<float> v;
 
     string line;
     while(getline(lines,line)){
@@ -64,14 +64,14 @@ void Csv::read(char* input){
 
     lines.close();
 
-    data = (double**) calloc(I, sizeof(double*));
+    data = (float**) calloc(I, sizeof(float*));
     if(data == NULL){
         fprintf(stderr, "No se pudo reservar memoria.\n");
         exit(1);
     }
     k = 0;
     for(i = 0; i < I; ++i){
-        data[i] = new double[J];
+        data[i] = new float[J];
         for(j = 0; j < J; ++j){
             data[i][j] = v[k];
             ++k;

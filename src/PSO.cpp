@@ -38,10 +38,10 @@
  * @param _fun Tipo de función objetivo.
  * @param _reps Repeticiones sin mejora.
  */
-PSO::PSO(double** _d, int _m, int _n, int _k, int _p,
-    double _c1, double _c2, int _w,
-    double _w1, double _w2, double _w3,
-    double* _zmx, double* _zmn, double _vmx,
+PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
+    float _c1, float _c2, int _w,
+    float _w1, float _w2, float _w3,
+    float* _zmx, float* _zmn, float _vmx,
     int _fun, int _reps)
 : Metaheuristic(_d, _m, _n, _k, _fun){
     int i, j, l;
@@ -72,37 +72,37 @@ PSO::PSO(double** _d, int _m, int _n, int _k, int _p,
         solution[i] = new int[N];
 
     //Se reservan P "posiciones actuales".
-    centroid    = (double ***) calloc(P, sizeof(double**));
+    centroid    = (float ***) calloc(P, sizeof(float**));
     if(centroid == NULL) exit(1);
 
     //Se reservan P "vectores de velocidad".
-    velocity    = (double ***) calloc(P, sizeof(double**));
+    velocity    = (float ***) calloc(P, sizeof(float**));
     if(velocity == NULL) exit(1);
 
     //Se reservan P "mejores posiciones".
-    bestParticle    = (double ***) calloc(P, sizeof(double**));
+    bestParticle    = (float ***) calloc(P, sizeof(float**));
     if(bestParticle == NULL) exit(1);
 
     for(i = 0; i < P; ++i){
-        centroid[i] = (double**) calloc(K, sizeof(double*));
+        centroid[i] = (float**) calloc(K, sizeof(float*));
         if(centroid[i] == NULL) exit(1);
 
-        velocity[i] = (double**) calloc(K, sizeof(double*));
+        velocity[i] = (float**) calloc(K, sizeof(float*));
         if(velocity[i] == NULL) exit(1);
 
-        bestParticle[i] = (double**) calloc(K, sizeof(double*));
+        bestParticle[i] = (float**) calloc(K, sizeof(float*));
         if(bestParticle[i] == NULL) exit(1);
 
         for(j = 0; j < K; ++j){
-            centroid[i][j]     = new double[M];
-            velocity[i][j]     = new double[M];
+            centroid[i][j]     = new float[M];
+            velocity[i][j]     = new float[M];
             for(l = 0; l < M; ++l) velocity[i][j][l] = 0.0;
-            bestParticle[i][j] = new double[M];
+            bestParticle[i][j] = new float[M];
         }
     }
 
     //Para mejores posiciones.
-    of = new double[P]; //Valor de las funciones objetivo.
+    of = new float[P]; //Valor de las funciones objetivo.
     Ks = new int[P];   //Cantidad de clusters.
     for(i = 0; i < P; ++i)
         Ks[i] = K;
@@ -127,9 +127,9 @@ PSO::PSO(double** _d, int _m, int _n, int _k, int _p,
  * @param _fun Tipo de función objetivo.
  * @param _reps Repeticiones sin mejora.
  */
-PSO::PSO(double** _d, int _m, int _n, int _k, int _p,
-    double _c1, double _c2, int _w,
-    double* _zmx, double* _zmn, double _vmx,
+PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
+    float _c1, float _c2, int _w,
+    float* _zmx, float* _zmn, float _vmx,
     int _fun, int _reps)
 : Metaheuristic(_d, _m, _n, _k, _fun){
     int i, j, l;
@@ -160,37 +160,37 @@ PSO::PSO(double** _d, int _m, int _n, int _k, int _p,
         solution[i] = new int[N];
 
     //Se reservan P "posiciones actuales".
-    centroid    = (double ***) calloc(P, sizeof(double**));
+    centroid    = (float ***) calloc(P, sizeof(float**));
     if(centroid == NULL) exit(1);
 
     //Se reservan P "vectores de velocidad".
-    velocity    = (double ***) calloc(P, sizeof(double**));
+    velocity    = (float ***) calloc(P, sizeof(float**));
     if(velocity == NULL) exit(1);
 
     //Se reservan P "mejores posiciones".
-    bestParticle    = (double ***) calloc(P, sizeof(double**));
+    bestParticle    = (float ***) calloc(P, sizeof(float**));
     if(bestParticle == NULL) exit(1);
 
     for(i = 0; i < P; ++i){
-        centroid[i] = (double**) calloc(K, sizeof(double*));
+        centroid[i] = (float**) calloc(K, sizeof(float*));
         if(centroid[i] == NULL) exit(1);
 
-        velocity[i] = (double**) calloc(K, sizeof(double*));
+        velocity[i] = (float**) calloc(K, sizeof(float*));
         if(velocity[i] == NULL) exit(1);
 
-        bestParticle[i] = (double**) calloc(K, sizeof(double*));
+        bestParticle[i] = (float**) calloc(K, sizeof(float*));
         if(bestParticle[i] == NULL) exit(1);
 
         for(j = 0; j < K; ++j){
-            centroid[i][j]     = new double[M];
-            velocity[i][j]     = new double[M];
+            centroid[i][j]     = new float[M];
+            velocity[i][j]     = new float[M];
             for(l = 0; l < M; ++l) velocity[i][j][l] = 0.0;
-            bestParticle[i][j] = new double[M];
+            bestParticle[i][j] = new float[M];
         }
     }
 
     //Para mejores posiciones.
-    of = new double[P]; //Valor de las funciones objetivo.
+    of = new float[P]; //Valor de las funciones objetivo.
     Ks = new int[P];   //Cantidad de clusters.
     for(i = 0; i < P; ++i)
         Ks[i] = K;
@@ -253,7 +253,7 @@ void PSO::initialize(){
         assign(i);
     }
 
-    bestFO = numeric_limits<double>::infinity();
+    bestFO = numeric_limits<float>::infinity();
 
     delete [] done;
 }
@@ -266,7 +266,7 @@ void PSO::initialize(){
 void PSO::run(int type){
     int p;
     int count = 0;
-    double fo = 0.0;
+    float fo = 0.0;
     bool improved = false;
 
     initialize();
@@ -311,12 +311,12 @@ void PSO::run(int type){
  */
 void PSO::updateVelocity(int p){
     int i, j;
-    double r1, r2, v;
+    float r1, r2, v;
 
     for(i = 0; i < Kmax; ++i){
         for(j = 0; j < M; ++j){
-            r1 = ( (double)rand() ) / ( (double)RAND_MAX );
-            r2 = ( (double)rand() ) / ( (double)RAND_MAX );
+            r1 = ( (float)rand() ) / ( (float)RAND_MAX );
+            r2 = ( (float)rand() ) / ( (float)RAND_MAX );
             v = W * velocity[p][i][j] +
                 c1 * r1 * (bestParticle[p][i][j] - centroid[p][i][j]) +
                 c2 * r2 * (bestCentroids[i][j]   - centroid[p][i][j]);
@@ -351,7 +351,7 @@ void PSO::updateParticle(int p){
  * @param p  Partícula.
  * @param fo Valor de la función objetivo.
  */
-void PSO::updateBestParticle(int p, double fo){
+void PSO::updateBestParticle(int p, float fo){
     int i = 0, j = 0;
 
     if(of[p] > fo){
@@ -371,7 +371,7 @@ void PSO::updateBestParticle(int p, double fo){
  *
  * @return Si hubo un cambio en la mejor solución global.
  */
-bool PSO::updateBest(int p, double fo){
+bool PSO::updateBest(int p, float fo){
     int i = 0, j = 0;
     if(bestFO > fo){
         bestFO = fo;
@@ -398,10 +398,10 @@ bool PSO::updateBest(int p, double fo){
  */
 void PSO::assign(int p){
     int i, j;
-    double ma = 0.0;
+    float ma = 0.0;
     int mai  = 0;
-    double t1  = 0.0;
-    double t2  = 0.0;
+    float t1  = 0.0;
+    float t2  = 0.0;
     int largest;
 
     for(i = 0; i < Kmax; ++i)
@@ -477,7 +477,7 @@ void PSO::assign(int p){
  * @return Valor de la solución con función objetivo
  *         indicada.
  */
-double PSO::foMin(int i, int k, int fun){
+float PSO::foMin(int i, int k, int fun){
     return ( psoFO(solution[i], centroid[i], k) );
 }
 
@@ -492,7 +492,7 @@ double PSO::foMin(int i, int k, int fun){
  * @return Valor de la solución con función objetivo
  *         indicada.
  */
-double PSO::foMin(int* sol, double** cent, int k, int fun){
+float PSO::foMin(int* sol, float** cent, int k, int fun){
     return ( psoFO(sol, cent, k) );
 }
 
@@ -505,15 +505,15 @@ double PSO::foMin(int* sol, double** cent, int k, int fun){
  *
  * @return Valor de la función objetivo.
  */
-double PSO::psoFO(int* sol, double** cent, int k){
+float PSO::psoFO(int* sol, float** cent, int k){
     int i, j;
-    double dmax = 0.0;
-    double je   = 0.0;
-    double dmin = numeric_limits<double>::infinity();
-    double t    = 0.0;
-    double res  = 0.0;
+    float dmax = 0.0;
+    float je   = 0.0;
+    float dmin = numeric_limits<float>::infinity();
+    float t    = 0.0;
+    float res  = 0.0;
 
-    double* sums = new double[k];
+    float* sums = new float[k];
     for(i = 0; i < k; ++i){
         sums[i] = 0.0;
         size[i] = 0;
@@ -526,7 +526,7 @@ double PSO::psoFO(int* sol, double** cent, int k){
 
     for(i = 0; i < k; ++i){
         if(size[i] != 0) 
-            sums[i] = sums[i] / ( (double) size[i] );
+            sums[i] = sums[i] / ( (float) size[i] );
     }
 
     //Cálculo de dmax.

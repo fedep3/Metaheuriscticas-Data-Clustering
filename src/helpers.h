@@ -46,7 +46,7 @@
 using namespace std;
 ///////////////////////////////////////////
 // Tiempo.
-extern double runtime;
+extern float runtime;
 
 ///////////////////////////////////////////
 // Opciones Generales.
@@ -98,12 +98,12 @@ extern int _I;
 /**
  * Probabilidad de mutación.
  */
-extern double _pm;
+extern float _pm;
 
 /**
  * Probabilidad de cruce.
  */
-extern double _pc;
+extern float _pc;
 
 /**
  * Tamaño del torneo.
@@ -116,47 +116,47 @@ extern int _tt;
 /**
  * Constante de la componente cognitiva.
  */
-extern double _c1;
+extern float _c1;
 
 /**
  * Constante de la componente social.
  */
-extern double _c2;
+extern float _c2;
 
 /**
  * Peso inercial.
  */
-extern double _W;
+extern float _W;
 
 /**
  * Peso de la distancia intracluster.
  */
-extern double _w1;
+extern float _w1;
 
 /**
  * Peso de la distancia intercluster;
  */
-extern double _w2;
+extern float _w2;
 
 /**
  * Peso del error de la solución.
  */
-extern double _w3;
+extern float _w3;
 
 /**
  * Máximos valores de cada atributo.
  */
-extern double* _mxv;
+extern float* _mxv;
 
 /**
  * Mínimos valores de cada atributo.
  */
-extern double* _mnv;
+extern float* _mnv;
 
 /**
  * Velocidad máxima de las partículas.
  */
-extern double _vmx;
+extern float _vmx;
 
 /**
  * Si la función es weighted o no.

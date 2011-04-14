@@ -56,7 +56,7 @@ class ImageReader: public Reader{
          * @param colors Arreglo de colores.
          * @param k      Cantidad de clusters.
          */
-        void generateColors(double **colors, int k);
+        void generateColors(float **colors, int k);
 
         /**
          * Ancho de la imagen.

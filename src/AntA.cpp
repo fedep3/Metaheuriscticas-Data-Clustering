@@ -23,7 +23,7 @@
  * @param _it  Cantidad de iteraciones.
  * @param _met Métrica.
  */
-AntA::AntA(double** _d, int _m, int _n, int _nA, int _it, int _met)
+AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
 : Metaheuristic(_d, _m, _n, _n, _met){
    
     nA = _nA;
@@ -48,7 +48,7 @@ AntA::AntA(double** _d, int _m, int _n, int _nA, int _it, int _met)
  * @param _it     Cantidad de iteraciones.
  * @param _met Métrica.
  */
-AntA::AntA(double** _d, int _m, int _n, int _nA, double _alpha2, 
+AntA::AntA(float** _d, int _m, int _n, int _nA, float _alpha2, 
                                                 int _it, int _met)
 : Metaheuristic(_d, _m, _n, _n, _met){
    
@@ -112,7 +112,7 @@ void AntA::run(int type){
 void AntA::pickAnt(int ra){
 
     int rp = 0, rc = 0;
-    double rn = 0.0;
+    float rn = 0.0;
     vector<int>::iterator it;
 
     rp = rand()%N;
@@ -122,7 +122,7 @@ void AntA::pickAnt(int ra){
         
     rc = free[rp];
 
-    rn = ((double)rand())/((double)RAND_MAX);
+    rn = ((float)rand())/((float)RAND_MAX);
 
     if(rn <= ppick(rp, rc)){
 
@@ -142,7 +142,7 @@ void AntA::pickAnt(int ra){
  */
 void AntA::reconstruct(int type){
 
-    double actual = 0.0, max = -1.0;
+    float actual = 0.0, max = -1.0;
     int i = 0, j = 0, best = 0, rp = 0;
     int *count = new int[K];
     vector<int>::iterator it;
@@ -252,7 +252,7 @@ void AntA::reconstruct(int type){
 void AntA::dropAnt(int ra){
 
     int j = 0, best = 0, rc = ants[ra].getPixel(), rp = 0, actual = 0;
-    double max = -1.0, rn = 0.0;
+    float max = -1.0, rn = 0.0;
     bool done = false;
     
     if(ants[ra].getMSize() > 0){
@@ -267,7 +267,7 @@ void AntA::dropAnt(int ra){
         }
 
         rc = best;
-        rn = ((double)rand())/((double)RAND_MAX);
+        rn = ((float)rand())/((float)RAND_MAX);
 
         if(rn <= pdrop(rp, rc)){
         
@@ -283,7 +283,7 @@ void AntA::dropAnt(int ra){
 
             rc = rand()%N;
 
-            rn = ((double)rand())/((double)RAND_MAX);
+            rn = ((float)rand())/((float)RAND_MAX);
 
             if(rn <= pdrop(rp, rc)){
 
@@ -300,7 +300,7 @@ void AntA::dropAnt(int ra){
 
         rc = rand()%N;
 
-        rn = ((double)rand())/((double)RAND_MAX);
+        rn = ((float)rand())/((float)RAND_MAX);
 
         if(rn <= pdrop(rp, rc)){
 
@@ -320,7 +320,7 @@ void AntA::dropAnt(int ra){
  * @param pixel Pixel que se quiere agarrar.
  * @param cell Célula donde donde se encuentra.
  */
-double AntA::ppick(int pixel, int cell){
+float AntA::ppick(int pixel, int cell){
 
     int size = cells[cell].size();
 
@@ -329,7 +329,7 @@ double AntA::ppick(int pixel, int cell){
     if(size == 2)
         return 0.7;
     else
-        return pow(cos(PIH * f(pixel, cell)),2 );
+        return powf(cos(PIH * f(pixel, cell)),2 );
 
 }
 
@@ -339,9 +339,9 @@ double AntA::ppick(int pixel, int cell){
  * @param pixel Pixel que se quiere soltar.
  * @param cell Célula donde se quiere soltar.
  */
-double AntA::pdrop(int pixel, int cell){
+float AntA::pdrop(int pixel, int cell){
 
-    return 1 - pow(cos(PIH * f(pixel, cell)),2 );
+    return 1 - powf(cos(PIH * f(pixel, cell)),2 );
 
 }
 
@@ -353,9 +353,9 @@ double AntA::pdrop(int pixel, int cell){
  * @param pixel Pixel que se quiere soltar.
  * @param cell Célula donde se quiere soltar.
  */
-double AntA::f(int pixel, int cell){
+float AntA::f(int pixel, int cell){
 
-    double sum = 0.0;
+    float sum = 0.0;
     vector<int>::iterator it;
     int size = cells[cell].size();
 
@@ -432,14 +432,14 @@ void AntA::initialize(){
 void AntA::calcAlpha(){
     int i, j;
     double s = (double) (N * (N - 1));
-    alpha2 = 0.0;
+    double atemp = 0.0;
     
     for(i = 0; i < N; ++i)
         for(j = i + 1; j < N; ++j)
-            alpha2 += 2.0 * d(i, j);
+            atemp += 2.0 * ( (double) d(i, j) );
 
-    alpha2 = alpha2 / s;
+    atemp = atemp / s;
+    atemp = atemp * atemp;
 
-    alpha2 = alpha2 * alpha2;
-
+    alpha2 = (float) atemp;
 }

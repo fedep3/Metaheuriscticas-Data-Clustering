@@ -39,8 +39,8 @@ class DE : public Metaheuristic{
          * @param _it  Número de iteraciones.
          * @param _met Métrica.
          */
-        DE(double** _d, int _m, int _n, int _k, int _i, int _it, double _w1,
-           double _w2, double _w3, double *_zmx, double *_zmn);
+        DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
+           float _w2, float _w3, float *_zmx, float *_zmn);
 
         /**
          * Constructor de la clase DE.
@@ -56,8 +56,8 @@ class DE : public Metaheuristic{
          *             parámetro.
          * @param _met Métrica.
          */
-        DE(double** _d, int _m, int _n, int _k, int _i, int _it, double _Cr, 
-           double _F, double _w1, double _w2, double _w3, double *_zmx, double *_zmn);
+        DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr, 
+           float _F, float _w1, float _w2, float _w3, float *_zmx, float *_zmn);
 
         /**
          * Inicializa la población. (Soluciones, centroides y
@@ -100,7 +100,7 @@ class DE : public Metaheuristic{
          * @param solution Solucion.
          * @param centroid Centroide.
          */
-        void assign(int *solution, double **centroid);
+        void assign(int *solution, float **centroid);
 
         /**
          * Cuenta el número de clusters diferentes a los que pertenece un
@@ -127,7 +127,7 @@ class DE : public Metaheuristic{
          *
          * @return Valor de la función objetivo.
          */
-        double deFO(int* sol, double** cent, int k);
+        float deFO(int* sol, float** cent, int k);
 
         /**
          * Función objetivo de la metaheurística PSO.
@@ -140,7 +140,7 @@ class DE : public Metaheuristic{
          * @return Valor de la solución con función objetivo
          *         indicada.
          */
-        double foMin(int* sol, double** cent, int k);
+        float foMin(int* sol, float** cent, int k);
 
 
         /**
@@ -156,12 +156,12 @@ class DE : public Metaheuristic{
         /**
          * Probabilidad de cruce.
          */
-        double Cr;
+        float Cr;
 
         /**
          * Escalar a la hora de crear nuevos individuos.
          */
-        double F;
+        float F;
 
         /**
          * Booleano para saber si los parámetros fueron dados, o son alea-
@@ -172,22 +172,22 @@ class DE : public Metaheuristic{
         /**
          * Máxima distancia posible entre objetos.
          */
-        double Zmax;
+        float Zmax;
 
         /**
          * Peso de la distacia entre elementos de un cluster.
          */
-        double w1;
+        float w1;
 
         /**
          * Peso de la distancia entre clusters.
          */
-        double w2;
+        float w2;
 
         /**
          * Peso del error.
          */
-        double w3;
+        float w3;
 
 };
 #endif

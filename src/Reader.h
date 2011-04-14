@@ -58,6 +58,6 @@ class Reader{
         /**
          * Objetos.
          */
-        double **data;
+        float **data;
 };
 #endif
