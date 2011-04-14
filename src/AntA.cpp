@@ -329,7 +329,7 @@ float AntA::ppick(int pixel, int cell){
     if(size == 2)
         return 0.7;
     else
-        return pow(cos(PIH * f(pixel, cell)),2 );
+        return powf(cos(PIH * f(pixel, cell)),2 );
 
 }
 
@@ -341,7 +341,7 @@ float AntA::ppick(int pixel, int cell){
  */
 float AntA::pdrop(int pixel, int cell){
 
-    return 1 - pow(cos(PIH * f(pixel, cell)),2 );
+    return 1 - powf(cos(PIH * f(pixel, cell)),2 );
 
 }
 
@@ -431,15 +431,15 @@ void AntA::initialize(){
  */
 void AntA::calcAlpha(){
     int i, j;
-
-    alpha2 = 0.0;
+    double s = (double) (N * (N - 1));
+    double atemp = 0.0;
     
     for(i = 0; i < N; ++i)
         for(j = i + 1; j < N; ++j)
-            alpha2 += 2.0 * d(i, j);
+            atemp += 2.0 * ( (double) d(i, j) );
 
-    alpha2 = alpha2 / ( (float) (N * (N - 1)) );
+    atemp = atemp / s;
+    atemp = atemp * atemp;
 
-    alpha2 = alpha2 * alpha2;
-
+    alpha2 = (float) atemp;
 }
