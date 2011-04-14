@@ -11,17 +11,17 @@ struct timeval t_p;
 /**
  * Tiempo inicial.
  */
-double tinit = 0.0;
+float tinit = 0.0;
 
 /**
  * Tiempo final.
  */
-double tend = 0.0;
+float tend = 0.0;
 
 /**
  * Tiempo de ejecución.
  */
-double runtime = 0.0;
+float runtime = 0.0;
 
 /**
  * Cantidad de repeticiones sin mejora.
@@ -78,12 +78,12 @@ int _I = 0;
 /**
  * Probabilidad de mutación.
  */
-double _pm = 0.0;
+float _pm = 0.0;
 
 /**
  * Probabilidad de cruce.
  */
-double _pc = 0.0;
+float _pc = 0.0;
 
 /**
  * Tamaño del torneo.
@@ -96,47 +96,47 @@ int _tt = 0;
 /**
  * Constante de la componente cognitiva.
  */
-double _c1 = 0.0;
+float _c1 = 0.0;
 
 /**
  * Constante de la componente social.
  */
-double _c2 = 0.0;
+float _c2 = 0.0;
 
 /**
  * Peso inercial.
  */
-double _W = 0.0;
+float _W = 0.0;
 
 /**
  * Peso de la distancia intracluster.
  */
-double _w1 = 0.0;
+float _w1 = 0.0;
 
 /**
  * Peso de la distancia intercluster;
  */
-double _w2 = 0.0;
+float _w2 = 0.0;
 
 /**
  * Peso del error de la solución.
  */
-double _w3 = 0.0;
+float _w3 = 0.0;
 
 /**
  * Máximos valores de cada atributo.
  */
-double* _mxv = NULL;
+float* _mxv = NULL;
 
 /**
  * Mínimos valores de cada atributo.
  */
-double* _mnv = NULL;
+float* _mnv = NULL;
 
 /**
  * Velocidad máxima de las partículas.
  */
-double _vmx = 0.0;
+float _vmx = 0.0;
 
 /**
  * Si la función es weighted o no.
@@ -168,12 +168,12 @@ int _o_bees = 0;
 ///////////////////////////////////////////
 // Opciones del Algoritmo Hormiga.
 
-double _alpha = 0.0;
+float _alpha = 0.0;
 
 /**
  * Parámetro de escalado de los vectores.
  */
-double _f = 0.0;
+float _f = 0.0;
 
 /**
  * Inicializa el contador.
@@ -386,8 +386,8 @@ int mns = 0;
 void parseVector(int t){
     int i;
     int vs;
-    vector<double> v;
-    double* temp;
+    vector<float> v;
+    float* temp;
 
     stringstream line(optarg);
     string str;
@@ -399,12 +399,12 @@ void parseVector(int t){
 
     switch(t){
         case V_MAX:
-            _mxv = new double[vs];
+            _mxv = new float[vs];
             mxs  = vs;
             temp = _mxv;
             break;
         case V_MIN:
-            _mnv = new double[vs];
+            _mnv = new float[vs];
             mns  = vs;
             temp = _mnv;
             break;
@@ -922,8 +922,8 @@ void initTime(){
 
 
     if (!gettimeofday(&t_p, NULL)){
-        tinit = (double) t_p.tv_sec +
-                ((double) t_p.tv_usec)/1000000.0;
+        tinit = (float) t_p.tv_sec +
+                ((float) t_p.tv_usec)/1000000.0;
     }else{
         fprintf(stderr, "Problema con el contador de tiempo\n");
         exit(1);
@@ -935,8 +935,8 @@ void initTime(){
  */
 void endTime(){
     if (!gettimeofday(&t_p,NULL)){
-        tend = (double) t_p.tv_sec +
-              ((double) t_p.tv_usec)/1000000.0;
+        tend = (float) t_p.tv_sec +
+              ((float) t_p.tv_usec)/1000000.0;
     }else{
         fprintf(stderr, "Problema con el contador de tiempo\n");
         exit(1);
