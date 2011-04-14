@@ -166,7 +166,9 @@ int _e_bees = 0;
 int _o_bees = 0;
 
 ///////////////////////////////////////////
-// Opciones del Algoritmo DE.
+// Opciones del Algoritmo Hormiga.
+
+float _alpha = 0.0;
 
 /**
  * Parámetro de escalado de los vectores.
@@ -189,6 +191,8 @@ void endTime();
 void improve(){
     int i, j;
 
+    if(algorithm == M_ANT) return;
+
     Kmeans *KA = new Kmeans(m->data, m->M, m->N, m->K, M_DB, 3);
 
     KA->setCentroids(m->bestCentroids);
@@ -207,6 +211,40 @@ void improve(){
     m->bestFO = KA->bestFO;
 
     delete KA;
+}
+
+/**
+ * Hace varias cosas antes de terminar el programa:
+ * - Muestra el tiempo.
+ * - Genera una imagen con la mejor solución.
+ * - Dice la cantidad de clusters.
+ * @param sig Señal.
+ */
+void longEnough(int sig){
+    try{
+        signal(SIGALRM, SIG_IGN);
+        signal(SIGINT, SIG_DFL);
+
+        endTime();
+        
+        printf("Tiempo excedido...\n");
+
+        m->reconstruct(_tf);
+
+        printf("Cantidad de Clusters Final: %d\n", m->K);
+
+        printf("Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+
+        printf("Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+
+        r->write(_output, m->bestSolution, m->K);
+
+        exit(0);
+    }catch(exception& e){
+        cout << e.what() << endl;
+        signal(SIGINT, SIG_DFL);
+        exit(1);
+    }
 }
 
 /**
@@ -247,15 +285,6 @@ void killIt(int sig){
         signal(SIGINT, SIG_DFL);
         exit(1);
     }
-}
-
-/**
- * Una vez pasado el tiempo MAXRUNTIME termina el programa haciendo
- * la limpieza necesaria y guardando las mejores soluciones que
- * se tengan hasta el momento.
- */
-void longEnough(int sig){
-    killIt(SIGINT);
 }
 
 /**
@@ -341,6 +370,9 @@ void help(bool fullhelp){
         printf("\t--e <Cantidad de parches élite>\n");
         printf("\t--eb <Cantidad de abejas a parches élite>\n");
         printf("\t--ob <Cantidad de abejas a parches no-élite>\n");
+        //Opciones Algoritmo Ant.
+        printf("\n\033[34;1mOpciones Algoritmo de Hormiga\033[0m\n");
+        printf("\t--alpha <Alpha^2 precalculado para la imagen> Opcional\n");
     }
 }
 
@@ -405,6 +437,7 @@ void initIt(int argc, char* argv[]){
     bool* optbee  = new bool[4];
     for(c = 0; c < 9; ++c) optpso[c] = false;
     bool optde = false;
+    bool optant = false;
 
     //////////////////////////////////////////
     // Lectura de parámetros.
@@ -444,10 +477,11 @@ void initIt(int argc, char* argv[]){
             {"f", required_argument, 0,'U'},
             //w1,w2,w3,pc
             /* BEE */
-            {"m", required_argument, 0,'W'},
-            {"e", required_argument, 0,'X'},
-            {"eb", required_argument, 0,'Y'},
-            {"ob", required_argument, 0,'Z'}
+            {"m", required_argument, 0,'V'},
+            {"e", required_argument, 0,'W'},
+            {"eb", required_argument, 0,'X'},
+            {"ob", required_argument, 0,'Y'},
+            {"alpha", required_argument, 0,'Z'}
 
             
         };
@@ -455,7 +489,7 @@ void initIt(int argc, char* argv[]){
         option_index = 0;
 
         c = getopt_long(argc, argv,
-                        "0:?A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:TUV:",
+                        "0:?A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:TU:V:W:X:Y:Z:",
                         long_options, &option_index);
 
         if(c == -1)
@@ -634,21 +668,25 @@ void initIt(int argc, char* argv[]){
                 }
                 optde = true;
                 break;
-            case 'W':
+            case 'V':
                 _m_sites = atoi(optarg);
                 optbee[0] = true;
                 break;
-            case 'X':
+            case 'W':
                 _e_sites = atoi(optarg);
                 optbee[1] = true;
                 break;
-            case 'Y':
+            case 'X':
                 _e_bees = atoi(optarg);
                 optbee[2] = true;
                 break;
-            case 'Z':
+            case 'Y':
                 _o_bees = atoi(optarg);
                 optbee[3] = true;
+                break;
+            case 'Z':
+                _alpha = atof(optarg);
+                optant = true;
                 break;
             case '?':
                 help(true);
@@ -851,7 +889,11 @@ void initIt(int argc, char* argv[]){
                 delete [] _mnv;
                 break;
             case M_ANT:
-                m = new AntA(r->data, r->M, r->N, _I, _reps, M_DB);
+                if(optant){
+                    m = new AntA(r->data, r->M, r->N, _I, _alpha, _reps, M_DB);
+                }else{
+                    m = new AntA(r->data, r->M, r->N, _I, _reps, M_DB);
+                }
                 break;
             case M_BEE:
                 m = new Bee(r->data, r->M, r->N, _K, _I, _m_sites, _e_sites, _e_bees, _o_bees, M_DB, _reps);
@@ -920,13 +962,15 @@ void runIt(){
 
     m->run(_tf);
 
-    signal(SIGALRM, SIG_IGN);
+    signal(SIGINT, SIG_DFL);
 
     endTime();
     
     printf("Mejorando solución...\n");
 
     initTime();
+
+    improve();
 
     m->reconstruct(_tf);
 

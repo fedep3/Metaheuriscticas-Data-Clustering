@@ -214,6 +214,27 @@ void AntA::reconstruct(int type){
             bestCentroids[i][j] = bestCentroids[i][j] / count[i];
             
     delete [] count;
+
+    Kmeans *KA = new Kmeans(data, M, N, K, M_DB, 3);
+
+    KA->setCentroids(bestCentroids);
+
+    KA->run(T_MAX);
+
+    for(i = 0; i < KA->N; ++i)
+        bestSolution[i] = KA->bestSolution[i];
+
+    for(i = 0; i < KA->K; ++i)
+        for(j = 0; j < KA->M; ++j)
+            bestCentroids[i][j] = KA->bestCentroids[i][j];
+
+    K = KA->K;
+
+    bestFO = KA->bestFO;
+
+    bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
+
+    delete KA;
 }
 
 /*
@@ -343,7 +364,6 @@ float AntA::f(int pixel, int cell){
     for ( it= cells[cell].begin() ; it < cells[cell].end(); it++ ){
         sum += alpha2/(alpha2 + d(pixel, *it));
     }
-
         
     sum = sum / size;
 
@@ -399,12 +419,11 @@ void AntA::initialize(){
     }
 
     if(!ac){
+        printf("Calculando Alfa^2...\n");
         calcAlpha();
         ac = true;
+        printf("Valor de Alfa^2: %.2f\n", alpha2);
     }
-
-    
-
 }
 
 /*
