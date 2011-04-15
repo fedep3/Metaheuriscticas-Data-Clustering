@@ -18,6 +18,7 @@ def GA():
     out.write('ofdb\tk\ti\tpm\tpc\ttt\n')
 
     for n in range(30):
+        print 'GA'+str(n+1)
         fo = 'GA'+str(n+1)+'.png'
         args = '--a GA --tf ' + tf + ' --fi ' + fi + ' --fo ' + fo + ' --t ' + t + ' --k ' + str(k[n]) + ' --i ' + str(i[n]) + ' --pm ' + str(pm[n]) + ' --pc ' + str(pc[n]) + ' --tt ' + str(tt[n])
         res = os.popen('./mhs ' + args)
@@ -25,15 +26,10 @@ def GA():
         co = 0
 
         for line in res.readlines():
-            if co == 2 and line == 'Mejorando solución...':
-                noI = True
+            aux  = re.search('1\/DB\(K\): \d+.\d+', line).group()
 
-            if  noI == False:
-                if co == 5:
-                    ofdb = re.search('\d+.\d+', line).group()
-            else:
-                if co == 6:
-                    ofdb = re.search('\d+.\d+', line).group()
+            if aux != None:
+                ofdb = re.search('\d+.\d+', aux.group()).group()
 
             co += 1
 
@@ -56,6 +52,7 @@ def Bee():
     out.write('ofdb\tk\ti\tm\te\teb\tob\n')
 
     for n in range(30):
+        print 'Bee'+str(n+1)
         fo = 'Bee'+str(n+1)+'.png'
         args = '--a Bee --tf ' + tf + ' --fi ' + fi + ' --fo ' + fo + ' --t ' + t + ' --k ' + str(k[n]) + ' --i ' + str(i[n]) + ' --m ' + str(m[n]) + ' --e ' + str(e[n]) + ' --eb ' + str(eb[n]) + ' --ob ' + str(ob[n])
         res = os.popen('./mhs ' + args)
@@ -63,16 +60,10 @@ def Bee():
         co = 0
 
         for line in res.readlines():
-            if co == 2 and line == 'Mejorando solución...':
-                noI = True
+            aux  = re.search('1\/DB\(K\): \d+.\d+', line).group()
 
-            if  noI == False:
-                if co == 5:
-                    ofdb = re.search('\d+.\d+', line).group()
-            else:
-                if co == 6:
-                    ofdb = re.search('\d+.\d+', line).group()
-
+            if aux != None:
+                ofdb = re.search('\d+.\d+', aux.group()).group()
             co += 1
 
         out.write(str(ofdb) + '\t' + str(k[n]) + '\t' + str(i[n]) + '\t' + str(m[n]) + '\t' + str(e[n]) + '\t' + str(eb[n]) + '\t' + str(ob[n]) + '\n')
@@ -97,6 +88,7 @@ def PSOW():
     out.write('ofdb\tk\ti\tc1\tc2\tw\tw1\tw2\tw3\tvmx\n')
 
     for n in range(30):
+        print 'PSOW'+str(n+1)
         fo = 'PSOW'+str(n+1)+'.png'
         args = '--a PSO  --weighted --tf ' + tf + ' --fi ' + fi + ' --fo ' + fo + ' --t ' + t + ' --k ' + str(k[n]) + ' --i ' + str(i[n]) + ' --c1 ' + str(c1[n]) + ' --c2 ' + str(c2[n]) + ' --w ' + str(w[n]) + ' --w1 ' + str(w1[n]) + ' --w2 ' + str(w2[n]) + ' --w3 ' + str(w3[n]) + ' --vmx ' + str(vmx[n]) + ' --weighted  --mx 255,255,255 --mn 0,0,0'
         res = os.popen('./mhs ' + args)
@@ -106,16 +98,10 @@ def PSOW():
         noI = False
 
         for line in res.readlines():
-            if co == 2 and line == 'Mejorando solución...':
-                noI = True
+            aux  = re.search('1\/DB\(K\): \d+.\d+', line).group()
 
-            if  noI == False:
-                if co == 5:
-                    ofdb = re.search('\d+.\d+', line).group()
-            else:
-                if co == 6:
-                    ofdb = re.search('\d+.\d+', line).group()
-
+            if aux != None:
+                ofdb = re.search('\d+.\d+', aux.group()).group()
             co += 1
 
         out.write(str(ofdb) + '\t' + str(k[n]) + '\t' + str(i[n]) + '\t' + str(c1[n]) + '\t' + str(c2[n]) + '\t' + str(w[n]) + '\t' + str(w1[n]) + '\t' + str(w2[n]) + '\t' + str(w3[n]) + '\t' + str(vmx[n]) + '\n')
@@ -137,6 +123,7 @@ def PSONW():
     out.write('ofdb\tk\ti\tc1\tc2\tw\tvmx\n')
 
     for n in range(30):
+        print 'PSONW'+str(n+1)
         fo = 'PSONW'+str(n+1)+'.png'
         args = '--a PSO --tf ' + tf + ' --fi ' + fi + ' --fo ' + fo + ' --t ' + t + ' --k ' + str(k[n]) + ' --i ' + str(i[n]) + ' --c1 ' + str(c1[n]) + ' --c2 ' + str(c2[n]) + ' --w ' + str(w[n]) + ' --vmx ' + str(vmx[n]) + ' --mx 255,255,255 --mn 0,0,0'
         res = os.popen('./mhs ' + args)
@@ -146,18 +133,11 @@ def PSONW():
         noI = False
 
         for line in res.readlines():
-            if co == 2 and line == 'Mejorando solución...':
-                noI = True
+            aux  = re.search('1\/DB\(K\): \d+.\d+', line).group()
 
-            if  noI == False:
-                if co == 5:
-                    ofdb = re.search('\d+.\d+', line).group()
-            else:
-                if co == 6:
-                    ofdb = re.search('\d+.\d+', line).group()
-
+            if aux != None:
+                ofdb = re.search('\d+.\d+', aux.group()).group()
             co += 1
-
         out.write(str(ofdb) + '\t' + str(k[n]) + '\t' + str(i[n]) + '\t' + str(c1[n]) + '\t' + str(c2[n]) + '\t' + str(w[n]) + '\t' + '\t' + str(vmx[n]) + '\n')
 
 def DEFCr():
@@ -178,6 +158,7 @@ def DEFCr():
     out.write('ofdb\tk\ti\tf\tcr\tw1\tw2\tw3\n')
 
     for n in range(30):
+        print 'DEFCr'+str(n+1)
         fo = 'DEFCr'+str(n+1)+'.png'
         args = '--a DE --tf ' + tf + ' --fi ' + fi + ' --fo ' + fo + ' --t ' + t + ' --k ' + str(k[n]) + ' --i ' + str(i[n]) + ' --f ' + str(f[n]) + ' --pc ' + str(cr[n]) + ' --w1 ' + str(w1[n]) + ' --w2 ' + str(w2[n]) + ' --w3 ' + str(w3[n]) + ' --mx 255,255,255 --mn 0,0,0'
 
@@ -190,16 +171,10 @@ def DEFCr():
         noI = False
 
         for line in res.readlines():
-            if co == 2 and line == 'Mejorando solución...':
-                noI = True
+            aux  = re.search('1\/DB\(K\): \d+.\d+', line).group()
 
-            if  noI == False:
-                if co == 5:
-                    ofdb = re.search('\d+.\d+', line).group()
-            else:
-                if co == 6:
-                    ofdb = re.search('\d+.\d+', line).group()
-
+            if aux != None:
+                ofdb = re.search('\d+.\d+', aux.group()).group()
             co += 1
 
         out.write(str(ofdb) + '\t' + str(k[n]) + '\t' + str(i[n]) + '\t' + str(f[n]) + '\t' + str(cr[n]) + '\t' + str(w1[n]) + '\t' + '\t' + str(w2[n]) + '\t' + str(w3[n]) + '\n')
@@ -220,6 +195,7 @@ def DE():
     out.write('ofdb\tk\ti\tw1\tw2\tw3\n')
 
     for n in range(30):
+        print 'DE'+str(n+1)
         fo = 'DE'+str(n+1)+'.png'
         args = '--a DE --tf ' + tf + ' --fi ' + fi + ' --fo ' + fo + ' --t ' + t + ' --k ' + str(k[n]) + ' --i ' + str(i[n]) + ' --w1 ' + str(w1[n]) + ' --w2 ' + str(w2[n]) + ' --w3 ' + str(w3[n]) + ' --mx 255,255,255 --mn 0,0,0'
         res = os.popen('./mhs ' + args)
@@ -229,16 +205,10 @@ def DE():
         noI = False
 
         for line in res.readlines():
-            if co == 2 and line == 'Mejorando solución...':
-                noI = True
+            aux  = re.search('1\/DB\(K\): \d+.\d+', line).group()
 
-            if  noI == False:
-                if co == 5:
-                    ofdb = re.search('\d+.\d+', line).group()
-            else:
-                if co == 6:
-                    ofdb = re.search('\d+.\d+', line).group()
-
+            if aux != None:
+                ofdb = re.search('\d+.\d+', aux.group()).group()
             co += 1
 
         out.write(str(ofdb) + '\t' + str(k[n]) + '\t' + str(i[n]) + '\t' + str(w1[n]) + '\t' + '\t' + str(w2[n]) + '\t' + str(w3[n]) + '\n')
@@ -246,7 +216,7 @@ def DE():
 
 if __name__ == '__main__':
     GA()
-    Bee()
+#    Bee()
     PSOW()
     PSONW()
     DEFCr()
