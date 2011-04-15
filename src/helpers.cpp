@@ -175,6 +175,8 @@ float _alpha = 0.0;
  */
 float _f = 0.0;
 
+
+
 /**
  * Si detiene definitivamente el programa o no.
  */
@@ -265,19 +267,21 @@ void improve(){
  * Inicializa los handlers del programa.
  */
 void initHandlers(){
-    new_sigint.sa_handler = SIG_IGN;
-    sigemptyset(&new_sigint.sa_mask);
-    sigaction(SIGINT, &new_sigint, &old_sigint);
+	memset(&new_sigint, 0, sizeof(new_sigint));
+	memset(&old_sigint, 0, sizeof(old_sigint));
+	memset(&new_sigalrm, 0, sizeof(new_sigalrm));
+	memset(&old_sigalrm, 0, sizeof(old_sigalrm));
 
-    if(old_sigint.sa_handler != SIG_IGN){
-        new_sigint.sa_handler = killIt;
-        sigemptyset(&new_sigint.sa_mask);
-        sigaction(SIGINT, &new_sigint, &old_sigint);
-    }
+    new_sigint.sa_handler = killIt;
+    sigemptyset(&new_sigint.sa_mask);
+    new_sigint.sa_flags   = SA_NODEFER;
+    sigaction(SIGINT, &new_sigint, &old_sigint);
 
     new_sigalrm.sa_handler = longEnough;
     sigemptyset(&new_sigalrm.sa_mask);
+    new_sigalrm.sa_flags = SA_NODEFER;
 	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
+
 	alarm(MAXRUNTIME);
 }
 
@@ -285,9 +289,21 @@ void initHandlers(){
  * Restaura los handlers originales del programa.
  */
 void restoreHandlers(){
-    new_sigint.sa_handler = old_sigint.sa_handler;
-    sigemptyset(&new_sigint.sa_mask);
-    sigaction(SIGINT, &new_sigint, &old_sigint);
+    if(definitelyStopIt){
+        printf("- Tiempo excedido...\n");
+        exit(1);
+    }
+    definitelyStopIt = true;
+
+    sigemptyset(&old_sigint.sa_mask);
+    old_sigint.sa_handler = SIG_DFL;
+    old_sigint.sa_flags   = SA_NODEFER;
+    sigaction(SIGINT, &old_sigint, NULL);
+
+    new_sigalrm.sa_handler = longEnough;
+    sigemptyset(&new_sigalrm.sa_mask);
+    new_sigalrm.sa_flags = SA_NODEFER;
+	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
 
 	alarm(MAXRUNTIME);
 }
@@ -300,26 +316,20 @@ void restoreHandlers(){
  * @param sig Señal.
  */
 void longEnough(int sig){
-    if(definitelyStopIt){
-        printf("Tiempo excedido de nuevo...\n");
-        exit(1);
-    }
-    definitelyStopIt = true;
-
     try{
         restoreHandlers();
 
         endTime();
         
-        printf("Tiempo excedido...\n");
+        printf("- Tiempo excedido...\n");
 
         m->reconstruct(_tf);
 
-        printf("Cantidad de Clusters Final: %d\n", m->K);
+        printf("- Cantidad de Clusters Final: %d\n", m->K);
 
-        printf("Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
 
-        printf("Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+        printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -343,7 +353,7 @@ void killIt(int sig){
 
         endTime();
         
-        printf("Mejorando solución...\n");
+        printf("- Mejorando solución...\n");
 
         initTime();
 
@@ -353,11 +363,11 @@ void killIt(int sig){
 
         endTime();
 
-        printf("Cantidad de Clusters Final: %d\n", m->K);
+        printf("- Cantidad de Clusters Final: %d\n", m->K);
 
-        printf("Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
 
-        printf("Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+        printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -1024,7 +1034,7 @@ void endTime(){
     }
 
     runtime = tend - tinit;
-    printf("Tiempo de corrida: %1.4f segs.\n", runtime);
+    printf("- Tiempo de corrida: %1.4f segs.\n", runtime);
 }
 
 /**
@@ -1033,7 +1043,7 @@ void endTime(){
 void runIt(){
     srand(time(NULL));
 
-    printf("Cantidad de Clusters Inicial: %d\n", m->K);
+    printf("- Cantidad de Clusters Inicial: %d\n", m->K);
 
     initTime();
 
@@ -1045,7 +1055,7 @@ void runIt(){
 
     endTime();
     
-    printf("Mejorando solución...\n");
+    printf("- Mejorando solución...\n");
 
     initTime();
 
@@ -1055,11 +1065,11 @@ void runIt(){
 
     endTime();
     
-    printf("Cantidad de Clusters Final: %d\n", m->K);
+    printf("- Cantidad de Clusters Final: %d\n", m->K);
 
-    printf("Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+    printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
 
-    printf("Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+    printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
     r->write(_output, m->bestSolution, m->K);
 }
