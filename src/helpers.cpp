@@ -241,13 +241,12 @@ struct sigaction new_sigalrm, old_sigalrm;
 void improve(){
     int i, j;
 
-    if(algorithm == M_ANT) return;
-
     Kmeans *KA = new Kmeans(m->data, m->M, m->N, m->K, M_DB, 3);
 
     KA->setCentroids(m->bestCentroids);
 
     KA->run(_tf);
+
 
     for(i = 0; i < KA->N; ++i)
         m->bestSolution[i] = KA->bestSolution[i];
@@ -261,6 +260,7 @@ void improve(){
     m->bestFO = KA->bestFO;
 
     delete KA;
+
 }
 
 /**
@@ -352,11 +352,14 @@ void killIt(int sig){
         restoreHandlers();
 
         endTime();
+
+        if(algorithm == M_ANT || algorithm == M_DE)
+            m->reconstruct(_tf);
         
         printf("- Mejorando solución...\n");
 
         initTime();
-
+            
         improve();
 
         m->reconstruct(_tf);
@@ -1054,16 +1057,20 @@ void runIt(){
     restoreHandlers();
 
     endTime();
-    
-    printf("- Mejorando solución...\n");
 
-    initTime();
+    if(algorithm != M_KMEANS){
+        
+        printf("- Mejorando solución...\n");
 
-    improve();
+        initTime();
 
-    m->reconstruct(_tf);
+        improve();
 
-    endTime();
+        m->reconstruct(_tf);
+
+        endTime();
+
+    }
     
     printf("- Cantidad de Clusters Final: %d\n", m->K);
 

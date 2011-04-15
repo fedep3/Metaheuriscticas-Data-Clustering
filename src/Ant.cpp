@@ -22,6 +22,9 @@ Ant::Ant(){
     free = true;
     pixel = -1;
 
+    for(int i = 0; i < MM; i++)
+        memory[i] = -1;
+
 }
 
 /**

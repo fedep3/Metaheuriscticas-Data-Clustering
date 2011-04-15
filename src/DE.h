@@ -189,5 +189,10 @@ class DE : public Metaheuristic{
          */
         float w3;
 
+        /**
+         * Indica si ya se reconstruyo la solucuión.
+         */
+        bool rc;
+
 };
 #endif

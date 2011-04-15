@@ -1,23 +1,30 @@
 /**
+
  * @file
  *
  * @author Alexander De Sousa 06-39439, 
  *         Federico Ponte     06-40108
+
  *
  * @section Descripción
+
  *
  * Clase concreta donde se definen las funciones y variables
+
  * necesarias para ejecutar el algoritmo hormiga.
+
  */
 
 #include "AntA.h"
 
 /**
  * Constructor de la clase AntA.
+
  *
  * @param _d   Datos del problema.
  * @param _m   Dimensión de cada dato.
  * @param _n   Cantidad de datos.
+
  * @param _k   Cantidad de clusters (iniciales).
  * @param _nA  Cantidad de hormigas.
  * @param _it  Cantidad de iteraciones.
@@ -29,6 +36,7 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
     nA = _nA;
     maxit = _it;
     ac = false;
+    rca = false;
 
     free = new int[N];
     cells = new vector<int>[N];    
@@ -38,6 +46,7 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
 
 /**
  * Constructor de la clase AntA.
+
  *
  * @param _d      Datos del problema.
  * @param _m      Dimensión de cada dato.
@@ -45,6 +54,7 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
  * @param _k      Cantidad de clusters (iniciales).
  * @param _nA     Cantidad de hormigas.
  * @param _alpha2 Parametro usado para las probabilidades.
+
  * @param _it     Cantidad de iteraciones.
  * @param _met Métrica.
  */
@@ -56,6 +66,7 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, float _alpha2,
     maxit = _it;
     alpha2 = _alpha2;
     ac = true;
+    rca = false;
 
     free = new int[N];
     cells = new vector<int>[N];    
@@ -81,6 +92,7 @@ AntA::~AntA(){
  *
  * @param type Si se utilizará una función objetivo de
  *             maximización o de minimización.
+
  */
 void AntA::run(int type){
 
@@ -107,7 +119,9 @@ void AntA::run(int type){
  * Va a buscar los pixeles que no estan siendo cargados y la hormiga va a inten-
  * tar agarrarlo.
  *
+
  * @param Número de la hormiga.
+
  */
 void AntA::pickAnt(int ra){
 
@@ -138,120 +152,105 @@ void AntA::pickAnt(int ra){
 }
 
 /*
+
  * Se encarga de armar la solutción a partir de la células y las hormigas.
+
  */
 void AntA::reconstruct(int type){
 
     float actual = 0.0, max = -1.0;
     int i = 0, j = 0, best = 0, rp = 0;
-    int *count = new int[K];
     vector<int>::iterator it;
-    
-    for(i = 0; i < N; i++){
-        if(free[i] == -1){
-            max = -1.0;
-            for(j = 0; j < N; j++){
-                if(cells[j].size() >0){
-                    if( (actual = f(i, j)) > max){
-                        max = actual;
-                        best = j;
+
+    if(!rca){
+
+        rca = true;
+
+        for(i = 0; i < nA; i++){
+            if(!ants[i].isFree()){
+                max = -1.0;
+                rp = ants[i].getPixel();
+                for(j = 0; j < N; j++){
+                    if(cells[j].size() >0){
+                        if((actual = f(rp, j)) > max){
+                            max = actual;
+                            best = j;
+                        }
                     }
                 }
+                free[rp] = best;
+                cells[best].push_back(rp);
+                ants[i].drop(best);
             }
-            cells[best].push_back(i);
         }
-    }
 
-    for(i = 0; i < nA; i++){
-        if(!ants[i].isFree()){
-            max = -1.0;
-            rp = ants[i].getPixel();
-            for(j = 0; j < N; j++){
-                if(cells[j].size() >0){
-                    if((actual = f(rp, j)) > max){
-                        max = actual;
-                        best = j;
-                    }
-                }
+        K = 0;
+
+        for(i = 0; i < N; i++){
+            if(cells[i].size() > 0){
+
+                for(it = cells[i].begin(); it < cells[i].end(); it++)
+                    bestSolution[*it] = K;
+
+                K++;
+
             }
-            cells[best].push_back(rp);
         }
-    }
 
-    K = 0;
 
-    for(i = 0; i < N; i++){
-        if(cells[i].size() > 0){
+        int *count = new int[K];
 
-            for(it = cells[i].begin(); it < cells[i].end(); it++)
-                bestSolution[*it] = K;
+        for(i = 0; i < K; i++){
 
-            K++;
+            for(j = 0; j < M; j++)
+                bestCentroids[i][j] = 0.0;
+
+            count[i] = 0;
 
         }
-    }
 
-    for(i = 0; i < K; i++){
+        for(i = 0; i < N; i++){
 
-        for(j = 0; j < M; j++)
-            bestCentroids[i][j] = 0.0;
+            for(j = 0; j < M; j++)
+                bestCentroids[bestSolution[i]][j] += data[i][j];
 
-        count[i] = 0;
+            count[bestSolution[i]]++;
 
-    }
+        }
 
-    for(i = 0; i < N; i++){
+        for(i = 0; i < K; i++)
+            for(j = 0; j < M; j++)
+                bestCentroids[i][j] = bestCentroids[i][j] / count[i];
 
-        for(j = 0; j < M; j++)
-            bestCentroids[bestSolution[i]][j] += data[i][j];
-
-        count[bestSolution[i]]++;
+        delete [] count;
 
     }
 
-    for(i = 0; i < K; i++)
-        for(j = 0; j < M; j++)
-            bestCentroids[i][j] = bestCentroids[i][j] / count[i];
-            
-    delete [] count;
+    bestFO = 1.0/(DB(bestSolution, bestCentroids, K));
 
-    Kmeans *KA = new Kmeans(data, M, N, K, M_DB, 3);
+    bestDB = bestFO;
 
-    KA->setCentroids(bestCentroids);
-
-    KA->run(T_MAX);
-
-    for(i = 0; i < KA->N; ++i)
-        bestSolution[i] = KA->bestSolution[i];
-
-    for(i = 0; i < KA->K; ++i)
-        for(j = 0; j < KA->M; ++j)
-            bestCentroids[i][j] = KA->bestCentroids[i][j];
-
-    K = KA->K;
-
-    bestFO = KA->bestFO;
-
-    bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
-
-    delete KA;
 }
 
 /*
+
  * Procedimiento que se encarga de soltar el pixel de una hormiga. Funciona
  * del siguiente modo:
  *
  * Si (memoria de la hormiga tiene por lo menos 1)
+
  *     entonces Revisa la memoria local de la hormiga y elige la mejor 
  *         célula donde dejar, en caso que no logre soltar el
  *         pixel intenta en una ceĺula aleatoria
  * sino Dejar el pixel en una célula aleatoria
+
  *
  * @param ra Número de la hormiga que quiere soltar el pixel.
  */
 void AntA::dropAnt(int ra){
 
-    int j = 0, best = 0, rc = ants[ra].getPixel(), rp = 0, actual = 0;
+    int j = 0, best = 0, rc = ants[ra].getPixel(), rp = ants[ra].getPixel();
+    int actual = 0;
     float max = -1.0, rn = 0.0;
     bool done = false;
     
@@ -318,6 +317,7 @@ void AntA::dropAnt(int ra){
  * Calcula la probabilidad agarrar un pixel en la célula cell.
  *
  * @param pixel Pixel que se quiere agarrar.
+
  * @param cell Célula donde donde se encuentra.
  */
 float AntA::ppick(int pixel, int cell){
@@ -335,6 +335,7 @@ float AntA::ppick(int pixel, int cell){
 
 /*
  * Calcula la probabilidad de dejar un pixel en la celula cell dada.
+
  *
  * @param pixel Pixel que se quiere soltar.
  * @param cell Célula donde se quiere soltar.
@@ -347,9 +348,11 @@ float AntA::pdrop(int pixel, int cell){
 
 
 /*
+
  * Funciones que devuelve el promedio de distancia entre el pixel y los
  * que se encuentra en la célula cell.
  *
+
  * @param pixel Pixel que se quiere soltar.
  * @param cell Célula donde se quiere soltar.
  */
@@ -360,7 +363,7 @@ float AntA::f(int pixel, int cell){
     int size = cells[cell].size();
 
     if(size == 0) return 0.0;
-    
+
     for ( it= cells[cell].begin() ; it < cells[cell].end(); it++ ){
         sum += alpha2/(alpha2 + pow(d(pixel, *it),2) );
     }
@@ -388,6 +391,7 @@ inline void AntA::swap(int *array, int f, int s){
 
 
 /**
+
  * Inicializa las células donde las hormigas va a recoger y soltar
  * los pixeles. También hace que cada hormiga recoga un pixel.
  */
@@ -397,26 +401,28 @@ void AntA::initialize(){
     int done[N];
     int size = N;
 
-    for(i = 0; i < N; ++i){
-        free[i] = i;
+    for(i = 0; i < N; ++i)
         done[i] = i;
-    }
-
-    for(i = 0; i < N; i++){
-        c = rand()%N;
-        cells[c].push_back(i);
-    }
 
     for(i = 0; i < nA ; ++i){
-    
-        k = done[rand()%size];
-        swap(done, k, size);
+
+        int pos = rand()%(size);
+
+        k = done[pos];
+        swap(done, pos, size-1);
         size--;
-        
+
         ants[i].pick(k);
         free[k] = -1;
 
     }
+
+    for(i = 0; i < size; i++){
+        c = rand()%N;
+        free[done[i]] = c;
+        cells[c].push_back(done[i]);
+    }
+
 
     if(!ac){
         printf("Calculando Alfa^2...\n");

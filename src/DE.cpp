@@ -32,6 +32,8 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
     I = _i;
     maxit = _it;
     var = true;
+    rc = false;
+    
     w1 = _w1;
     w2 = _w2;
     w3 = _w3;
@@ -88,6 +90,7 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr,
     F = _F;
     Cr = _Cr;
     var = false;
+    rc = false;
 
     Zmax = 0.0;
     for(i = 0; i < M; ++i)
@@ -201,7 +204,7 @@ void DE::run(int type){
                 }
             }
 
-          assign(auxSol, auxCent);
+            assign(auxSol, auxCent);
 
             if((auxOf = foMin(auxSol, auxCent, K)) < of[i]){
             
@@ -332,7 +335,7 @@ int DE::getBetter(int type){
 void DE::initialize(){
 
     int i, j, l;
-    int k, size;
+    int k, size, pos;
 
     int done[N];
 
@@ -345,8 +348,9 @@ void DE::initialize(){
 
         for(j = 0; j < Kmax; ++j){
         
-            k = rand()%size;
-            swap(done, k, size-1);
+            pos = rand()%size;
+            k = done[pos];
+            swap(done, pos, size-1);
             size--;
 
             for(l = 0; l < M; ++l)
@@ -507,18 +511,24 @@ float DE::deFO(int* sol, float** cent, int k){
 void DE::reconstruct(int type){
 
     int j,m;
-    int best = getBetter(type);
 
-    for(j = 0; j < N; j++)
-        bestSolution[j] = solution[best][j];
+    if(!rc){
 
-    for(j = 0; j < K; j++)
-        for(m = 0; m < M; m++)
-            bestCentroids[j][m] = centroid[best][j][m];
+        rc = true;
 
-    bestFO = of[best];
+        int best = getBetter(type);
 
-    renamer(bestSolution, &K);
+        for(j = 0; j < N; j++)
+            bestSolution[j] = solution[best][j];
+
+        for(j = 0; j < K; j++)
+            for(m = 0; m < M; m++)
+                bestCentroids[j][m] = centroid[best][j][m];
+
+        bestFO = of[best];
+
+        renamer(bestSolution, &K);
+    }
 
     bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
 
