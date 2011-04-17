@@ -69,6 +69,14 @@ int _reps = 3;
 int _I = 0;
 
 ///////////////////////////////////////////
+// Requeridos Ant
+
+/**
+ * Promedio de diferencia entre todos los posibles par de vector de atributos.
+ */
+float _alpha;
+
+///////////////////////////////////////////
 // Requeridos Bee
 
 /**
@@ -185,7 +193,46 @@ float _w3 = 0.0;
 
 //////////////////////////////////////////////
 
-using namespace boost;
+#define V_MAX 0
+int mxs = 0;
+#define V_MIN 1
+int mns = 0;
+/**
+ * Parsea el vector de acuerdo a un string.
+ */
+void parseVector(string vec, int t){
+    int i;
+    int vs;
+    vector<float> v;
+    float* temp;
+    stringstream line(vec);
+    string str;
+
+    while(getline(line, str, ',')){
+        v.push_back( atof( str.c_str() ) );
+    }
+
+    vs = (int) v.size();
+
+    switch(t){
+        case V_MAX:
+            _mxv = new float[vs];
+            mxs  = vs;
+            temp = _mxv;
+            break;
+        case V_MIN:
+            _mnv = new float[vs];
+            mns  = vs;
+            temp = _mnv;
+            break;
+        default:
+            exit(1);
+    }
+    
+    for(i = 0; i < vs; ++i)
+        temp[i] = v[i];
+}
+
 namespace po = boost::program_options;
 
 void initIt(int argc, char* argv[]){
@@ -222,11 +269,20 @@ PSO")
     po::options_description extra("Opciones requeridas por varios algorimos");
     extra.add_options()
         ("k", po::value<int>(&_K), "Número de clusters (Todos menos Ant)")
-        ("reps", po::value<int>(&_reps)->default_value(3), "Número de iteracion en el\
- caso de Ant y DE, y cantidad de iteraciones que no se mejora en el caso de Bee\
-, GA, Kmeans y PSO. El valor por default es 3")
+        ("reps", po::value<int>(&_reps)->default_value(3), "Número de iteracion\
+ en el caso de Ant y DE, y cantidad de iteraciones que no se mejora en el caso \
+de Bee, GA, Kmeans y PSO. El valor por default es 3")
         ("tf", po::value<string>()->default_value("MAX"), "Si se desea maximiza\
 r o minimizar (MAX o MIN), el MAX está por defecto (Bee, GA y Kmeans)")
+        ;
+
+    /** 
+     * Requerimiento poblacionales (Ant, Bee, DE, GA y PSO)
+     */
+    po::options_description ant("Opcional Ant");
+    ant.add_options()
+        ("alpha", po::value<float>(&_alpha), "Promedio de diferencia entre todos \
+los posibles par de vector de atributos")
         ;
 
     /** 
@@ -246,7 +302,8 @@ SO)");
         ("e", po::value<int>(&_e_sites), "Cantidad de parches élite")
         ("eb", po::value<int>(&_e_bees), "Cantidad de abejas a parches élite")
         ("m", po::value<int>(&_m_sites), "Cantidad de parches de exploración")
-        ("ob", po::value<int>(&_o_bees), "Cantidad de abejas a parches no-élite")
+        ("ob", po::value<int>(&_o_bees), "Cantidad de abejas a parches \
+no-élite")
         ;
 
     /** 
@@ -254,8 +311,8 @@ SO)");
      */
     po::options_description de("Opciones DE");
     de.add_options()
-        ("f", po::value<float>(&_f), "Párametro escalar, requiere que el pc tambié\
-n este establecido, sino se puede dejar de colocar ambos")
+        ("f", po::value<float>(&_f), "Párametro escalar, requiere que el pc tam\
+bién este establecido, sino se puede dejar de colocar ambos")
         ;
 
     /** 
@@ -269,12 +326,13 @@ n este establecido, sino se puede dejar de colocar ambos")
 
 
     /** 
-     * Requerido por DE y  opcional del GA
+     * Requerido por GA y opcional DE
      */
-    po::options_description dega("Requerido por DE y  opcional del GA");
+    po::options_description dega("Requerido por GA y opcional DE");
     dega.add_options()
-        ("pc", po::value<float>(&_pc), "Probabilidad de cruce, requerida en el gené\
-tico, opcional en el DE (requiere el factor escalar esté establecido también)")
+        ("pc", po::value<float>(&_pc), "Probabilidad de cruce, requerida en el \
+genético, opcional en el DE (requiere el factor escalar esté establecido tambié\
+n)")
         ;
 
     /** 
@@ -320,8 +378,8 @@ La suma debe ser w1+w2+w3 = 1.0")
         ;
 
     po::options_description visible("Opciones permitidas");
-    visible.add(help).add(generic).add(extra).add(pob).add(bee).add(de);
-    visible.add(ga).add(dega).add(pso).add(opso).add(depso).add(deopso);
+    visible.add(help).add(generic).add(extra).add(pob).add(ant).add(bee);
+    visible.add(de).add(ga).add(dega).add(pso).add(opso).add(depso).add(deopso);
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, visible), vm);
@@ -333,7 +391,7 @@ La suma debe ser w1+w2+w3 = 1.0")
     for(c = 0; c < 4; ++c) optgen[c] = false;
     bool* optextra = new bool[3];
     for(c = 0; c < 3; ++c) optextra[c] = false;
-    bool  indiv  = false;
+    bool  optindiv  = false;
     bool* optbee  = new bool[4];
     for(c = 0; c < 4; ++c) optbee[c] = false;
     bool optde = false;
@@ -348,6 +406,7 @@ La suma debe ser w1+w2+w3 = 1.0")
     bool* optdeopso  = new bool[3];
     for(c = 0; c < 3; ++c) optdeopso[c] = false;
     bool noerror = true;
+    bool aux;
 
     if (vm.count("help")) {
         cout << "Uso: \n\t./mhs [-?|--help] <Requeridas Genéricas> \
@@ -357,41 +416,205 @@ La suma debe ser w1+w2+w3 = 1.0")
 
     if (vm.count("a")) {
 
-        if(strcmp(vm["a"].as<string>.c_str(), "Kmeans") == 0){
+        if(vm["a"].as<string>().compare("Kmeans") == 0){
             algorithm = M_KMEANS;
-        }else if(strcmp(vm["a"].as<string>.c_str(), "GA") == 0){
+        }else if(vm["a"].as<string>().compare("GA") == 0){
             algorithm = M_GA;
-        }else if(strcmp(vm["a"].as<string>.c_str(), "PSO") == 0){
+        }else if(vm["a"].as<string>().compare("PSO") == 0){
             algorithm = M_PSO;
-        }else if(strcmp(vm["a"].as<string>.c_str(), "DE") == 0){
+        }else if(vm["a"].as<string>().compare("DE") == 0){
             algorithm = M_DE;
-        }else if(strcmp(vm["a"].as<string>.c_str(), "Ant") == 0){
+        }else if(vm["a"].as<string>().compare("Ant") == 0){
             algorithm = M_ANT;
-        }else if(strcmp(vm["a"].as<string>.c_str(), "Bee") == 0){
+        }else if(vm["a"].as<string>().compare("Bee") == 0){
             algorithm = M_BEE;
         }else{
-            fprintf(stderr, "Debe elegir un algoritmo válido.\n");
-            fprintf(stderr, "Kmeans, GA, PSO, DE, Ant o Bee son válidos, %s no lo es.\n", optarg);
+            cerr << "Debe elegir un algoritmo válido.\nKmeans, GA, PSO, \
+DE, Ant o Bee son válidos, " << vm["a"].as<string>() << " no lo es \n";
             noerror = false;
         }
-
-        printf("ALG %d\n",algorithm);
 
         optgen[0] = true;
     }
 
     if (vm.count("fi")) {
 
-        _input = vm["fi"].as<string>.c_str();
+        _input = (char *) vm["fi"].as<string>().c_str();
         optgen[1] = true;
 
     }
 
     if (vm.count("fo")) {
 
-        _output = vm["fo"].as<string>.c_str();
+        _output = (char *)vm["fo"].as<string>().c_str();
         optgen[2] = true;
 
     }
+
+    if (vm.count("t")) {
+
+        if(vm["t"].as<string>().compare("PNG") == 0){
+            r = new Png();
+        }else if(vm["t"].as<string>().compare("TIFF") == 0){
+            r = new Tiff();
+        }else if(vm["t"].as<string>().compare("CSV") == 0){
+            r = new Csv();
+        }else{
+            cerr << "Debe elegir un tipo de archivo válido.\n PNG, TIFF o CSV \
+son válidos, " << vm["t"].as<string>() << " no lo es.\n", 
+            noerror = false;
+        }
+
+        r->read(_input);
+
+        optgen[3] = true;
+
+    }
+
+    for(c = 0; c < 4; c++)
+        noerror = noerror && optgen[c];
+
+    if(!noerror)
+        cerr << "Debe definir todas las opciones generales\n";
+
+    if (vm.count("k")) 
+        optextra[0] = true;
+
+    if (vm.count("reps")) 
+        optextra[1] = true;
+
+    if (vm.count("tf")){
+
+        if(vm["tf"].as<string>().compare("MAX") == 0){
+            _tf = T_MAX;
+        }else if(vm["tf"].as<string>().compare("MIN") == 0){
+            _tf = T_MIN;
+        }else{
+            cerr << "Debe elegir un tipo de función válido.\n MAX ó MIN son vál\
+idos, " << vm["tf"].as<string>() << " no lo es.\n";
+            noerror = false;
+        }
+
+        optextra[2] = true;
+
+    }
+
+    if(algorithm == M_KMEANS){
+
+        if(!optextra[0])
+            cerr << "Debe definir todas las opciones del Kmeans\n";
+
+        noerror = noerror && optextra[0];
+
+    }
+
+    if(algorithm == M_ANT){
+
+        if(!optindiv)
+            cerr << "Debe definir todas las opciones del Ant\n";
+
+        noerror = noerror && optindiv;
+
+    }
+
+    if (vm.count("i")) 
+        optindiv = true;
+
+    if (vm.count("e")) 
+        optbee[0] = true;
+
+    if (vm.count("eb")) 
+        optbee[1] = true;
+
+    if (vm.count("m")) 
+        optbee[2] = true;
+
+    if (vm.count("ob")) 
+        optbee[3] = true;
+
+    if(algorithm == M_BEE){
+
+        aux = true;
+
+        for(c = 0; c < 4; c++)
+            aux = aux && optbee[c];
+
+        aux = aux && optindiv && optextra[0];
+
+        if(!aux)
+            cerr << "Debe definir todas las opciones del Bee\n";
+
+        noerror = noerror && aux;
+
+    }
+
+    if (vm.count("f")) 
+        optde = true;
+
+    if (vm.count("pm")) 
+        optga[0] = true;
+
+    if (vm.count("tt")) 
+        optga[1] = true;
+
+    if (vm.count("pc")) 
+        optdega = true;
+
+    if(algorithm == M_GA){
+
+        aux = true;
+
+        for(c = 0; c < 2; c++)
+            aux = aux && optga[c];
+
+        aux = aux && optindiv && optdega && optextra[0];
+
+        if(!aux)
+            cerr << "Debe definir todas las opciones del GA\n";
+
+        noerror = noerror && aux;
+
+    }
+
+    if (vm.count("c1")) 
+         optpso[0] = true;
+
+    if (vm.count("c2")) 
+         optpso[1] = true;
+
+    if (vm.count("w")) 
+         optpso[2] = true;
+
+    if (vm.count("vmx")) 
+         optpso[3] = true;
+
+    if(vm.count("wieghted"))
+        wieghted = true;
+
+    if(vm.count("mn")){
+
+        optdepso[0] = true;
+        parseVector(vm["mn"].as<string>(), V_MIN);
+
+    }
+
+    if(vm.count("mx")){
+
+        optdepso[1] = true;
+        parseVector(vm["mx"].as<string>(), V_MIN);
+
+    }
+
+    if(vm.count("w1"))
+        optdeopso[0] = true;
+
+    if(vm.count("w2"))
+        optdeopso[1] = true;
+
+    if(vm.count("w3"))
+        optdeopso[2] = true;
+
+
+
 
 }
