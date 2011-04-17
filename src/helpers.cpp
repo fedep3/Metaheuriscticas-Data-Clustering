@@ -221,8 +221,8 @@ PSO")
      */
     po::options_description extra("Opciones requeridas por varios algorimos");
     extra.add_options()
-        ("k", po::value<int>(), "Número de clusters (Todos menos Ant)")
-        ("reps", po::value<int>()->default_value(3), "Número de iteracion en el\
+        ("k", po::value<int>(&_K), "Número de clusters (Todos menos Ant)")
+        ("reps", po::value<int>(&_reps)->default_value(3), "Número de iteracion en el\
  caso de Ant y DE, y cantidad de iteraciones que no se mejora en el caso de Bee\
 , GA, Kmeans y PSO. El valor por default es 3")
         ("tf", po::value<string>()->default_value("MAX"), "Si se desea maximiza\
@@ -235,7 +235,7 @@ r o minimizar (MAX o MIN), el MAX está por defecto (Bee, GA y Kmeans)")
     po::options_description pob("Requeridos poblacionales (Ant, Bee, DE, GA y P\
 SO)");
     pob.add_options()
-        ("i", po::value<int>(), "Cantidad de individuos")
+        ("i", po::value<int>(&_I), "Cantidad de individuos")
         ;
 
     /** 
@@ -243,10 +243,10 @@ SO)");
      */
     po::options_description bee("Requeridos Bee");
     bee.add_options()
-        ("e", po::value<int>(), "Cantidad de parches élite")
-        ("eb", po::value<int>(), "Cantidad de abejas a parches élite")
-        ("m", po::value<int>(), "Cantidad de parches de exploración")
-        ("ob", po::value<int>(), "Cantidad de abejas a parches no-élite")
+        ("e", po::value<int>(&_e_sites), "Cantidad de parches élite")
+        ("eb", po::value<int>(&_e_bees), "Cantidad de abejas a parches élite")
+        ("m", po::value<int>(&_m_sites), "Cantidad de parches de exploración")
+        ("ob", po::value<int>(&_o_bees), "Cantidad de abejas a parches no-élite")
         ;
 
     /** 
@@ -254,7 +254,7 @@ SO)");
      */
     po::options_description de("Opciones DE");
     de.add_options()
-        ("f", po::value<float>(), "Párametro escalar, requiere que el pc tambié\
+        ("f", po::value<float>(&_f), "Párametro escalar, requiere que el pc tambié\
 n este establecido, sino se puede dejar de colocar ambos")
         ;
 
@@ -263,8 +263,8 @@ n este establecido, sino se puede dejar de colocar ambos")
      */
     po::options_description ga("Requeridos GA");
     ga.add_options()
-        ("pm", po::value<float>(), "Probabilidad de mutación")
-        ("tt", po::value<int>(), "Tamaño del torneo")
+        ("pm", po::value<float>(&_pm), "Probabilidad de mutación")
+        ("tt", po::value<int>(&_tt), "Tamaño del torneo")
         ;
 
 
@@ -273,7 +273,7 @@ n este establecido, sino se puede dejar de colocar ambos")
      */
     po::options_description dega("Requerido por DE y  opcional del GA");
     dega.add_options()
-        ("pc", po::value<float>(), "Probabilidad de cruce, requerida en el gené\
+        ("pc", po::value<float>(&_pc), "Probabilidad de cruce, requerida en el gené\
 tico, opcional en el DE (requiere el factor escalar esté establecido también)")
         ;
 
@@ -282,10 +282,10 @@ tico, opcional en el DE (requiere el factor escalar esté establecido también)"
      */
     po::options_description pso("Requeridos PSO");
     pso.add_options()
-        ("c1", po::value<float>(), "Constante de la componente cognitiva")
-        ("c2", po::value<float>(), "Constante de la componente social")
-        ("w", po::value<float>(), "Peso inercial")
-        ("vmx", po::value<float>(), "Velocidad máxima")
+        ("c1", po::value<float>(&_c1), "Constante de la componente cognitiva")
+        ("c2", po::value<float>(&_c2), "Constante de la componente social")
+        ("w", po::value<float>(&_W), "Peso inercial")
+        ("vmx", po::value<float>(&_vmx), "Velocidad máxima")
     ;
 
 
@@ -313,9 +313,9 @@ o")
      */
     po::options_description deopso("Requeridos DE y opcional PSO");
     deopso.add_options()
-        ("w1", po::value<float>(), "Peso de la distancia intracluster")
-        ("w2", po::value<float>(), "Peso de la distancia intercluster")
-        ("w3", po::value<float>(), "Peso del error.\
+        ("w1", po::value<float>(&_w1), "Peso de la distancia intracluster")
+        ("w2", po::value<float>(&_w2), "Peso de la distancia intercluster")
+        ("w3", po::value<float>(&_w3), "Peso del error.\
 La suma debe ser w1+w2+w3 = 1.0")
         ;
 
@@ -325,7 +325,28 @@ La suma debe ser w1+w2+w3 = 1.0")
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, visible), vm);
-    po::notify(vm);  
+    po::notify(vm);
+
+    int c;  
+
+    bool* optgen = new bool[4];
+    for(c = 0; c < 4; ++c) optgen[c] = false;
+    bool* optextra = new bool[3];
+    for(c = 0; c < 3; ++c) optextra[c] = false;
+    bool  indiv  = false;
+    bool* optbee  = new bool[4];
+    for(c = 0; c < 4; ++c) optbee[c] = false;
+    bool optde = false;
+    bool* optga  = new bool[2];
+    for(c = 0; c < 2; ++c) optga[c] = false;
+    bool optdega = false;
+    bool* optpso  = new bool[4];
+    for(c = 0; c < 4; ++c) optpso[c] = false;
+    bool wieghted = false;
+    bool* optdepso  = new bool[2];
+    for(c = 0; c < 2; ++c) optdepso[c] = false;
+    bool* optdeopso  = new bool[3];
+    for(c = 0; c < 3; ++c) optdeopso[c] = false;
 
     if (vm.count("help")) {
         cout << "Uso: \n\t./mhs <Requeridas Genéricas> \
