@@ -1,8 +1,8 @@
 module Tests(
-    -- * Utilidades    
-    run,
+    -- * Utilidades
+    Results(..),
+    runTests,
     -- * Generadores.
-    genPrograms,
     genKmeans,
     genGA,
     genPSO,
@@ -24,7 +24,7 @@ module Tests(
     -- * Aleatorios.
     Population(..),
     Velocity(..),
-    Weight(..)    
+    Weight(..)
 ) where
 
 import Test.QuickCheck
@@ -38,6 +38,78 @@ run :: Program          -- * Programa a ejecutar
 run p = do
     let (e:a) = words $ show p
     readProcess e a ""
+
+-- | Resultado de cada prueba.
+data Results = Results { prog   :: String
+                       , file   :: String
+                       , stdout :: [(String, String)]
+                       }
+
+-- | Representa los resultados de cierto algoritmo.
+data ProgResults = PR Int Int Float Float Float
+    deriving(Eq)
+
+-- | Instancia de Show de ProgResults.
+instance Show ProgResults where
+    show (PR ki ke t fo fdb) = (show ki) ++ "," ++ (show ke) ++ "," ++
+                               (show t) ++ "," ++ (show fo) ++ "," ++
+                               (show fdb)
+
+-- | Corre las pruebas de acuerdo a una acción monádica generadora.
+runTests :: String       -- * Nombre del ejecutable.
+         -> String       -- * Nombre del archivo de entrada.
+         -> FileType     -- * Tipo del archivo de entrada.
+         -> OFType       -- * Tipo de función objetivo.
+         -> Int          -- * Cantidad de Clusters.
+         -> IO [Algorithm]-- * Acción monádica.
+         -> String       -- * Nombre del algoritmo.
+         -> Int          -- * Cantidad de pruebas (múltiplos de 10).
+         -> IO Results   -- * Lista de resultados.
+runTests p i ft f k m n size = do
+    programs  <- genPrograms p i ft f k m n (1, size) []
+    let hAnova = (headerAnova . algorithm) $ head programs
+    let lanova = (hAnova:(map (getAnova . algorithm) programs))
+    lstdout   <- mapM run programs
+    let lstdout' = zip lanova lstdout
+    return (Results n i lstdout')
+
+-- | Genera el header para generar la tabla ANOVA.
+headerAnova :: Algorithm -> String
+headerAnova (Kmeans _)           = ""
+headerAnova (GA _ _ _ _)         = "ofdb\ti\ttt\tpc\tpm"
+headerAnova (PSO _ _ _ _ _ _)    = "ofdb\ti\tc1\tc2\tw\tvmx"
+headerAnova (WPSO _ _ _ _ _ _ _) = "ofdb\ti\tc1\tc2\tw\tvmx\tw1\tw2\tw3"
+headerAnova (DE _ _ _ _ _)       = "ofdb\ti\tw1\tw2\tw3"
+headerAnova (SDE _ _ _ _ _ _ _)  = "ofdb\ti\tw1\tw2\tw3\tf\tpc"
+headerAnova (Ant _ _ _)          = "ofdb\ti"
+headerAnova (Bee _ _)            = "ofdb\ti\tm\te\teb\tob"
+
+-- | Genera una línea apta para generar una tabla ANOVA.
+getAnova :: Algorithm   -- * Algoritmo.
+         -> String      -- * String con los valores relevantes.
+getAnova (Kmeans _) =
+    ""
+getAnova (GA _ (IGA i t) (Pc pc) (Pm pm)) =
+    (show i) ++ "\t" ++ (show t) ++ "\t" ++ (show pc) ++ "\t" ++
+    (show pm)
+getAnova (PSO _ (I i) _ _ (Velocity c1 c2 w) (VMax vmx)) =
+    (show i) ++ "\t" ++ (show c1) ++ "\t" ++ (show c2) ++ "\t" ++
+    (show w) ++ "\t" ++ (show vmx)
+getAnova (WPSO _ (I i) _ _ (Velocity c1 c2 w) (VMax vmx) (Weight w1 w2 w3)) =
+    (show i) ++ "\t" ++ (show c1) ++ "\t" ++ (show c2) ++ "\t" ++
+    (show w) ++ "\t" ++ (show vmx) ++ "\t" ++ (show w1) ++ "\t" ++
+    (show w2) ++ "\t" ++ (show w3)
+getAnova (DE _ (I i) _ _ (Weight w1 w2 w3)) =
+    (show i) ++ "\t" ++ (show w1) ++ "\t" ++ (show w2) ++ "\t" ++
+    (show w3)
+getAnova (SDE _ (I i) _ _ (Weight w1 w2 w3) (Scale s) (Pc pc)) =
+    (show i) ++ "\t" ++ (show w1) ++ "\t" ++ (show w2) ++ "\t" ++
+    (show w3) ++ "\t" ++ (show s) ++ "\t" ++ (show pc)
+getAnova (Ant _ (I i) _) =
+    (show i)
+getAnova (Bee _ (IBee i m e eb ob)) =
+    (show i) ++ "\t" ++ (show m) ++ "\t" ++ (show e) ++ "\t" ++
+    (show eb) ++ "\t" ++ (show ob)
 
 {-
  - No aleatorios. 
@@ -78,7 +150,7 @@ genProgram p i ft o f k a =
                              a)
                 else error "K debe ser mayor de 0"
 
--- | Genera programas dada una acción monádica
+-- | Genera programas dada una acción monádica.
 genPrograms :: String       -- * Nombre del ejecutable.
             -> String       -- * Nombre del archivo de entrada.
             -> FileType     -- * Tipo del archivo de entrada.
@@ -86,7 +158,7 @@ genPrograms :: String       -- * Nombre del ejecutable.
             -> Int          -- * Cantidad de Clusters.
             -> IO [Algorithm]-- * Acción monádica.
             -> String       -- * Nombre del algoritmo.
-            -> (Int, Int)   -- * Inicio y fin de la numeración
+            -> (Int, Int)   -- * Inicio y fin de la numeración.
             -> [Program]    -- * Acumulador.
             -> IO [Program] -- * Lista de programas.
 genPrograms p i ft f k m n (ini, end) a = do
