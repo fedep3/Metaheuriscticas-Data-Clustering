@@ -347,11 +347,51 @@ La suma debe ser w1+w2+w3 = 1.0")
     for(c = 0; c < 2; ++c) optdepso[c] = false;
     bool* optdeopso  = new bool[3];
     for(c = 0; c < 3; ++c) optdeopso[c] = false;
+    bool noerror = true;
 
     if (vm.count("help")) {
-        cout << "Uso: \n\t./mhs <Requeridas Genéricas> \
+        cout << "Uso: \n\t./mhs [-?|--help] <Requeridas Genéricas> \
 <Opciones Del Algoritmo>]\n\n"<< visible << "\n";
-        return;
+        exit(1);
+    }
+
+    if (vm.count("a")) {
+
+        if(strcmp(vm["a"].as<string>.c_str(), "Kmeans") == 0){
+            algorithm = M_KMEANS;
+        }else if(strcmp(vm["a"].as<string>.c_str(), "GA") == 0){
+            algorithm = M_GA;
+        }else if(strcmp(vm["a"].as<string>.c_str(), "PSO") == 0){
+            algorithm = M_PSO;
+        }else if(strcmp(vm["a"].as<string>.c_str(), "DE") == 0){
+            algorithm = M_DE;
+        }else if(strcmp(vm["a"].as<string>.c_str(), "Ant") == 0){
+            algorithm = M_ANT;
+        }else if(strcmp(vm["a"].as<string>.c_str(), "Bee") == 0){
+            algorithm = M_BEE;
+        }else{
+            fprintf(stderr, "Debe elegir un algoritmo válido.\n");
+            fprintf(stderr, "Kmeans, GA, PSO, DE, Ant o Bee son válidos, %s no lo es.\n", optarg);
+            noerror = false;
+        }
+
+        printf("ALG %d\n",algorithm);
+
+        optgen[0] = true;
+    }
+
+    if (vm.count("fi")) {
+
+        _input = vm["fi"].as<string>.c_str();
+        optgen[1] = true;
+
+    }
+
+    if (vm.count("fo")) {
+
+        _output = vm["fo"].as<string>.c_str();
+        optgen[2] = true;
+
     }
 
 }
