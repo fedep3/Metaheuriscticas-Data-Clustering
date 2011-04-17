@@ -9,9 +9,10 @@
  * Archivo con funciones de ayuda y lectura de argumentos del
  * programa.
  */
+
+#include <boost/program_options.hpp>
 #include <cstdio>
 #include <cstdlib>
-#include <getopt.h>
 #include <cstring>
 #include <vector>
 #include <time.h>
@@ -46,15 +47,19 @@
 using namespace std;
 ///////////////////////////////////////////
 // Tiempo.
+
+/**
+ * Tiempo de ejecución.
+ */
 extern float runtime;
 
 ///////////////////////////////////////////
-// Opciones Generales.
+// Rquisitos genéricos
 
 /**
- * Tipo de función objetivo.
+ * Tipo de metaheurística.
  */
-extern int _tf;
+extern int algorithm;
 /**
  * Nombre del archivo de entrada.
  */
@@ -63,11 +68,13 @@ extern char* _input;
  * Nombre del archivo de salida.
  */
 extern char* _output;
-
 /**
  * Tipo de lector.
  */
 extern Reader* r;
+
+///////////////////////////////////////////
+// Opciones requeridas por varios algoritmos
 
 /**
  * Cantidad (máxima) de clusters.
@@ -75,17 +82,16 @@ extern Reader* r;
 extern int _K;
 
 /**
- * Tipo de metaheurística.
+ * Tipo de función objetivo.
  */
-extern int algorithm;
-
+extern int _tf;
 /**
- * Metaheurística.
+ * Cantidad de repeticiones sin mejora.
  */
-extern Metaheuristic* m;
+extern int _reps;
 
 ///////////////////////////////////////////
-// Opciones Generales para poblacionales.
+// Requerimiento poblacionales (Ant, Bee, DE, GA y PSO)
 
 /**
  * Individuos o partículas.
@@ -93,25 +99,59 @@ extern Metaheuristic* m;
 extern int _I;
 
 ///////////////////////////////////////////
-// Opciones del Algoritmo Genético.
+// Requeridos Bee
+
+/**
+ * Cantidad de sitios a explorar.
+ */
+extern int _m_sites;
+
+/**
+ * Cantidad de sitios élite.
+ */
+extern int _e_sites;
+
+/**
+ * Cantidad de abejas a sitios élite.
+ */
+extern int _e_bees;
+
+/**
+ * Cantidad de abejas a sitios no-élite.
+ */
+extern int _o_bees;
+
+///////////////////////////////////////////
+// Opciones DE
+
+/**
+ * Parámetro de escalado de los vectores.
+ */
+extern float _f;
+
+///////////////////////////////////////////
+// Requeridos GA 
 
 /**
  * Probabilidad de mutación.
  */
 extern float _pm;
+/**
+ * Tamaño del torneo.
+ */
+extern int _tt;
+
+
+///////////////////////////////////////////
+// Requerido por DE y  opcional del GA
 
 /**
  * Probabilidad de cruce.
  */
 extern float _pc;
 
-/**
- * Tamaño del torneo.
- */
-extern int _tt;
-
 ///////////////////////////////////////////
-// Opciones del Algoritmo PSO.
+// Requeridos PSO
 
 /**
  * Constante de la componente cognitiva.
@@ -127,6 +167,35 @@ extern float _c2;
  * Peso inercial.
  */
 extern float _W;
+/**
+ * Velocidad máxima de las partículas.
+ */
+extern float _vmx;
+
+
+///////////////////////////////////////////
+// Opcional PSO
+
+/**
+ * Si la función es weighted o no.
+ */
+extern bool weighted;
+
+///////////////////////////////////////////
+// Requeridos DE y PSO
+
+/**
+ * Máximos valores de cada atributo.
+ */
+extern float* _mxv;
+
+/**
+ * Mínimos valores de cada atributo.
+ */
+extern float* _mnv;
+
+///////////////////////////////////////////
+// Requeridos DE y opcional PSO
 
 /**
  * Peso de la distancia intracluster.
@@ -143,32 +212,7 @@ extern float _w2;
  */
 extern float _w3;
 
-/**
- * Máximos valores de cada atributo.
- */
-extern float* _mxv;
-
-/**
- * Mínimos valores de cada atributo.
- */
-extern float* _mnv;
-
-/**
- * Velocidad máxima de las partículas.
- */
-extern float _vmx;
-
-/**
- * Si la función es weighted o no.
- */
-extern bool weighted;
-
-/**
- * Imprime la ayuda del programa.
- *
- * @param fullhelp Si es verdadero muestra la ayuda completa.
- */
-void help(bool fullhelp);
+///////////////////////////////////////////
 
 /**
  * Lee los argumentos del programa e inicializa las estructuras.
@@ -178,13 +222,4 @@ void help(bool fullhelp);
  */
 void initIt(int argc, char* argv[]);
 
-/**
- * Ejecuta la metaheurística elegida.
- */
-void runIt();
-
-/**
- * Libera las variables reservadas.
- */
-void cleanIt();
 #endif

@@ -1,6 +1,6 @@
 CC       := gcc
-CFLAGS   := -c -Wall -g
-LDFLAGS  := -lstdc++ -ltiff
+CFLAGS   := -c -Wall -O2
+LDFLAGS  := -lstdc++ -ltiff -lboost_program_options-mt
 OBJFILES := $(patsubst src/%.cpp,obj/%.o,$(wildcard src/*.cpp))
 RM       := rm -f
 

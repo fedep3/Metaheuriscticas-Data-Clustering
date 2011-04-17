@@ -11,11 +11,6 @@ int main(int argc, char* argv[]){
         //Inicializa el algoritmo.
         initIt(argc, argv);
 
-        //Ejecuta y escribe los resultados del algoritmo.
-        runIt();
-
-        //Libera las variables.
-        cleanIt();
     }catch(exception& e){
         cout << e.what() << endl;
     }

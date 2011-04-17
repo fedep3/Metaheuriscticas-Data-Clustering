@@ -23,18 +23,13 @@ float tend = 0.0;
  */
 float runtime = 0.0;
 
-/**
- * Cantidad de repeticiones sin mejora.
- */
-int _reps = 3;
-
 ///////////////////////////////////////////
-// Opciones Generales.
+// Rquisitos genéricos
 
 /**
- * Tipo de función objetivo.
+ * Tipo de metaheurística.
  */
-int _tf = 0;
+int algorithm = -1;
 /**
  * Nombre del archivo de entrada.
  */
@@ -43,11 +38,13 @@ char* _input = NULL;
  * Nombre del archivo de salida.
  */
 char* _output = NULL;
-
 /**
  * Tipo de lector.
  */
 Reader* r = NULL;
+
+///////////////////////////////////////////
+// Opciones requeridas por varios algoritmos
 
 /**
  * Cantidad (máxima) de clusters.
@@ -55,17 +52,16 @@ Reader* r = NULL;
 int _K = 0;
 
 /**
- * Tipo de metaheurística.
+ * Tipo de función objetivo.
  */
-int algorithm = -1;
-
+int _tf = 0;
 /**
- * Metaheurística.
+ * Cantidad de repeticiones sin mejora.
  */
-Metaheuristic* m = NULL;
+int _reps = 3;
 
 ///////////////////////////////////////////
-// Opciones Generales para poblacionales.
+// Requerimiento poblacionales (Ant, Bee, DE, GA y PSO)
 
 /**
  * Individuos o partículas.
@@ -73,78 +69,8 @@ Metaheuristic* m = NULL;
 int _I = 0;
 
 ///////////////////////////////////////////
-// Opciones del Algoritmo Genético.
+// Requeridos Bee
 
-/**
- * Probabilidad de mutación.
- */
-float _pm = 0.0;
-
-/**
- * Probabilidad de cruce.
- */
-float _pc = 0.0;
-
-/**
- * Tamaño del torneo.
- */
-int _tt = 0;
-
-///////////////////////////////////////////
-// Opciones del Algoritmo PSO.
-
-/**
- * Constante de la componente cognitiva.
- */
-float _c1 = 0.0;
-
-/**
- * Constante de la componente social.
- */
-float _c2 = 0.0;
-
-/**
- * Peso inercial.
- */
-float _W = 0.0;
-
-/**
- * Peso de la distancia intracluster.
- */
-float _w1 = 0.0;
-
-/**
- * Peso de la distancia intercluster;
- */
-float _w2 = 0.0;
-
-/**
- * Peso del error de la solución.
- */
-float _w3 = 0.0;
-
-/**
- * Máximos valores de cada atributo.
- */
-float* _mxv = NULL;
-
-/**
- * Mínimos valores de cada atributo.
- */
-float* _mnv = NULL;
-
-/**
- * Velocidad máxima de las partículas.
- */
-float _vmx = 0.0;
-
-/**
- * Si la función es weighted o no.
- */
-bool weighted = false;
-
-///////////////////////////////////////////
-// Opciones del Algoritmo Bee.
 /**
  * Cantidad de sitios a explorar.
  */
@@ -166,925 +92,237 @@ int _e_bees = 0;
 int _o_bees = 0;
 
 ///////////////////////////////////////////
-// Opciones del Algoritmo Hormiga.
-
-float _alpha = 0.0;
+// Opciones DE
 
 /**
  * Parámetro de escalado de los vectores.
  */
 float _f = 0.0;
 
-
-
-/**
- * Si detiene definitivamente el programa o no.
- */
-bool definitelyStopIt = false;
+///////////////////////////////////////////
+// Requeridos GA 
 
 /**
- * Inicializa el contador.
+ * Probabilidad de mutación.
  */
-void initTime();
+float _pm = 0.0;
+/**
+ * Tamaño del torneo.
+ */
+int _tt = 0;
+
+
+///////////////////////////////////////////
+// Requerido por DE y  opcional del GA
 
 /**
- * Guarda el tiempo del contador.
+ * Probabilidad de cruce.
  */
-void endTime();
+float _pc = 0.0;
+
+///////////////////////////////////////////
+// Requeridos PSO
 
 /**
- * Mejora la solución que ya se tiene al aplicar un Kmeans.
+ * Constante de la componente cognitiva.
  */
-void improve();
+float _c1 = 0.0;
 
 /**
- * Inicializa los handlers del programa.
+ * Constante de la componente social.
  */
-void initHandlers();
+float _c2 = 0.0;
 
 /**
- * Restaura los handlers originales del programa.
+ * Peso inercial.
  */
-void retoreHandlers();
+float _W = 0.0;
+/**
+ * Velocidad máxima de las partículas.
+ */
+float _vmx = 0.0;
+
+
+///////////////////////////////////////////
+// Opcional PSO
 
 /**
- * Hace varias cosas antes de terminar el programa:
- * - Muestra el tiempo.
- * - Genera una imagen con la mejor solución.
- * - Dice la cantidad de clusters.
- * @param sig Señal.
+ * Si la función es weighted o no.
  */
-void longEnough(int);
+bool weighted = false;
+
+///////////////////////////////////////////
+// Requeridos DE y PSO
 
 /**
- * Hace varias cosas antes de terminar el programa:
- * - Muestra el tiempo.
- * - Genera una imagen con la mejor solución.
- * - Dice la cantidad de clusters.
- * @param sig Señal.
+ * Máximos valores de cada atributo.
  */
-void killIt(int);
+float* _mxv = NULL;
 
 /**
- * Estructuras que controla la señal de SIGINT.
+ * Mínimos valores de cada atributo.
  */
-struct sigaction new_sigint, old_sigint;
+float* _mnv = NULL;
+
+///////////////////////////////////////////
+// Requeridos DE y opcional PSO
 
 /**
- * Estructuras que controla la señal de SIGALRM.
+ * Peso de la distancia intracluster.
  */
-struct sigaction new_sigalrm, old_sigalrm;
+float _w1 = 0.0;
 
 /**
- * Mejora la solución que ya se tiene al aplicar un Kmeans.
+ * Peso de la distancia intercluster;
  */
-void improve(){
-    int i, j;
-
-    Kmeans *KA = new Kmeans(m->data, m->M, m->N, m->K, M_DB, 3);
-
-    KA->setCentroids(m->bestCentroids);
-
-    KA->run(_tf);
-
-
-    for(i = 0; i < KA->N; ++i)
-        m->bestSolution[i] = KA->bestSolution[i];
-
-    for(i = 0; i < KA->K; ++i)
-        for(j = 0; j < KA->M; ++j)
-            m->bestCentroids[i][j] = KA->bestCentroids[i][j];
-
-    m->K = KA->K;
-
-    m->bestFO = KA->bestFO;
-
-    delete KA;
-
-}
+float _w2 = 0.0;
 
 /**
- * Inicializa los handlers del programa.
+ * Peso del error de la solución.
  */
-void initHandlers(){
-	memset(&new_sigint, 0, sizeof(new_sigint));
-	memset(&old_sigint, 0, sizeof(old_sigint));
-	memset(&new_sigalrm, 0, sizeof(new_sigalrm));
-	memset(&old_sigalrm, 0, sizeof(old_sigalrm));
-
-    new_sigint.sa_handler = killIt;
-    sigemptyset(&new_sigint.sa_mask);
-    new_sigint.sa_flags   = SA_NODEFER;
-    sigaction(SIGINT, &new_sigint, &old_sigint);
-
-    new_sigalrm.sa_handler = longEnough;
-    sigemptyset(&new_sigalrm.sa_mask);
-    new_sigalrm.sa_flags = SA_NODEFER;
-	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
-
-	alarm(MAXRUNTIME);
-}
-
-/**
- * Restaura los handlers originales del programa.
- */
-void restoreHandlers(){
-    if(definitelyStopIt){
-        printf("- Tiempo excedido...\n");
-        exit(1);
-    }
-    definitelyStopIt = true;
-
-    sigemptyset(&old_sigint.sa_mask);
-    old_sigint.sa_handler = SIG_DFL;
-    old_sigint.sa_flags   = SA_NODEFER;
-    sigaction(SIGINT, &old_sigint, NULL);
-
-    new_sigalrm.sa_handler = longEnough;
-    sigemptyset(&new_sigalrm.sa_mask);
-    new_sigalrm.sa_flags = SA_NODEFER;
-	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
-
-	alarm(MAXRUNTIME);
-}
-
-/**
- * Hace varias cosas antes de terminar el programa:
- * - Muestra el tiempo.
- * - Genera una imagen con la mejor solución.
- * - Dice la cantidad de clusters.
- * @param sig Señal.
- */
-void longEnough(int sig){
-    try{
-        restoreHandlers();
-
-        endTime();
-        
-        printf("- Tiempo excedido...\n");
-
-        m->reconstruct(_tf);
-
-        printf("- Cantidad de Clusters Final: %d\n", m->K);
-
-        printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
-
-        printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-
-        r->write(_output, m->bestSolution, m->K);
-
-        exit(0);
-    }catch(exception& e){
-        cout << e.what() << endl;
-        exit(1);
-    }
-}
-
-/**
- * Hace varias cosas antes de terminar el programa:
- * - Muestra el tiempo.
- * - Genera una imagen con la mejor solución.
- * - Dice la cantidad de clusters.
- * @param sig Señal.
- */
-void killIt(int sig){
-    try{
-        restoreHandlers();
-
-        endTime();
-
-        if(algorithm == M_ANT || algorithm == M_DE)
-            m->reconstruct(_tf);
-        
-        printf("- Mejorando solución...\n");
-
-        initTime();
-            
-        improve();
-
-        m->reconstruct(_tf);
-
-        endTime();
-
-        printf("- Cantidad de Clusters Final: %d\n", m->K);
-
-        printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
-
-        printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-
-        r->write(_output, m->bestSolution, m->K);
-
-        exit(0);
-    }catch(exception& e){
-        cout << e.what() << endl;
-        exit(1);
-    }
-}
-
-/**
- * Imprime la ayuda del programa.
- *
- * @param fullhelp Si es verdadero muestra la ayuda completa.
- */
-void help(bool fullhelp){
-    printf("Uso: \n\t./mhs <Opciones Generales> [--reps <Cantidad>]\
-[<Opciones Poblacionales> <Opciones Del Algoritmo>]\n\n");
-
-    if(fullhelp){
-        printf("\t--reps <Cantidad>\n\
-\t\t\033[34;1mAnt\033[0m   - Cantidad de iteraciones.\n\
-\t\t\033[34;1mResto\033[0m - Cantidad de repeticiones sin mejora.\n");
-        printf("\t--reps <Cantidad de repeticiones sin mejora>\n");
-        printf("\t--help - Ayuda.\n");
-        printf("\t-? - Ayuda.\n");
-        //Opciones Generales.
-        printf("\n\033[34;1mOpciones Generales\033[0m\n");
-        //Tipo de Función Objetivo.
-        printf("\t--tf <Tipo de Función Objetivo>\n\
-\t\t\033[34;1mMAX\033[0m - Función de maximización.\n\
-\t\t\033[34;1mMIN\033[0m - Función de minimización.\n");
-        //Archivo de entrada.
-        printf("\t--fi <Archivo de entrada>\n");
-        //Archivo de salida.
-        printf("\t--fo <Archivo de salida>\n");
-        //Tipo de archivo.
-        printf("\t--t  <Tipo de archivo de entrada>\n\
-\t\t\033[34;1mPNG\033[0m  - Imagen PNG.\n\
-\t\t\033[34;1mTIFF\033[0m - Imagen TIFF.\n\
-\t\t\033[34;1mCSV\033[0m  - Archivo CSV.\n");
-        //Cantidad de clusters.
-        printf("\t--k <Cantidad de Clusters Iniciales>\n");
-        //Algoritmo.
-        printf("\t--a <Algoritmo a utilizar>\n\
-\t\t\033[34;1mKmeans\033[0m - Algoritmo Kmeans.\n\
-\t\t\033[34;1mGA\033[0m     - Algoritmo Genético..\n\
-\t\t\033[34;1mPSO\033[0m    - Algoritmo PSO.\n\
-\t\t\033[34;1mDE\033[0m     - Algoritmo DE.\n\
-\t\t\033[34;1mAnt\033[0m    - Algoritmo Hormiga.\n\
-\t\t\033[34;1mBee\033[0m    - Algoritmo Abeja.\n");
+float _w3 = 0.0;
 
 
-        //Opciones Poblacionales.
-        printf("\n\033[34;1mOpciones Poblacionales\033[0m\n");
-        printf("\t--i <Cantidad de individuos/partículas>\n");
+//////////////////////////////////////////////
 
+using namespace boost;
+namespace po = boost::program_options;
 
-        //Opciones Algoritmo Genético.
-        printf("\n\033[34;1mOpciones Algoritmo Genético\033[0m\n");
-        printf("\t--pm <Probabilidad de mutación>\n");
-        printf("\t--pc <Probabilidad de cruce>\n");
-        printf("\t--tt <Tamaño del torneo>\n");
-
-        //Opciones Algoritmo PSO.
-        printf("\n\033[34;1mOpciones Algoritmo PSO\033[0m\n");
-        printf("\t--c1 <Constante de la componente cognitiva>\n");
-        printf("\t--c2 <Constante de la componente social>\n");
-        printf("\t--W <Peso inercial>\n");
-        printf("\t--w1 <Peso de la distancia intracluster>\n");
-        printf("\t--w2 <Peso de la distancia intercluster>\n");
-        printf("\t--w3 <Peso del error>\n");
-        printf("\t--mx <Valor máximo de un atributo>\n\
-\t\t\033[34;1ma1,a2,...,am\033[0m - Donde ai es el máximo valor\n\
-\t\t\tpara el atributo i.\n");
-        printf("\t--mn <Valor mínimo de un atributo>\n\
-\t\t\033[34;1ma1,a2,...,am\033[0m - Donde ai es el mínimo valor\n\
-\t\t\tpara el atributo i.\n");
-        printf("\t--vmx <Velocidad máxima>\n");
-        printf("\t--weighted - Si se utilizará la función objetivo\n\
-\t\t\tcon pesos.\n");
-
-        //Opciones Algoritmo DE.
-        printf("\n\033[34;1mOpciones Algoritmo DE\033[0m\n");
-        printf("\t--f <Parámetro de escalado>\n");
-        printf("\t--pc <Probabilidad de cruce>\n");
-
-        //Opciones Algoritmo Bee.
-        printf("\n\033[34;1mOpciones Algoritmo de Abeja\033[0m\n");
-        printf("\t--m <Cantidad de parches de exploración>\n");
-        printf("\t--e <Cantidad de parches élite>\n");
-        printf("\t--eb <Cantidad de abejas a parches élite>\n");
-        printf("\t--ob <Cantidad de abejas a parches no-élite>\n");
-        //Opciones Algoritmo Ant.
-        printf("\n\033[34;1mOpciones Algoritmo de Hormiga\033[0m\n");
-        printf("\t--alpha <Alpha^2 precalculado para la imagen> Opcional\n");
-    }
-}
-
-#define V_MAX 0
-int mxs = 0;
-#define V_MIN 1
-int mns = 0;
-/**
- * Parsea el vector de acuerdo a un string.
- */
-void parseVector(int t){
-    int i;
-    int vs;
-    vector<float> v;
-    float* temp;
-
-    stringstream line(optarg);
-    string str;
-    while(getline(line, str, ',')){
-        v.push_back( atof( str.c_str() ) );
-    }
-
-    vs = (int) v.size();
-
-    switch(t){
-        case V_MAX:
-            _mxv = new float[vs];
-            mxs  = vs;
-            temp = _mxv;
-            break;
-        case V_MIN:
-            _mnv = new float[vs];
-            mns  = vs;
-            temp = _mnv;
-            break;
-        default:
-            exit(1);
-    }
-    
-    for(i = 0; i < vs; ++i)
-        temp[i] = v[i];
-}
-
-/**
- * Lee los argumentos del programa e inicializa las estructuras.
- *
- * @param argc Cantidad de Argumentos.
- * @param argv Argumentos.
- */
 void initIt(int argc, char* argv[]){
-    int c;
-    int option_index;
-    bool noerror = true;
 
-    bool* optgen = new bool[6];
-    for(c = 0; c < 6; ++c) optgen[c] = false;
-    bool  indiv  = false;
-    bool* optga  = new bool[3];
-    for(c = 0; c < 3; ++c) optga[c]  = false;
-    bool* optpso = new bool[9];
-    for(c = 0; c < 9; ++c) optpso[c] = false;
-    bool* optbee  = new bool[4];
-    for(c = 0; c < 9; ++c) optpso[c] = false;
-    bool optde = false;
-    bool optant = false;
+    /** 
+     * Ayuda
+     */
+    po::options_description help("Ayuda");
+    help.add_options()
+        ("help,?", "Produce mensaje de ayuda")
+    ;
 
-    //////////////////////////////////////////
-    // Lectura de parámetros.
-    // INICIO.
+    /** 
+     * Rquisitos genéricos
+     */
+    po::options_description generic("Requeridas genéricas");
+    generic.add_options()
+        ("a", po::value<string>(), "Algoritmo a ejecutar:\n\
+Ant\n\
+Bee\n\
+DE\n\
+GA\n\
+Kmeans\n\
+PSO")
+        ("fi", po::value<string>(), "Archivo de entrada")
+        ("fo", po::value<string>(), "Archivo de salida")
+        ("t", po::value<string>(), "Tipo de archivo de entrada \
+(CSV, TIFF o PNG)")
+        ;
 
-    while(true){
-        static struct option long_options[] =
-        {
-            /* Ayuda */
-            {"help", no_argument, 0, '?'},
-            {"reps", required_argument, 0, '0'},
-            /* Opciones generales */
-            {"tf", required_argument, 0, 'A'},
-            {"fi", required_argument, 0, 'B'},
-            {"fo", required_argument, 0, 'C'},
-            {"t",  required_argument, 0, 'D'},
-            {"k",  required_argument, 0, 'E'},
-            {"a",  required_argument, 0, 'F'},
-            /* Opciones generales poblacionales */
-            {"i",  required_argument, 0, 'G'},
-            /* Opciones genético */
-            {"pm", required_argument, 0, 'H'},
-            {"pc", required_argument, 0, 'I'},
-            {"tt", required_argument, 0, 'J'},
-            /* Opciones PSO */
-            {"c1", required_argument, 0, 'K'},
-            {"c2", required_argument, 0, 'L'},
-            {"W",  required_argument, 0, 'M'},
-            {"w1", required_argument, 0, 'N'},
-            {"w2", required_argument, 0, 'O'},
-            {"w3", required_argument, 0, 'P'},
-            {"mx", required_argument, 0, 'Q'},
-            {"mn", required_argument, 0, 'R'},
-            {"vmx", required_argument, 0,'S'},
-            {"weighted", no_argument, 0, 'T'},
-            /* Opciones del DE */
-            {"f", required_argument, 0,'U'},
-            //w1,w2,w3,pc
-            /* BEE */
-            {"m", required_argument, 0,'V'},
-            {"e", required_argument, 0,'W'},
-            {"eb", required_argument, 0,'X'},
-            {"ob", required_argument, 0,'Y'},
-            {"alpha", required_argument, 0,'Z'}
+    /** 
+     * Opciones requeridas por varios algorimos
+     */
+    po::options_description extra("Opciones requeridas por varios algorimos");
+    extra.add_options()
+        ("k", po::value<int>(), "Número de clusters (Todos menos Ant)")
+        ("reps", po::value<int>()->default_value(3), "Número de iteracion en el caso de Ant y DE, y cantidad de iteraciones que no se mejora en el caso de Bee, GA, Kmeans y PSO. El valor por default es 3")
+        ("tf", po::value<string>()->default_value("MAX"), "Si se desea maximizar o minimizar (MAX o MIN), el MAX está por defecto (Bee, GA y Kmeans)")
+        ;
 
-            
-        };
+    /** 
+     * Requerimiento poblacionales (Ant, Bee, DE, GA y PSO)
+     */
+    po::options_description pob("Requeridos poblacionales (Ant, Bee, DE, GA y PSO)");
+    pob.add_options()
+        ("i", po::value<int>(), "Cantidad de individuos")
+        ;
 
-        option_index = 0;
+    /** 
+     * Requeridos Bee
+     */
+    po::options_description bee("Requeridos Bee");
+    bee.add_options()
+        ("e", po::value<int>(), "Cantidad de parches élite")
+        ("eb", po::value<int>(), "Cantidad de abejas a parches élite")
+        ("m", po::value<int>(), "Cantidad de parches de exploración")
+        ("ob", po::value<int>(), "Cantidad de abejas a parches no-élite")
+        ;
 
-        c = getopt_long(argc, argv,
-                        "0:?A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:TU:V:W:X:Y:Z:",
-                        long_options, &option_index);
+    /** 
+     * Opciones DE
+     */
+    po::options_description de("Opciones DE");
+    de.add_options()
+        ("f", po::value<float>(), "Párametro escalar, requiere que el pc también este establecido, sino se puede dejar de colocar ambos")
+        ;
 
-        if(c == -1)
-            break;
+    /** 
+     * Requeridos GA 
+     */
+    po::options_description ga("Requeridos GA");
+    ga.add_options()
+        ("pm", po::value<float>(), "Probabilidad de mutación")
+        ("tt", po::value<int>(), "Tamaño del torneo")
+        ;
 
-        switch(c){
-            case '0':
-                _reps = atoi(optarg);
-                if(_reps <= 0){
-                    fprintf(stderr, "La cantidad de repeticiones debe ser mayor que 0.\n");
-                    fprintf(stderr, "%s no lo es. Se utilizará 3 por defecto.\n", optarg);
-                    _reps = 3;
-                }
-                break;
-            case 'A':
-                if(strcmp(optarg, "MAX") == 0){
-                    _tf = T_MAX;
-                }else if(strcmp(optarg, "MIN") == 0){
-                    _tf = T_MIN;
-                }else{
-                    fprintf(stderr, "Debe elegir un tipo de función válido.\n");
-                    fprintf(stderr, "MAX ó MIN son válidos, %s no lo es.\n", optarg);
-                    noerror = false;
-                }
 
-                optgen[0] = true;
-                break;
-            case 'B':
-                _input = optarg;
-                if(r != NULL) r->read(_input);
+    /** 
+     * Requerido por DE y  opcional del GA
+     */
+    po::options_description dega("Requerido por DE y  opcional del GA");
+    dega.add_options()
+        ("pc", po::value<float>(), "Probabilidad de cruce, requerida en el genético, opcional en el DE (requiere el factor escalar esté establecido también)")
+        ;
 
-                optgen[1] = true;
-                break;
-            case 'C':
-                _output = optarg;
+    /** 
+     * Requeridos PSO
+     */
+    po::options_description pso("Requeridos PSO");
+    pso.add_options()
+        ("c1", po::value<float>(), "Constante de la componente cognitiva")
+        ("c2", po::value<float>(), "Constante de la componente social")
+        ("w", po::value<float>(), "Peso inercial")
+        ("vmx", po::value<float>(), "Velocidad máxima")
+    ;
 
-                optgen[2] = true;
-                break;
-            case 'D':
-                if(strcmp(optarg, "PNG") == 0){
-                    r = new Png();
-                    if(_input != NULL) r->read(_input);
-                }else if(strcmp(optarg, "TIFF") == 0){
-                    r = new Tiff();
-                    if(_input != NULL) r->read(_input);
-                }else if(strcmp(optarg, "CSV") == 0){
-                    r = new Csv();
-                    if(_input != NULL) r->read(_input);
-                }else{
-                    fprintf(stderr, "Debe elegir un tipo de archivo válido.\n");
-                    fprintf(stderr, "PNG, TIFF o CSV son válidos, %s no lo es.\n", optarg);
-                    noerror = false;
-                }
 
-                optgen[3] = true;
-                break;
-            case 'E':
-                _K = atoi(optarg);
-                if(_K < 2){
-                    fprintf(stderr, "La cantidad de clusters debe ser mayor que 2.\n");
-                    fprintf(stderr, "%s no lo es.\n", optarg);
-                    noerror = false;
-                }
+    /** 
+     * Opcional PSO
+     */
+    po::options_description opso("Opcional PSO");
+    opso.add_options()
+        ("weighted", "Indica si se van a usar los pesos o no en el algoritmo")
+    ;
 
-                optgen[4] = true;
-                break;
-            case 'F':
-                if(strcmp(optarg, "Kmeans") == 0){
-                    algorithm = M_KMEANS;
-                }else if(strcmp(optarg, "GA") == 0){
-                    algorithm = M_GA;
-                }else if(strcmp(optarg, "PSO") == 0){
-                    algorithm = M_PSO;
-                }else if(strcmp(optarg, "DE") == 0){
-                    algorithm = M_DE;
-                }else if(strcmp(optarg, "Ant") == 0){
-                    algorithm = M_ANT;
-                }else if(strcmp(optarg, "Bee") == 0){
-                    algorithm = M_BEE;
-                }else{
-                    fprintf(stderr, "Debe elegir un algoritmo válido.\n");
-                    fprintf(stderr, "Kmeans, GA, PSO, DE, Ant o Bee son válidos, %s no lo es.\n", optarg);
-                    noerror = false;
-                }
+    /** 
+     * Requeridos DE y PSO
+     */
+    po::options_description depso("Requeridos DE y PSO");
+    depso.add_options()
+        ("mn", po::value<string>(), "Vector de valores mínimos de cada atributo")
+        ("mx", po::value<string>(), "Vector de valores máximos de cada atributo")
+    ;
 
-                optgen[5] = true;
-                break;
-            case 'G':
-                _I = atoi(optarg);
-                if(_I <= 0){
-                    fprintf(stderr, "La cantidad de individuos debe ser mayor que 0.\n");
-                    fprintf(stderr, "%s no lo es.\n", optarg);
-                    noerror = false;
-                }
-                indiv = true;
-                break;
-            //Genético.
-            case 'H':
-                _pm = atof(optarg);
-                if(_pm < 0.0 && _pm > 1.0){
-                    fprintf(stderr, "El porcentaje de mutación debe estar entre 0.0 y 1.0.\n");
-                    fprintf(stderr, "%s no lo está.\n", optarg);
-                    noerror = false;
-                }
-                optga[0] = true;
-                break;
-            case 'I':
-                _pc = atof(optarg);
-                if(_pc < 0.0 && _pc > 1.0){
-                    fprintf(stderr, "El porcentaje de cruce debe estar entre 0.0 y 1.0.\n");
-                    fprintf(stderr, "%s no lo está.\n", optarg);
-                    noerror = false;
-                }
-                optga[1] = true;
-                break;
-            case 'J':
-                _tt = atoi(optarg);
-                if(_tt <= 0){
-                    fprintf(stderr, "El tamaño del torneo debe ser mayor que 0.\n");
-                    fprintf(stderr, "%s no lo es.\n", optarg);
-                    noerror = false;
-                }
-                optga[2] = true;
-                break;
-            //PSO
-            case 'K':
-                _c1 = atof(optarg);
-                optpso[0] = true;
-                break;
-            case 'L':
-                _c2 = atof(optarg);
-                optpso[1] = true;
-                break;
-            case 'M':
-                _W = atof(optarg);
-                optpso[2] = true;
-                break;
-            case 'N':
-                _w1 = atof(optarg);
-                optpso[3] = true;
-                break;
-            case 'O':
-                _w2 = atof(optarg);
-                optpso[4] = true;
-                break;
-            case 'P':
-                _w3 = atof(optarg);
-                optpso[5] = true;
-                break;
-            case 'Q':
-                parseVector(V_MAX);
-                optpso[6] = true;
-                break;
-            case 'R':
-                parseVector(V_MIN);
-                optpso[7] = true;
-                break;
-            case 'S':
-                _vmx = atof(optarg);
-                if(_vmx <= 0.0){
-                    fprintf(stderr, "La velocidad máxima debe ser mayor que 0.0\n");
-                    fprintf(stderr, "%s no lo es.\n", optarg);
-                    noerror = false;
-                }
-                optpso[8] = true;
-                break;
-            case 'T':
-                weighted = true;
-                break;
-            case 'U':
-                _f = atof(optarg);
-                if(_f < 0.5 || _f > 1.0){
-                    fprintf(stderr, "El parámetro de escalado f debe estar entre 0.5 y 1.0\n");
-                    fprintf(stderr, "%s no lo está.\n", optarg);
-                    noerror = false;
-                }
-                optde = true;
-                break;
-            case 'V':
-                _m_sites = atoi(optarg);
-                optbee[0] = true;
-                break;
-            case 'W':
-                _e_sites = atoi(optarg);
-                optbee[1] = true;
-                break;
-            case 'X':
-                _e_bees = atoi(optarg);
-                optbee[2] = true;
-                break;
-            case 'Y':
-                _o_bees = atoi(optarg);
-                optbee[3] = true;
-                break;
-            case 'Z':
-                _alpha = atof(optarg);
-                optant = true;
-                break;
-            case '?':
-                help(true);
-                exit(0);
-                break;
-            default:
-                exit(1);
-        }
+    /** 
+     * Requeridos DE y opcional PSO
+     */
+    po::options_description deopso("Requeridos DE y opcional PSO");
+    deopso.add_options()
+        ("w1", po::value<float>(), "Peso de la distancia intracluster")
+        ("w2", po::value<float>(), "Peso de la distancia intercluster")
+        ("w3", po::value<float>(), "Peso del error.\
+La suma debe ser w1+w2+w3 = 1.0")
+        ;
+
+    po::options_description visible("Opciones permitidas");
+    visible.add(help).add(generic).add(extra).add(pob).add(bee).add(de);
+    visible.add(ga).add(dega).add(pso).add(opso).add(depso).add(deopso);
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, visible), vm);
+    po::notify(vm);  
+
+    if (vm.count("help")) {
+        cout << "Uso: \n\t./mhs <Requeridas Genéricas> \
+<Opciones Del Algoritmo>]\n\n"<< visible << "\n";
+        return;
     }
 
-    // FIN
-
-    //////////////////////////////////////////
-    // Verificación de parámetros.
-    // INICIO.
-
-    //Opciones generales completas.
-    switch(algorithm){
-        case M_ANT:
-            for(c = 2; c < 6; ++c)
-                if(c != 4)
-                    optgen[1] = optgen[1] && optgen[c];
-
-            optgen[0] = optgen[1];
-            break;
-        case M_DE:
-        case M_PSO:
-            for(c = 2; c < 6; ++c)
-                if(c != 4)
-                    optgen[1] = optgen[1] && optgen[c];
-
-            optgen[0] = optgen[1];
-            break;
-        default:
-            for(c = 0; c < 6; ++c) optgen[0] = optgen[0] && optgen[c];
-    }
-
-    if(!optgen[0]){
-        fprintf(stderr, "Se deben definir todas las opciones generales.\n");
-        if(algorithm == M_ANT)
-            fprintf(stderr, "Excepto la cantidad de clusters.\n");
-        noerror = false;
-    }
-
-    bool second = false;
-
-    //Verificación por algoritmo.
-    switch(algorithm){
-        case M_KMEANS:
-            if(!optgen[0])
-                fprintf(stderr, "Se necesitan las opciones generales para ejecutar el Kmeans.\n");
-            break;
-        case M_GA:
-            for(c = 0; c < 3; ++c) optga[0] = optga[0] && optga[c];
-            if(!optga[0] || !indiv){
-                fprintf(stderr, "Se necesitan definir todas las opciones del algoritmo genético\n");
-                fprintf(stderr, "y la cantidad de individuos.\n");
-                noerror = false;
-            }
-            break;
-        case M_PSO:
-            if(weighted)
-                for(c = 0; c < 9; ++c) optpso[0] = optpso[0] && optpso[c];
-            else{
-                for(c = 0; c < 9; ++c){
-                    switch(c){
-                        case 3:
-                        case 4:
-                        case 5:
-                            break;
-                        default:
-                            optpso[0] = optpso[0] && optpso[c];
-                    }
-                }
-            }
-
-            if(!optpso[0] || !indiv){
-                fprintf(stderr, "Se necesitan definir todas las opciones del algoritmo PSO\n");
-                fprintf(stderr, "y la cantidad de individuos.\n");
-                noerror = false;
-            }
-
-            if(( ( (_c1 + _c2) * 0.5 ) - 1.0 ) >= _W){
-                fprintf(stderr, "No se asegura convergencia con los valores de c1, c2 y W.\n");
-                fprintf(stderr, "(c1 + c2) * 0.5 ) - 1  < W\n");
-                fprintf(stderr, "(%.2f + %.2f) * 0.5 ) - 1 >= %.2f\n", _c1, _c2, _W);
-                fprintf(stderr, "Se continuará la ejecución a pesar de esto.\n");
-            }
-
-            if(r->M != mxs || r->M != mns){
-                fprintf(stderr, "Los tamaños de los vectores máximo o mínimos valores de atributos\n");
-                fprintf(stderr, "no concuerdan\n");
-                fprintf(stderr, "Cantidad de Atributos: %d\n", r->M);
-                fprintf(stderr, "Cantidad de Atributos del Máximo: %d\n", mxs);
-                fprintf(stderr, "Cantidad de Atributos del Mínimo: %d\n", mns);
-                noerror = false;
-            }
-            break;
-        case M_DE:
-            if(!indiv){
-                fprintf(stderr, "Se necesita definir la cantidad de individuos.\n");
-                noerror = false;
-            }
-
-            if(!optpso[3] || !optpso[4] || !optpso[5]){
-                fprintf(stderr, "Debe definir los 3 pesos requeridos\n");
-                noerror = false;
-            }
-
-
-            if(!optpso[6] || !optpso[7]){
-                fprintf(stderr, "Debe definir los vectores de máximo y mínimo\n");
-                noerror = false;
-            }
-
-            if(r->M != mxs || r->M != mns){
-                fprintf(stderr, "Los tamaños de los vectores máximo o mínimos valores de atributos\n");
-                fprintf(stderr, "no concuerdan\n");
-                fprintf(stderr, "Cantidad de Atributos: %d\n", r->M);
-                fprintf(stderr, "Cantidad de Atributos del Máximo: %d\n", mxs);
-                fprintf(stderr, "Cantidad de Atributos del Mínimo: %d\n", mns);
-                noerror = false;
-            }
-
-            if(optde && optga[1])
-                second = true;
-            break;
-        case M_ANT:
-            printf("Se harán %d iteraciones.\n", _reps);
-            if(!indiv){
-                fprintf(stderr, "Debe definir la cantidad de hormigas.\n");
-                noerror = false;
-            }
-            break;
-        case M_BEE:
-
-            if(!indiv){
-                fprintf(stderr, "Se necesita definir la cantidad de abejas.\n");
-                noerror = false;
-            }
-
-            if(_I < ( _e_bees + _o_bees )){
-                fprintf(stderr, "La suma entre las abejas élite y las no-élite\n");
-                fprintf(stderr, "debe ser menor o igual que la cantidad de individuos\n");
-                noerror = false;
-            }
-
-            if(_e_sites > _m_sites){
-                fprintf(stderr, "La suma entre las abejas élite y las no-élite\n");
-                fprintf(stderr, "debe ser menor o igual que la cantidad de individuos\n");
-                noerror = false;
-            }
-            break;
-        default:
-            fprintf(stderr, "Algoritmo desconocido.\n");
-            exit(1);
-    }
-
-    // FIN
-
-    //////////////////////////////////////////
-    // Inicialiciación de algoritmos.
-    // INICIO.
-
-    if(noerror){
-        switch(algorithm){
-            case M_KMEANS:
-                m = new Kmeans(r->data, r->M, r->N, _K, M_DB, _reps);
-                m->initialize();
-                break;
-            case M_GA:
-                m = new GA(r->data, r->M, r->N, _K, _I, _pc, _pm, _tt, M_DB, _reps);
-                break;
-            case M_PSO:
-                if(weighted){
-                    m = new PSO(r->data, r->M, r->N, _K, _I,
-                                _c1, _c2, _W,
-                                _w1, _w2, _w3,
-                                _mxv, _mnv, _vmx, F_WEIGHTED, _reps);
-                }else{
-                    m = new PSO(r->data, r->M, r->N, _K, _I,
-                                _c1, _c2, _W,
-                                _mxv, _mnv, _vmx, F_NON_WEIGHTED, _reps);
-                }
-
-                delete [] _mxv;
-                delete [] _mnv;
-                break;
-            case M_DE:
-                if(second){
-                    m = new DE(r->data, r->M, r->N, _K, _I, 
-                                _reps, _pc, _f, _w1, _w2, _w3,
-                                _mxv, _mnv);
-                }else{
-                    m = new DE(r->data, r->M, r->N, _K, _I,
-                                _reps, _w1, _w2, _w3, _mxv, _mnv);
-                }
-
-                delete [] _mxv;
-                delete [] _mnv;
-                break;
-            case M_ANT:
-                if(optant){
-                    m = new AntA(r->data, r->M, r->N, _I, _alpha, _reps, M_DB);
-                }else{
-                    m = new AntA(r->data, r->M, r->N, _I, _reps, M_DB);
-                }
-                break;
-            case M_BEE:
-                m = new Bee(r->data, r->M, r->N, _K, _I, _m_sites, _e_sites, _e_bees, _o_bees, M_DB, _reps);
-                break;
-            default:
-                fprintf(stderr, "Algoritmo desconocido.\n");
-                exit(1);
-        }
-    }else{
-        help(false);
-        exit(1);
-    }
-
-    // FIN
-
-    delete [] optbee;
-    delete [] optgen;
-    delete [] optga;
-    delete [] optpso;
-}
-
-/**
- * Inicializa el contador.
- */
-void initTime(){
-
-
-    if (!gettimeofday(&t_p, NULL)){
-        tinit = (float) t_p.tv_sec +
-                ((float) t_p.tv_usec)/1000000.0;
-    }else{
-        fprintf(stderr, "Problema con el contador de tiempo\n");
-        exit(1);
-    }
-}
-
-/**
- * Guarda el tiempo del contador.
- */
-void endTime(){
-    if (!gettimeofday(&t_p,NULL)){
-        tend = (float) t_p.tv_sec +
-              ((float) t_p.tv_usec)/1000000.0;
-    }else{
-        fprintf(stderr, "Problema con el contador de tiempo\n");
-        exit(1);
-    }
-
-    runtime = tend - tinit;
-    printf("- Tiempo de corrida: %1.4f segs.\n", runtime);
-}
-
-/**
- * Ejecuta la metaheurística elegida.
- */
-void runIt(){
-    srand(time(NULL));
-
-    printf("- Cantidad de Clusters Inicial: %d\n", m->K);
-
-    initTime();
-
-    initHandlers();
-
-    m->run(_tf);
-
-    restoreHandlers();
-
-    endTime();
-
-    if(algorithm != M_KMEANS){
-        
-        printf("- Mejorando solución...\n");
-
-        initTime();
-
-        improve();
-
-        m->reconstruct(_tf);
-
-        endTime();
-
-    }
-    
-    printf("- Cantidad de Clusters Final: %d\n", m->K);
-
-    printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
-
-    printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-
-    r->write(_output, m->bestSolution, m->K);
-}
-
-/**
- * Libera las variables reservadas.
- */
-void cleanIt(){
-    delete m;
-    delete r;
 }
