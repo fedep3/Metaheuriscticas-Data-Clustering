@@ -222,14 +222,18 @@ PSO")
     po::options_description extra("Opciones requeridas por varios algorimos");
     extra.add_options()
         ("k", po::value<int>(), "Número de clusters (Todos menos Ant)")
-        ("reps", po::value<int>()->default_value(3), "Número de iteracion en el caso de Ant y DE, y cantidad de iteraciones que no se mejora en el caso de Bee, GA, Kmeans y PSO. El valor por default es 3")
-        ("tf", po::value<string>()->default_value("MAX"), "Si se desea maximizar o minimizar (MAX o MIN), el MAX está por defecto (Bee, GA y Kmeans)")
+        ("reps", po::value<int>()->default_value(3), "Número de iteracion en el\
+ caso de Ant y DE, y cantidad de iteraciones que no se mejora en el caso de Bee\
+, GA, Kmeans y PSO. El valor por default es 3")
+        ("tf", po::value<string>()->default_value("MAX"), "Si se desea maximiza\
+r o minimizar (MAX o MIN), el MAX está por defecto (Bee, GA y Kmeans)")
         ;
 
     /** 
      * Requerimiento poblacionales (Ant, Bee, DE, GA y PSO)
      */
-    po::options_description pob("Requeridos poblacionales (Ant, Bee, DE, GA y PSO)");
+    po::options_description pob("Requeridos poblacionales (Ant, Bee, DE, GA y P\
+SO)");
     pob.add_options()
         ("i", po::value<int>(), "Cantidad de individuos")
         ;
@@ -250,7 +254,8 @@ PSO")
      */
     po::options_description de("Opciones DE");
     de.add_options()
-        ("f", po::value<float>(), "Párametro escalar, requiere que el pc también este establecido, sino se puede dejar de colocar ambos")
+        ("f", po::value<float>(), "Párametro escalar, requiere que el pc tambié\
+n este establecido, sino se puede dejar de colocar ambos")
         ;
 
     /** 
@@ -268,7 +273,8 @@ PSO")
      */
     po::options_description dega("Requerido por DE y  opcional del GA");
     dega.add_options()
-        ("pc", po::value<float>(), "Probabilidad de cruce, requerida en el genético, opcional en el DE (requiere el factor escalar esté establecido también)")
+        ("pc", po::value<float>(), "Probabilidad de cruce, requerida en el gené\
+tico, opcional en el DE (requiere el factor escalar esté establecido también)")
         ;
 
     /** 
@@ -296,8 +302,10 @@ PSO")
      */
     po::options_description depso("Requeridos DE y PSO");
     depso.add_options()
-        ("mn", po::value<string>(), "Vector de valores mínimos de cada atributo")
-        ("mx", po::value<string>(), "Vector de valores máximos de cada atributo")
+        ("mn", po::value<string>(), "Vector de valores mínimos de cada atribut\
+o")
+        ("mx", po::value<string>(), "Vector de valores máximos de cada atribut\
+o")
     ;
 
     /** 
