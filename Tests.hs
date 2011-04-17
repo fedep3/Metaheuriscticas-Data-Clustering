@@ -1,7 +1,7 @@
 module Tests(
-    -- * No aleatorios.
-    Program(..),
-    Algorithm(..),
+    -- * Utilidades    
+    run,
+    -- * Generadores.
     genPrograms,
     genKmeans,
     genGA,
@@ -11,6 +11,9 @@ module Tests(
     genSDE,
     genAnt,
     genBee,
+    -- * No aleatorios.
+    Program(..),
+    Algorithm(..),
     InputFile(..),
     OutputFile(..),
     FileType(..),
@@ -27,6 +30,14 @@ module Tests(
 import Test.QuickCheck
 import Data.List
 import Control.Monad
+import System.Process
+
+-- | Ejecuta el programa y devuelve la salida del mismo.
+run :: Program          -- * Programa a ejecutar
+    -> IO String        -- * Salida de la ejecución del programa.
+run p = do
+    let (e:a) = words $ show p
+    readProcess e a ""
 
 {-
  - No aleatorios. 
@@ -389,7 +400,8 @@ instance Arbitrary Velocity where
     arbitrary = do
         a <- suchThat (arbitrary :: Gen Float) (>= 0.0)
         b <- suchThat (arbitrary :: Gen Float) (>= 0.0)
-        let prop_vel = (\x y z -> ( ( ( ( (x + y) * 0.5) - 1.0) < z ) && (z >= 0.0) ))
+        let prop_vel = (\x y z -> ( ( ( ( (x + y) * 0.5) - 1.0) < z )
+                                   && (z >= 0.0) ))
         c <- suchThat (arbitrary :: Gen Float) (prop_vel a b)
         return (Velocity a b c)
 
