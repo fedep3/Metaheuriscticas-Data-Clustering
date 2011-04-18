@@ -318,7 +318,7 @@ void initHandlers(){
  */
 void restoreHandlers(){
     if(definitelyStopIt){
-        printf("- Tiempo excedido...\n");
+        printf("-- Tiempo excedido...\n");
         exit(1);
     }
     definitelyStopIt = true;
@@ -347,19 +347,20 @@ void longEnough(int sig){
     try{
         restoreHandlers();
 
+        printf(">> ");
         endTime();
         
-        printf("- Tiempo excedido...\n");
+        printf("-- Tiempo excedido...\n");
 
         m->reconstruct(_tf);
 
         m->calcGFO();
 
-        printf("- Cantidad de Clusters Final: %d\n", m->K);
+        printf(">> Cantidad de Clusters Final: %d\n", m->K);
 
-        printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        printf(">> Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
 
-        printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+        printf("** Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -378,30 +379,44 @@ void longEnough(int sig){
  * @param sig Señal.
  */
 void killIt(int sig){
+    int i = 0;
     try{
         restoreHandlers();
 
+        printf(">> ");
         endTime();
-        
-        printf("- Mejorando solución...\n");
 
         m->reconstruct(_tf);
 
         m->calcGFO();
 
-        initTime();
+        if(algorithm != M_KMEANS){
 
-        improve();
+            printf("-- Mejorando solución...\n");
 
-        m->calcGFO();
+            initTime();
 
-        endTime();
+            i = improve();
+            
+            m->calcGFO();
 
-        printf("- Cantidad de Clusters Final: %d\n", m->K);
+            printf("-> ");
+            endTime();
 
-        printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        }
 
-        printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+        printf(">> Cantidad de Clusters Final: %d\n", m->K);
+
+        printf(">> Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
+
+        if(algorithm != M_KMEANS)
+            printf("-> Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", i);
+
+        printf(">> Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
+
+        printf(">> Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+
+        printf("** Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -420,7 +435,7 @@ void initTime(){
         tinit = (double) t_p.tv_sec +
                 ((double) t_p.tv_usec)/1000000.0;
     }else{
-        fprintf(stderr, "Problema con el contador de tiempo\n");
+        fprintf(stderr, "-- Problema con el contador de tiempo\n");
         exit(1);
     }
 }
@@ -433,12 +448,12 @@ void endTime(){
         tend = (double) t_p.tv_sec +
               ((double) t_p.tv_usec)/1000000.0;
     }else{
-        fprintf(stderr, "Problema con el contador de tiempo\n");
+        fprintf(stderr, "-- Problema con el contador de tiempo\n");
         exit(1);
     }
 
     runtime = tend - tinit;
-    printf("- Tiempo de corrida: %1.4f segs.\n", runtime);
+    printf("Tiempo de corrida: %1.4f segs.\n", runtime);
 }
 
 
@@ -1207,7 +1222,7 @@ void runIt(){
 
     srand(time(NULL));
 
-    printf("- Cantidad de Clusters Inicial: %d\n", m->K);
+    printf(">> Cantidad de Clusters Inicial: %d\n", m->K);
 
     initTime();
 
@@ -1215,6 +1230,7 @@ void runIt(){
 
     m->run(_tf);
 
+    printf(">> ");
     endTime();
 
     restoreHandlers();
@@ -1225,7 +1241,7 @@ void runIt(){
     
     if(algorithm != M_KMEANS){
 
-        printf("- Mejorando solución...\n");
+        printf("-- Mejorando solución...\n");
 
         initTime();
 
@@ -1233,22 +1249,23 @@ void runIt(){
         
         m->calcGFO();
 
+        printf("-> ");
         endTime();
 
     }
 
-    printf("- Cantidad de Clusters Final: %d\n", m->K);
+    printf(">> Cantidad de Clusters Final: %d\n", m->K);
 
-    printf("- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
+    printf(">> Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
 
     if(algorithm != M_KMEANS)
-        printf("- Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", i);
+        printf("-> Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", i);
 
-    printf("- Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
+    printf(">> Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
 
-    printf("- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+    printf(">> Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
 
-    printf("* Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+    printf("** Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
 
     r->write(_output, m->bestSolution, m->K);
 
