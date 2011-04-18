@@ -299,8 +299,6 @@ void PSO::run(int type){
             ++count;
     }
 
-    bestDB = 1.0 / DB(bestSolution, bestCentroids, K);
-
     renamer(bestSolution, &K);
 }
 

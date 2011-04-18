@@ -10,7 +10,7 @@
  * programa.
  */
 
-#include <boost/program_options.hpp>
+#include <getopt.h>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -72,6 +72,10 @@ extern char* _output;
  * Tipo de lector.
  */
 extern Reader* r;
+/**
+ * Metaheurística.
+ */
+extern Metaheuristic* m;
 
 ///////////////////////////////////////////
 // Opciones requeridas por varios algoritmos
@@ -97,6 +101,14 @@ extern int _reps;
  * Individuos o partículas.
  */
 extern int _I;
+
+///////////////////////////////////////////
+// Requeridos Ant
+
+/**
+ * Promedio de diferencia entre todos los posibles par de vector de atributos.
+ */
+extern float _alpha;
 
 ///////////////////////////////////////////
 // Requeridos Bee
@@ -221,5 +233,15 @@ extern float _w3;
  * @param argv Argumentos.
  */
 void initIt(int argc, char* argv[]);
+
+/**
+ * Ejecuta la metaheurística elegida.
+ */
+void runIt();
+
+/**
+ * Libera las variables reservadas.
+ */
+void cleanIt();
 
 #endif

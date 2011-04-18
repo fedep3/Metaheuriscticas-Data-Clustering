@@ -36,7 +36,6 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
     nA = _nA;
     maxit = _it;
     ac = false;
-    rca = false;
 
     free = new int[N];
     cells = new vector<int>[N];    
@@ -66,7 +65,6 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, float _alpha2,
     maxit = _it;
     alpha2 = _alpha2;
     ac = true;
-    rca = false;
 
     free = new int[N];
     cells = new vector<int>[N];    
@@ -110,8 +108,6 @@ void AntA::run(int type){
             dropAnt(ra);
         
     }
-
-    reconstruct(type);
 
 }
 
@@ -162,73 +158,66 @@ void AntA::reconstruct(int type){
     int i = 0, j = 0, best = 0, rp = 0;
     vector<int>::iterator it;
 
-    if(!rca){
-
-        rca = true;
-
-        for(i = 0; i < nA; i++){
-            if(!ants[i].isFree()){
-                max = -1.0;
-                rp = ants[i].getPixel();
-                for(j = 0; j < N; j++){
-                    if(cells[j].size() >0){
-                        if((actual = f(rp, j)) > max){
-                            max = actual;
-                            best = j;
-                        }
+    for(i = 0; i < nA; i++){
+        if(!ants[i].isFree()){
+            max = -1.0;
+            rp = ants[i].getPixel();
+            for(j = 0; j < N; j++){
+                if(cells[j].size() >0){
+                    if((actual = f(rp, j)) > max){
+                        max = actual;
+                        best = j;
                     }
                 }
-                free[rp] = best;
-                cells[best].push_back(rp);
-                ants[i].drop(best);
             }
+            free[rp] = best;
+            cells[best].push_back(rp);
+            ants[i].drop(best);
         }
+    }
 
-        K = 0;
+    K = 0;
 
-        for(i = 0; i < N; i++){
-            if(cells[i].size() > 0){
+    for(i = 0; i < N; i++){
+        if(cells[i].size() > 0){
 
-                for(it = cells[i].begin(); it < cells[i].end(); it++)
-                    bestSolution[*it] = K;
+            for(it = cells[i].begin(); it < cells[i].end(); it++)
+                bestSolution[*it] = K;
 
-                K++;
-
-            }
-        }
-
-
-        int *count = new int[K];
-
-        for(i = 0; i < K; i++){
-
-            for(j = 0; j < M; j++)
-                bestCentroids[i][j] = 0.0;
-
-            count[i] = 0;
+            K++;
 
         }
+    }
 
-        for(i = 0; i < N; i++){
 
-            for(j = 0; j < M; j++)
-                bestCentroids[bestSolution[i]][j] += data[i][j];
+    int *count = new int[K];
 
-            count[bestSolution[i]]++;
+    for(i = 0; i < K; i++){
 
-        }
+        for(j = 0; j < M; j++)
+            bestCentroids[i][j] = 0.0;
 
-        for(i = 0; i < K; i++)
-            for(j = 0; j < M; j++)
-                bestCentroids[i][j] = bestCentroids[i][j] / count[i];
-
-        delete [] count;
+        count[i] = 0;
 
     }
 
-    bestFO = 1.0/(DB(bestSolution, bestCentroids, K));
+    for(i = 0; i < N; i++){
 
-    bestDB = bestFO;
+        for(j = 0; j < M; j++)
+            bestCentroids[bestSolution[i]][j] += data[i][j];
+
+        count[bestSolution[i]]++;
+
+    }
+
+    for(i = 0; i < K; i++)
+        for(j = 0; j < M; j++)
+            bestCentroids[i][j] = bestCentroids[i][j] / count[i];
+
+    delete [] count;
+
+
+    bestFO = 1.0/(DB(bestSolution, bestCentroids, K));
 
 }
 

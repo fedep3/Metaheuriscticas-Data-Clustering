@@ -671,7 +671,13 @@ void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, in
 /**
  * Reconstruye la solución.
  */
-void Metaheuristic::reconstruct(int type){
+void Metaheuristic::reconstruct(int type){}
+
+
+/**
+ * Calcula 1/DB()
+ */
+void Metaheuristic::calcGFO(){
     bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
 }
 

@@ -182,10 +182,5 @@ class AntA : public Metaheuristic{
          */
         bool ac;
 
-        /**
-         * Indica si ya se reconstruyo la solucuión.
-         */
-        bool rca;
-
 };
 #endif

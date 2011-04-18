@@ -192,7 +192,6 @@ void Bee::run(int type){
         updateBetter(top, &best, &last, &count, type);
     }
 
-    bestDB = 1.0 / DB(bestSolution, bestCentroids, K);
 }
 
 /**

@@ -63,6 +63,11 @@ class Metaheuristic{
         virtual void reconstruct(int type);
 
         /**
+         * Calcula 1/DB()
+         */
+        virtual void calcGFO();
+
+        /**
          * Destructor de la clase Metaheuristic.
          */
         virtual ~Metaheuristic();
