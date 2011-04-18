@@ -51,7 +51,7 @@ using namespace std;
 /**
  * Tiempo de ejecución.
  */
-extern float runtime;
+extern double runtime;
 
 ///////////////////////////////////////////
 // Rquisitos genéricos
