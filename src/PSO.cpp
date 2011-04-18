@@ -491,6 +491,7 @@ float PSO::foMin(int i, int k, int fun){
  *         indicada.
  */
 float PSO::foMin(int* sol, float** cent, int k, int fun){
+    ++ofEval;
     return ( psoFO(sol, cent, k) );
 }
 

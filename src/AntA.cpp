@@ -336,17 +336,15 @@ float AntA::pdrop(int pixel, int cell){
 }
 
 
-/*
-
+/**
  * Funciones que devuelve el promedio de distancia entre el pixel y los
  * que se encuentra en la célula cell.
  *
-
  * @param pixel Pixel que se quiere soltar.
  * @param cell Célula donde se quiere soltar.
  */
 float AntA::f(int pixel, int cell){
-
+    ++ofEval;
     float sum = 0.0;
     vector<int>::iterator it;
     int size = cells[cell].size();

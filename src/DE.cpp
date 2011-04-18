@@ -241,6 +241,7 @@ void DE::run(int type){
  *         indicada.
  */
 float DE::foMin(int* sol, float** cent, int k){
+    ++ofEval;
     return ( deFO(sol, cent, k) );
 }
 

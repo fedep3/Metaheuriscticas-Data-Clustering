@@ -156,7 +156,7 @@ void Bee::run(int type){
     switch(type){
         case T_MAX:
             //Maximización.
-            best = -1.0;
+            best = 0.0;
             break;
         default:
             //Minimización.

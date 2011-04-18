@@ -41,6 +41,8 @@ Metaheuristic::Metaheuristic(float** _d, int _m, int _n, int _k, int _met){
         bestCentroids[i] = new float[M];
 
     size = new int[K];
+
+    ofEval = 0;
 }
 
 /**
@@ -233,6 +235,7 @@ float Metaheuristic::DB(int* sol, float** cent, int k){
     int j, l, cluster;
     float m, t1, t2;
 
+    if(k <= 1) return (numeric_limits<float>::infinity());
 
     float* S  = new float[k];
     int* csize = new int[k];
@@ -312,6 +315,8 @@ float Metaheuristic::CS(int* sol, float** cent, int k){
     int j, l;
     bool first;
 
+    if(k <= 1) return (numeric_limits<float>::infinity());
+
     float* MX  = new float[k];
     int* csize  = new int[k];
 
@@ -386,6 +391,7 @@ float Metaheuristic::CS(int* sol, float** cent, int k){
  * @return Valor de la solución con la métrica indicada.
  */
 float Metaheuristic::foMin(int i, int k, int met){
+    ofEval += 1;
     switch(met){
         case M_DB:
             return DB(i, k);
@@ -410,6 +416,7 @@ float Metaheuristic::foMin(int i, int k, int met){
  * @return Valor de la solución con la métrica indicada.
  */
 float Metaheuristic::foMin(int* sol, float** cent, int k, int met){
+    ofEval += 1;
     switch(met){
         case M_DB:
             return DB(sol, cent, k);
@@ -433,6 +440,7 @@ float Metaheuristic::foMin(int* sol, float** cent, int k, int met){
  * @return Valor de la solución con la métrica indicada.
  */
 float Metaheuristic::foMax(int i, int k, int met){
+    ofEval += 1;
     switch(met){
         case M_DB:
             return (1.0/DB(i, k));
@@ -457,6 +465,7 @@ float Metaheuristic::foMax(int i, int k, int met){
  * @return Valor de la solución con la métrica indicada.
  */
 float Metaheuristic::foMax(int* sol, float** cent, int k, int met){
+    ofEval += 1;
     switch(met){
         case M_DB:
             return (1.0/DB(sol, cent, k));

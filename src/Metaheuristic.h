@@ -112,6 +112,11 @@ class Metaheuristic{
          */
         float** data;
 
+        /**
+         * Cantidad de evaluación.
+         */
+        int ofEval;
+
     protected:
         /**
          * Calcula la distancia entre dos objetos. 
