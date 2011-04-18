@@ -543,7 +543,46 @@ Requeridos DE y PSO:\n\
 Requeridos DE y opcional PSO:\n\
   --w1 arg              Peso de la distancia intracluster.\n\
   --w2 arg              Peso de la distancia intercluster.\n\
-  --w3 arg              Peso del error.La suma debe ser w1+w2+w3 = 1.0.\n\n\n");
+  --w3 arg              Peso del error.La suma debe ser w1+w2+w3 = 1.0.\n\n\n\
+Ejempos:\n\
+\n\
+- Ant\n\
+\n\
+    * ./mhs --t PNG --fi entrada.png --fo salida.png --a Ant --i 20 --reps \
+100\n\
+    * ./mhs --t PNG --fi entrada.png --fo salida.png --a Ant --i 30 --reps \
+9000 --alpha 244.5\n\
+\n\
+- Bee\n\
+\n\
+    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a Bee --e 2 --eb 3 --ob \
+5 --m 2 --i 5 --k 5 --reps 4\n\
+\n\
+- DE\n\
+\n\
+    * ./mhs --a DE --k 2 --fi entrada.tiff --fo salida.png --t TIFF --i 20 \
+--w1 0.33 --w2 0.33 --w3 0.33 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --reps \
+30\n\
+    * ./mhs --a DE --k 2 --fi entrada.png --fo salida.png --t TIFF --i 20 --w1 \
+0.2 --w2 0.4 --w3 0.4 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --f 0.2 --pc 0.4 \
+--reps 30\n\
+\n\
+- GA \n\
+\n\
+    * ./mhs --a GA --k 2 --fi entrada.tiff --fo salida.png --t TIFF --i 20 --pc\
+ 0.8 --pm 0.1 --tt 5\n\
+\n\
+- Kmeans\n\
+\n\
+    * ./mhs --a Kmeans --k 2 --fi entrada.png --fo salida.png --t PNG --tf \
+MIN\n\
+\n\
+- PSO\n\
+    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a PSO --c1 1.5 --c2 1.5 \
+--W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5\n\
+    * ./mhs --t PNG --fi entrada.png --fo salida.png --a PSO --c1 1.5 --c2 1.5 \
+--W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5 --w1 \
+0.33 --w2 0.33 --w3 0.33\n\n\n");
 
 }
 
@@ -929,7 +968,7 @@ entre 0.0 y 1.0\n");
                     noerror = false;
                 }
 
-                optdeopso[0] = true;
+                optdeopso[1] = true;
 
                 break;
             case 'Z':
@@ -941,7 +980,7 @@ entre 0.0 y 1.0\n");
                     noerror = false;
                 }
 
-                optdeopso[0] = true;
+                optdeopso[2] = true;
 
                 break;
             default:
@@ -1033,9 +1072,12 @@ definirlos.\n");
         for(c = 0; c < 3; c++)
             aux = aux && optdeopso[c];
 
-        if(aux)
-            if((_w1 + _w2 + _w1) - 1.0 > 0.1)
+        if(aux){
+            if((_w1 + _w2 + _w1) - 1.0 > 0.1){
                 fprintf(stderr, "La suma de los pesos debe ser 1.0.\n");
+                aux = false;
+            }
+        }
 
         //i y k
         aux = aux && optindiv && optextra[0];
@@ -1075,7 +1117,7 @@ definirlos.\n");
         aux = aux && optindiv && optextra[0];
 
         if(!aux)
-            fprintf(stderr, "Debe definir todas las opciones del DE.\n");
+            fprintf(stderr, "Debe definir todas las opciones del PSO.\n");
 
         noerror = noerror && aux;
 
