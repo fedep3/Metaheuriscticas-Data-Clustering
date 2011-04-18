@@ -79,7 +79,7 @@ void Kmeans::run(int type){
     switch(type){
         case T_MAX:
             //Maximización.
-            best = -1.0;
+            best = 0.0;
             break;
         default:
             //Minimización.
@@ -100,7 +100,6 @@ void Kmeans::run(int type){
             solution[0][i] = bestCluster(0, i);
 
         //Renombra los clusters y recalcula los centroides.
-
         renamer(0, &Ks[0], size);
         //Evalua la función objetivo.
         switch(type){

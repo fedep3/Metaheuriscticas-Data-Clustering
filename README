@@ -1,91 +1,101 @@
 ------------------------------------------------------------------
--- Cambios al programa.
-------------------------------------------------------------------
-
-1. Hice un programa de prueba más presentable. Utilicé la librería
-getopt.h para hacer las opciones. Todo esto está en los archivos
-helpers.*
-   Las opciones se muestran en este mismo archivo, más abajo, o
-también haciendo ./mhs -? en la cónsola.
-
-2. Se había borrado el lector de CSVs así que lo volví a hacer.
-
-3. Ya compilé el PSO. Es relativamente rápido, pero los resultados
-no son tan buenos como los del genético. Sin embargo, es un algoritmo
-con muchos parámetros y por lo tanto es necesario tunearlo.
-
-4. Leeré el paper de Abeja para ver si comienzo a implementarlo.
-
-5. Necesito que me digas que parámetros utiliza el DE para que
-agregue una entrada para el mismo en el código fuente de helpers.*
-de modo que integremos lo que llevamos.
-
-6. Instalé Ubuntu de 32 bits. Eso será más problema para mí que
-para tí ya que no podré correr directamente los ejecutables que
-generes. Me estoy arrepintiendo, ya que debí de haber instalado
-Debian Wheezy de 32 bits, pero para eso hubiese necesitado más
-tiempo ya que el netinst tarda más en instalarse.
-
-------------------------------------------------------------------
 -- Ayuda.
 ------------------------------------------------------------------
 
-Uso: 
-	./mhs <Opciones Generales> [--reps <Cantidad>] [<Opciones Poblacionales> <Opciones Del Algoritmo>]
+Uso:
+	./mhs [-?|--help] <Requeridas Genéricas> <Opciones Del Algoritmo>
 
-	--reps <Cantidad de repeticiones sin mejora>
-	--help - Ayuda.
-	-? - Ayuda.
+Opciones permitidas:
+Ayuda:
+  -? [ --help ]         Produce mensaje de ayuda.
 
-Opciones Generales
-	--tf <Tipo de Función Objetivo>
-		MAX - Función de maximización.
-		MIN - Función de minimización.
-	--fi <Archivo de entrada>
-	--fo <Archivo de salida>
-	--t  <Tipo de archivo de entrada>
-		PNG  - Imagen PNG.
-		TIFF - Imagen TIFF.
-		CSV  - Archivo CSV.
-	--k <Cantidad de Clusters Iniciales>
-	--a <Algoritmo a utilizar>
-		Kmeans - Algoritmo Kmeans.
-		GA     - Algoritmo Genético..
-		PSO    - Algoritmo PSO.
-		DE     - Algoritmo DE.
-		Ant    - Algoritmo Hormiga.
-		Bee    - Algoritmo Abeja.
+Requeridas genéricas:  --a arg               Algoritmo a ejecutar:
+                        Ant
+                        Bee
+                        DE
+                        GA
+                        Kmeans
+                        PSO
+  --fi arg              Archivo de entrada.
+  --fo arg              Archivo de salida.
+  --t arg               Tipo de archivo de entrada (CSV, TIFF o PNG).
 
-Ejemplo:
-  ./mhs --tf MAX --fi img/lena.png --fo salida.png --t PNG --k 10 --a Kmeans --reps 3
+Opciones requeridas por varios algorimos:
+  --k arg               Número de clusters (Todos menos Ant).
+  --reps arg (=3)       Número de iteracion en el caso de Ant y DE, y canti-
+                        dad de iteraciones que no se mejora en el caso de 
+                        Bee, GA, Kmeans y PSO. El valor por default es 3.
+  --tf arg (=MAX)       Si se desea maximizar o minimizar (MAX o MIN), el MAX
+                        está por defecto (Bee, GA y Kmeans).
 
-Opciones Poblacionales
-	--i <Cantidad de individuos/partículas>
+Requeridos poblacionales (Ant, Bee, DE, GA y PSO):
+  --i arg               Cantidad de individuos.
 
-Opciones Algoritmo Genético
-	--pm <Probabilidad de mutación>
-	--pc <Probabilidad de cruce>
-	--tt <Tamaño del torneo>
+Opciones Ant:
+  --alpha arg           Promedio de diferencia entre todos los posibles par
+                        de vector de atributos.
 
-Ejemplo:
-  ./mhs --tf MAX --fi img/lena.png --fo salida.png --t PNG --k 10 --a GA --i 30 --pm 0.1 --pc 0.8 --tt 15--reps 10
+Requeridos Bee:
+  --e arg               Cantidad de parches élite.
+  --eb arg              Cantidad de abejas a parches élite.
+  --m arg               Cantidad de parches de exploración.
+  --ob arg              Cantidad de abejas a parches no-élite.
+
+Opciones DE:
+  --f arg               Párametro escalar, requiere que el pc también este.
+                        establecido, sino se puede dejar de colocar ambos.
+
+Requeridos GA:
+  --pm arg              Probabilidad de mutación.
+  --tt arg              Tamaño del torneo.
+
+Requerido por GA y opcional DE:
+  --pc arg              Probabilidad de cruce, requerida en el genético,
+                        opcional en el DE (requiere el factor escalar esté
+                        establecido también).
+
+Requeridos PSO:
+  --c1 arg              Constante de la componente cognitiva.
+  --c2 arg              Constante de la componente social.
+  --w arg               Peso inercial.
+  --vmx arg             Velocidad máxima.
+
+Requeridos DE y PSO:
+  --mn arg              Vector de valores mínimos de cada atributo.
+  --mx arg              Vector de valores máximos de cada atributo.
+
+Requeridos DE y opcional PSO:
+  --w1 arg              Peso de la distancia intracluster.
+  --w2 arg              Peso de la distancia intercluster.
+  --w3 arg              Peso del error.La suma debe ser w1+w2+w3 = 1.0.
 
 
-Opciones Algoritmo PSO
-	--c1 <Constante de la componente cognitiva>
-	--c2 <Constante de la componente social>
-	--W <Peso inercial>
-	--w1 <Peso de la distancia intracluster> (Opcional)
-	--w2 <Peso de la distancia intercluster> (Opcional)
-	--w3 <Peso del error>                    (Opcional)
-	--mx <Valor máximo de un atributo>
-		a1,a2,...,am - Donde ai es el máximo valor para el atributo i.
-	--mn <Valor mínimo de un atributo>
-		a1,a2,...,am - Donde ai es el mínimo valor para el atributo i.
-	--vmx <Velocidad máxima>
-	--weighted - Si se utilizará la función objetivo con pesos. (Opcional)
+Ejempos:
 
-Ejemplo:
- ./mhs --tf MAX --fi img/lena.png --fo salida.png --t PNG --k 10 --a PSO --i 30 --c1 1.49 --c2 1.49 --W 0.72 --w1 0.0 --w2 0.0 --w3 0.0 --mx 255.0,255.0,255.0 --mn 0.0,0.0,0.0 --vmx 255 --reps 10
+- Ant
+
+    * ./mhs --t PNG --fi entrada.png --fo salida.png --a Ant --i 20 --reps 100
+    * ./mhs --t PNG --fi entrada.png --fo salida.png --a Ant --i 30 --reps 9000 --alpha 244.5
+
+- Bee
+
+    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a Bee --e 2 --eb 3 --ob 5 --m 2 --i 5 --k 5 --reps 4
+
+- DE
+
+    * ./mhs --a DE --k 2 --fi entrada.tiff --fo salida.png --t TIFF --i 20 --w1 0.33 --w2 0.33 --w3 0.33 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --reps 30
+    * ./mhs --a DE --k 2 --fi entrada.png --fo salida.png --t TIFF --i 20 --w1 0.2 --w2 0.4 --w3 0.4 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --f 0.2 --pc 0.4 --reps 30
+
+- GA 
+
+    * ./mhs --a GA --k 2 --fi entrada.tiff --fo salida.png --t TIFF --i 20 --pc 0.8 --pm 0.1 --tt 5
+
+- Kmeans
+
+    * ./mhs --a Kmeans --k 2 --fi entrada.png --fo salida.png --t PNG --tf MIN
+
+- PSO
+    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a PSO --c1 1.5 --c2 1.5 --W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5
+    * ./mhs --t PNG --fi entrada.png --fo salida.png --a PSO --c1 1.5 --c2 1.5 --W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5 --w1 0.33 --w2 0.33 --w3 0.33
 
 
