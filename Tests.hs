@@ -45,33 +45,37 @@ data Results = Results { prog   :: String
                        , stdout :: [(String, String)]
                        }
 
--- | Representa los resultados de cierto algoritmo.
-data ProgResults = PR Int Int Float Float Float
-    deriving(Eq)
-
--- | Instancia de Show de ProgResults.
-instance Show ProgResults where
-    show (PR ki ke t fo fdb) = (show ki) ++ "," ++ (show ke) ++ "," ++
-                               (show t) ++ "," ++ (show fo) ++ "," ++
-                               (show fdb)
-
 -- | Corre las pruebas de acuerdo a una acción monádica generadora.
-runTests :: String       -- * Nombre del ejecutable.
-         -> String       -- * Nombre del archivo de entrada.
-         -> FileType     -- * Tipo del archivo de entrada.
-         -> OFType       -- * Tipo de función objetivo.
-         -> Int          -- * Cantidad de Clusters.
-         -> IO [Algorithm]-- * Acción monádica.
-         -> String       -- * Nombre del algoritmo.
-         -> Int          -- * Cantidad de pruebas (múltiplos de 10).
-         -> IO Results   -- * Lista de resultados.
+runTests :: String         -- * Nombre del ejecutable.
+         -> String         -- * Nombre del archivo de entrada.
+         -> FileType       -- * Tipo del archivo de entrada.
+         -> OFType         -- * Tipo de función objetivo.
+         -> Int            -- * Cantidad de Clusters.
+         -> IO [Algorithm] -- * Acción monádica.
+         -> String         -- * Nombre del algoritmo.
+         -> Int            -- * Cantidad de pruebas (múltiplos de 10).
+         -> IO Results     -- * Lista de resultados.
 runTests p i ft f k m n size = do
     programs  <- genPrograms p i ft f k m n (1, size) []
     let hAnova = (headerAnova . algorithm) $ head programs
     let lanova = (hAnova:(map (getAnova . algorithm) programs))
     lstdout   <- mapM run programs
-    let lstdout' = zip lanova lstdout
-    return (Results n i lstdout')
+    let lstdout' = zip lanova ("":(map filterStdout lstdout))
+    let l      = ((head lstdout') : (map helper $ tail lstdout'))
+    return (Results n i l)
+
+filterStdout :: String -> String
+filterStdout = unlines . filter ((/=) '-' . head) . lines
+
+helper :: (String, String) -> (String, String)
+helper (xs, ys) = ((reverse ss) ++ "\t" ++ xs, ys)
+    where (_, (s:ss)) = foldl' (helperBinary ',') ([], "") ys
+
+helperBinary :: Char -> ([String], String) -> Char -> ([String], String)
+helperBinary c (x, w) y =
+    if (c == y) then ((reverse w):x, [])
+                else (x,y:w)
+                          
 
 -- | Genera el header para generar la tabla ANOVA.
 headerAnova :: Algorithm -> String
@@ -127,7 +131,7 @@ data Program = Program { name       :: String
 
 -- | Instancia de Show para Program.
 instance Show Program where
-    show (Program p i o t k a) = "./" ++ p ++ " " ++
+    show (Program p i o t k a) = "./" ++ p ++ " -d " ++
                                  (show i) ++ (show o) ++
                                  (show t) ++ (show k) ++
                                  (show a)
@@ -181,7 +185,8 @@ genResultName :: String   -- * Nombre del algoritmo.
               -> [String] -- * Lista de nombres.
 genResultName alg file ini = zipWith fun l [ini..]
     where fun = (\a b -> a ++ (show b) ++ ".png")
-          l   = (take 10 $ repeat (alg ++ "_" ++ file ++ "_"))
+          l   = (take 10 $ repeat (alg ++ "_" ++ f ++ "_"))
+          f   = reverse $ snd $ foldl' (helperBinary '/') ([], "") file
 
 -- | Tipo de dato que representa a un algoritmo.
 data Algorithm = Kmeans Repetitions
@@ -239,7 +244,7 @@ genWPSO r mx mn = do
     vx <- sample' (arbitrary :: Gen (VMax))
     w  <- sample' (arbitrary :: Gen (Weight))
     let z   = zip7 r' p mx' mn' v vx w
-    return $ foldl' (\l (a,b,c,d,e,f,g) -> ((WPSO a b c d e f g):l)) [] z 
+    return $ foldl' (\l (a,b,c,d,e,f,g) -> ((WPSO a b c d e f g):l)) [] z
 
 -- | Genera 10 casos de prueba aleatorios para DE.
 genDE :: Int            -- * Iteraciones.
@@ -273,13 +278,12 @@ genSDE r mx mn = do
 
 -- | Genera 10 casos de prueba aleatorios para Ant.
 genAnt :: Int            -- * Iteraciones.
-       -> Float          -- * Alpha.
        -> IO [Algorithm] -- * Corridas generadas.
-genAnt r a = do
+genAnt r = do
     p <- sample' (arbitrary :: Gen (Population))
+    a <- sample' ( choose (0.0, 441.67) )
     let r' = take 10 $ repeat (Iter r)
-    let a' = take 10 $ repeat a
-    let z  = zip3 r' p a'
+    let z  = zip3 r' p a
     return $ foldl' (\l (a,b,c) -> ((Ant a b c):l)) [] z
 
 -- | Genera 10 casos de prueba idénticos para Bee.
