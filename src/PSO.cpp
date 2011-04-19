@@ -476,6 +476,7 @@ void PSO::assign(int p){
  *         indicada.
  */
 float PSO::foMin(int i, int k, int fun){
+    ++ofEval;
     return ( psoFO(solution[i], centroid[i], k) );
 }
 

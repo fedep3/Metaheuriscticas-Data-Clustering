@@ -2,6 +2,7 @@ module Tests(
     -- * Utilidades
     Results(..),
     runTests,
+    runTestsAnova,
     -- * Generadores.
     genKmeans,
     genGA,
@@ -63,6 +64,20 @@ runTests p i ft f k m n size = do
     let lstdout' = zip lanova ("":(map filterStdout lstdout))
     let l      = ((head lstdout') : (map helper $ tail lstdout'))
     return (Results n i l)
+
+-- | Corre las pruebas de acuerdo a una acción monádica generadora.
+runTestsAnova :: String         -- * Nombre del ejecutable.
+              -> String         -- * Nombre del archivo de entrada.
+              -> FileType       -- * Tipo del archivo de entrada.
+              -> OFType         -- * Tipo de función objetivo.
+              -> Int            -- * Cantidad de Clusters.
+              -> IO [Algorithm] -- * Acción monádica.
+              -> String         -- * Nombre del algoritmo.
+              -> Int            -- * Cantidad de pruebas (múltiplos de 10).
+              -> IO ()
+runTestsAnova p i ft f k m n size = do
+    r <- runTests p i ft f k m n size
+    putStrLn $ unlines $ map fst $ stdout r
 
 filterStdout :: String -> String
 filterStdout = unlines . filter ((/=) '-' . head) . lines
