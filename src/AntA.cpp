@@ -158,6 +158,8 @@ void AntA::reconstruct(int type){
     int i = 0, j = 0, best = 0, rp = 0;
     vector<int>::iterator it;
 
+    printf("-- Reconstruyendo solución\n");
+
     for(i = 0; i < nA; i++){
         if(!ants[i].isFree()){
             max = -1.0;
@@ -189,7 +191,6 @@ void AntA::reconstruct(int type){
         }
     }
 
-
     int *count = new int[K];
 
     for(i = 0; i < K; i++){
@@ -215,7 +216,6 @@ void AntA::reconstruct(int type){
             bestCentroids[i][j] = bestCentroids[i][j] / count[i];
 
     delete [] count;
-
 
     bestFO = 1.0/(DB(bestSolution, bestCentroids, K));
 
@@ -435,4 +435,8 @@ void AntA::calcAlpha(){
     atemp = atemp * atemp;
 
     alpha2 = (float) atemp;
+}
+
+void AntA::calcGFO(){
+    bestDB = bestFO;
 }

@@ -340,51 +340,6 @@ int improve(){
 }
 
 /**
- * Inicializa los handlers del programa.
- */
-void initHandlers(){
-	memset(&new_sigint, 0, sizeof(new_sigint));
-	memset(&old_sigint, 0, sizeof(old_sigint));
-	memset(&new_sigalrm, 0, sizeof(new_sigalrm));
-	memset(&old_sigalrm, 0, sizeof(old_sigalrm));
-
-    new_sigint.sa_handler = killIt;
-    sigemptyset(&new_sigint.sa_mask);
-    new_sigint.sa_flags   = SA_NODEFER;
-    sigaction(SIGINT, &new_sigint, &old_sigint);
-
-    new_sigalrm.sa_handler = longEnough;
-    sigemptyset(&new_sigalrm.sa_mask);
-    new_sigalrm.sa_flags = SA_NODEFER;
-	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
-
-	alarm(MAXRUNTIME);
-}
-
-/**
- * Restaura los handlers originales del programa.
- */
-void restoreHandlers(){
-    if(definitelyStopIt){
-        printf("-- Tiempo excedido...\n");
-        exit(1);
-    }
-    definitelyStopIt = true;
-
-    sigemptyset(&old_sigint.sa_mask);
-    old_sigint.sa_handler = SIG_DFL;
-    old_sigint.sa_flags   = SA_NODEFER;
-    sigaction(SIGINT, &old_sigint, NULL);
-
-    new_sigalrm.sa_handler = longEnough;
-    sigemptyset(&new_sigalrm.sa_mask);
-    new_sigalrm.sa_flags = SA_NODEFER;
-	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
-
-	alarm(MAXRUNTIME);
-}
-
-/**
  * Imprime un CSV con los resultados.
  */
 void debugging(){
@@ -431,6 +386,70 @@ void debugging(){
     printf("\n");
 }
 
+/**
+ * Inicializa los handlers del programa.
+ */
+void initHandlers(){
+	memset(&new_sigint, 0, sizeof(new_sigint));
+	memset(&old_sigint, 0, sizeof(old_sigint));
+	memset(&new_sigalrm, 0, sizeof(new_sigalrm));
+	memset(&old_sigalrm, 0, sizeof(old_sigalrm));
+
+    new_sigint.sa_handler = killIt;
+    sigemptyset(&new_sigint.sa_mask);
+    new_sigint.sa_flags   = SA_NODEFER;
+    sigaction(SIGINT, &new_sigint, &old_sigint);
+
+    new_sigalrm.sa_handler = longEnough;
+    sigemptyset(&new_sigalrm.sa_mask);
+    new_sigalrm.sa_flags = SA_NODEFER;
+	sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
+
+	alarm(MAXRUNTIME);
+}
+
+/**
+ * Restaura los handlers originales del programa.
+ */
+void restoreHandlers(){
+
+    if(definitelyStopIt){
+
+        printf("-- Tiempo excedido...\n");
+
+        printf("-- Cantidad de Clusters Final: %d\n", m->K);
+        if(debug) d_3 = m->K;
+
+        printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
+        if(debug) d_4 = m->ofEval;
+
+        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        if(debug) d_6 = m->bestFO;
+
+        printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+        if(debug) d_7 = m->bestDB;
+
+        if(debug) debugging();
+
+        r->write(_output, m->bestSolution, m->K);
+
+        exit(1);
+    }
+
+    definitelyStopIt = true;
+
+    sigemptyset(&old_sigint.sa_mask);
+    old_sigint.sa_handler = SIG_DFL;
+    old_sigint.sa_flags   = SA_NODEFER;
+    sigaction(SIGINT, &old_sigint, NULL);
+
+    new_sigalrm.sa_handler = longEnough;
+    sigemptyset(&new_sigalrm.sa_mask);
+    new_sigalrm.sa_flags = SA_NODEFER;
+    sigaction(SIGALRM, &new_sigalrm, &old_sigalrm);
+
+    alarm(MAXRUNTIME);
+}
 /**
  * Hace varias cosas antes de terminar el programa:
  * - Muestra el tiempo.

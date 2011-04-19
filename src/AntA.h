@@ -83,6 +83,11 @@ class AntA : public Metaheuristic{
          */
         virtual void reconstruct(int type);
 
+        /**
+         * Calcula 1/DB()
+         */
+        virtual void calcGFO();
+
         /*
          * Calcula el parámetro alpha2 usado en las probabilidades.
          */

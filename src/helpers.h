@@ -42,7 +42,7 @@
 #define M_ANT    5
 #define M_BEE    6
 
-#define MAXRUNTIME  100
+#define MAXRUNTIME  300
 
 using namespace std;
 ///////////////////////////////////////////

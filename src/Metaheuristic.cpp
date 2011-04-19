@@ -682,7 +682,6 @@ void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, in
  */
 void Metaheuristic::reconstruct(int type){}
 
-
 /**
  * Calcula 1/DB()
  */

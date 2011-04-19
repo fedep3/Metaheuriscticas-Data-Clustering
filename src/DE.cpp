@@ -507,6 +507,8 @@ float DE::deFO(int* sol, float** cent, int k){
  */
 void DE::reconstruct(int type){
 
+    printf("-- Reconstruyendo solución\n");
+
     int j,m;
 
     int best = getBetter(type);
