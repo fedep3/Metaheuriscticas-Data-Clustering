@@ -507,7 +507,7 @@ Opciones permitidas:\
 Ayuda:\n\
   -? [ --help ]         Produce mensaje de ayuda.\n\
 \n\
-Requeridas genéricas:\
+Requeridas genéricas:\n\
   --a arg               Algoritmo a ejecutar:\n\
                         Ant\n\
                         Bee\n\
