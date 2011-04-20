@@ -688,4 +688,3 @@ void Metaheuristic::reconstruct(int type){}
 void Metaheuristic::calcGFO(){
     bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
 }
-

@@ -60,6 +60,8 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
 
     of = new float[I]; //Valor de las funciones objetivo.
 
+    Ks = new int[I];
+
 }
 
 /**
@@ -113,6 +115,8 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr,
 
     of = new float[I]; //Valor de las funciones objetivo.
 
+    Ks = new int[I];
+
 }
 
 /**
@@ -146,8 +150,8 @@ void DE::run(int type){
 
     float **auxCent;
     int *auxSol;
-    int auxOf = 0;
-    int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0;
+    float auxOf = 0;
+    int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0, auxK = K;
 
     auxCent = (float**) calloc(Kmax, sizeof(float*));
     if(auxCent == NULL) exit(1);
@@ -162,7 +166,9 @@ void DE::run(int type){
 
         assign(solution[i], centroid[i]);
 
-        of[i] = foMin(solution[i], centroid[i], K);
+        renamer(i, &Ks[i], size);
+
+        of[i] = foMin(solution[i], centroid[i], Ks[i]);
 
     }
 
@@ -204,7 +210,9 @@ void DE::run(int type){
 
             assign(auxSol, auxCent);
 
-            if((auxOf = foMin(auxSol, auxCent, K)) < of[i]){
+            renamer(auxSol, auxCent, &auxK, size);
+
+            if((auxOf = foMin(auxSol, auxCent, auxK)) < of[i]){
             
                 for(j = 0; j < N; j++)
                     solution[i][j] = auxSol[j];
@@ -341,6 +349,8 @@ void DE::initialize(){
         for(l = 0; l < N; ++l)
             done[l] = l;
         
+        Ks[i] = Kmax;
+
         size = N;
 
         for(j = 0; j < Kmax; ++j){
@@ -395,11 +405,13 @@ void DE::assign(int *solution, float **centroid){
     mai = 0;
 
     //Asegurar que en la reasignación no queden clusters vacíos.
+
     for(i = 0; i < Kmax; ++i){
         switch(size[i]){
             case 0:
             case 1:
                 //Creación de un nuevo cluster:
+                size[solution[largest]] -= 1;
                 solution[largest] = i;
                 size[i] += 1;
                 for(j = 0; j < M; ++j){
@@ -521,7 +533,5 @@ void DE::reconstruct(int type){
             bestCentroids[j][m] = centroid[best][j][m];
 
     bestFO = of[best];
-
-    renamer(bestSolution, &K);
 
 }
