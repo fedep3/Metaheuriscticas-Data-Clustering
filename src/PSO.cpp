@@ -429,6 +429,7 @@ void PSO::assign(int p){
             case 0:
             case 1:
                 //Creación de un nuevo cluster:
+                size[solution[p][largest]] -= 1;
                 solution[p][largest] = i;
                 size[i] += 1;
                 for(j = 0; j < M; ++j){
