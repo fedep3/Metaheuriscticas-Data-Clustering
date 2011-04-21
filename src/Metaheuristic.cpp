@@ -512,8 +512,8 @@ void Metaheuristic::reassign(int* sol, float** cent, int k){
 /**
  * Renombra los elementos de un vector.
  *
- * @param Individuo.
- * @param Cantidad de clusters del mismo.
+ * @param i Individuo.
+ * @param k Cantidad de clusters del mismo.
  */
 void Metaheuristic::renamer(int i, int* k){
     renamer(solution[i], k);
@@ -523,8 +523,8 @@ void Metaheuristic::renamer(int i, int* k){
 /**
  * Renombra los elementos de un vector.
  *
- * @param Vector solución.
- * @param Cantidad de clusters del mismo.
+ * @param sol Vector solución.
+ * @param k   Cantidad de clusters del mismo.
  */
 void Metaheuristic::renamer(int* sol, int* k){
     int i;
@@ -549,23 +549,66 @@ void Metaheuristic::renamer(int* sol, int* k){
  * Renombra los elementos de un vector y calcula, además,
  * los centroides.
  *
- * @param Individuo.
- * @param Cantidad de clusters del mismo.
+ * @param i     Individuo.
+ * @param k     Cantidad de clusters del mismo.
+ * @param csize Arreglo de tamaño k.
  *
- * @return Devuelve la cantidad de clusters vacíos removidos.
+ * @return Devuelve la cantidad de clusters vacíos
+ *         removidos.
  */
 int Metaheuristic::renamer(int i, int* k, int* csize){
     return ( renamer(solution[i], centroid[i], k, csize) );
+}
+
+
+/**
+ * Renombra los elementos de un vector y sus centroides.
+ *
+ * @param sol  Vector solución.
+ * @param cent Centroides para el vector solución.
+ * @param k    Cantidad de clusters del mismo.
+ *
+ */
+void Metaheuristic::renamer(int* sol, float **cent, int *k){
+
+    int i, index = 0;
+    vector<int> v(Kmax,-1);
+    
+    for(i = 0; i < N; ++i){
+
+        if(v[ sol[i] ] == -1){
+            v[ sol[i] ] = index;
+            ++index;
+        }
+
+        sol[i] = v[ sol[i] ];
+
+    }
+
+    float *aux;
+
+    for(i = 0; i < Kmax; i++){
+        if(v[i] != -1 && v[i] != i){
+            aux = cent[i];
+            cent[i] = cent[v[i]];
+            cent[v[i]] = aux;
+        }
+    }
+
+    *k = index;
 }
 
 /**
  * Renombra los elementos de un vector y calcula, además,
  * los centroides.
  *
- * @param Vector solución.
- * @param Cantidad de clusters del mismo.
+ * @param sol   Vector solución.
+ * @param cent  Centroides para el vector solución.
+ * @param k     Cantidad de clusters del mismo.
+ * @param csize Arreglo de tamaño k.
  *
- * @return
+ * @return Devuelve la cantidad de clusters vacíos
+ *         removidos.
  */
 int Metaheuristic::renamer(int* sol, float** cent, int* k, int* csize){
     int i, j;
