@@ -100,7 +100,7 @@ headerAnova (PSO _ _ _ _ _ _)    = "ofdb\ti\tc1\tc2\tw\tvmx"
 headerAnova (WPSO _ _ _ _ _ _ _) = "ofdb\ti\tc1\tc2\tw\tvmx\tw1\tw2\tw3"
 headerAnova (DE _ _ _ _ _)       = "ofdb\ti\tw1\tw2\tw3"
 headerAnova (SDE _ _ _ _ _ _ _)  = "ofdb\ti\tw1\tw2\tw3\tf\tpc"
-headerAnova (Ant _ _ _)          = "ofdb\ti"
+headerAnova (Ant _ _ _)          = "ofdb\ti\talpha"
 headerAnova (Bee _ _)            = "ofdb\ti\tm\te\teb\tob"
 
 -- | Genera una línea apta para generar una tabla ANOVA.
@@ -124,8 +124,8 @@ getAnova (DE _ (I i) _ _ (Weight w1 w2 w3)) =
 getAnova (SDE _ (I i) _ _ (Weight w1 w2 w3) (Scale s) (Pc pc)) =
     (show i) ++ "\t" ++ (show w1) ++ "\t" ++ (show w2) ++ "\t" ++
     (show w3) ++ "\t" ++ (show s) ++ "\t" ++ (show pc)
-getAnova (Ant _ (I i) _) =
-    (show i)
+getAnova (Ant _ (IAnt i) a) =
+    (show i) ++ "\t" ++ (show a)
 getAnova (Bee _ (IBee i m e eb ob)) =
     (show i) ++ "\t" ++ (show m) ++ "\t" ++ (show e) ++ "\t" ++
     (show eb) ++ "\t" ++ (show ob)
@@ -210,7 +210,7 @@ data Algorithm = Kmeans Repetitions
                | WPSO Repetitions Population Mx Mn Velocity VMax Weight
                | DE Iterations Population Mx Mn Weight
                | SDE Iterations Population Mx Mn Weight Scale Pc
-               | Ant Iterations Population Float
+               | Ant Iterations PopulationAnt Float
                | Bee Repetitions PopulationBee
     deriving(Eq)
 
@@ -295,7 +295,7 @@ genSDE r mx mn = do
 genAnt :: Int            -- * Iteraciones.
        -> IO [Algorithm] -- * Corridas generadas.
 genAnt r = do
-    p <- sample' (arbitrary :: Gen (Population))
+    p <- sample' (arbitrary :: Gen (PopulationAnt))
     a <- sample' ( choose (0.0, 441.67) )
     let r' = take 10 $ repeat (Iter r)
     let z  = zip3 r' p a
@@ -448,6 +448,20 @@ instance Arbitrary PopulationGA where
         i <- choose (20, 30)
         t <- choose (10, 15)
         return (IGA i t)
+
+-- | Cantidad de individuos o partículas.
+data PopulationAnt = IAnt Int
+    deriving(Eq)
+
+-- | Instancia de Show para PopulationGA.
+instance Show PopulationAnt where
+    show (IAnt i) = " --i " ++ (show i) ++ " "
+
+-- | Instancia de Arbitrary para PopulationGA.
+instance Arbitrary PopulationAnt where
+    arbitrary = do
+        i <- choose (1, 20)
+        return (IAnt i)
 
 -- | Cantidad de individuos o partículas.
 data PopulationBee = IBee Int Int Int Int Int
