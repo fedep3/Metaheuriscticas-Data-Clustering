@@ -22,8 +22,8 @@ main = do
             putStrLn "-- Algoritmo: SDE."
             runAnova (genSDE 30 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "SDE" 30
         3 -> do
-            putStrLn "-- Algoritmo: PSO."
-            runAnova (genPSO 3 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "PSO" 30
+            --putStrLn "-- Algoritmo: PSO."
+            --runAnova (genPSO 3 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "PSO" 30
             putStrLn "-- Algoritmo: WPSO."
             runAnova (genWPSO 3 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "WPSO" 30
         4 -> do

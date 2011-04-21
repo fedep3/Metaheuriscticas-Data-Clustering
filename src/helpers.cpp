@@ -957,9 +957,9 @@ que 0.\n");
 
                 break;
             case 'J':
-                _e_sites = atoi(optarg);
-                if(_e_sites < 0){
-                    fprintf(stderr, "El e debe ser positivo.\n");
+                _m_sites = atoi(optarg);
+                if(_m_sites < 0){
+                    fprintf(stderr, "El m debe ser positivo.\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
@@ -968,9 +968,9 @@ que 0.\n");
 
                 break;
             case 'K':
-                _e_bees = atoi(optarg);
-                if(_e_bees < 0){
-                    fprintf(stderr, "El eb debe ser positivo.\n");
+                _e_sites = atoi(optarg);
+                if(_e_sites < 0){
+                    fprintf(stderr, "El e debe ser positivo.\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
@@ -979,9 +979,9 @@ que 0.\n");
 
                 break;
             case 'L':
-                _m_sites = atoi(optarg);
-                if(_m_sites < 0){
-                    fprintf(stderr, "El m debe ser positivo.\n");
+                _e_bees = atoi(optarg);
+                if(_e_bees < 0){
+                    fprintf(stderr, "El eb debe ser positivo.\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }

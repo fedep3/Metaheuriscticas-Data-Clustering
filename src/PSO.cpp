@@ -429,19 +429,22 @@ void PSO::assign(int p){
             case 0:
             case 1:
                 //Creación de un nuevo cluster:
+                size[solution[p][largest]] -= 1;
                 solution[p][largest] = i;
                 size[i] += 1;
-                for(j = 0; j < M; ++j){
+
+                for(j = 0; j < M; ++j)
                     centroid[p][i][j] = data[largest][j];
-                }
 
                 //Llena el nuevo cluster
                 for(j = 0; j < N; ++j){
+                    if(largest == j) continue;
+
                     t1 = d(data[j], centroid[p][i]);
                     t2 = d(data[j], centroid[p][solution[p][j]]);
 
                     if(t1 < t2){
-                        size[solution[p][j]] -=1;
+                        size[solution[p][j]] -= 1;
                         solution[p][j] = i;
                         size[i] += 1;
                     }else{
@@ -452,7 +455,7 @@ void PSO::assign(int p){
                     }
                 }
                 //Reinicializaciones.
-                i = 0;
+                i = -1;
                 largest = mai;
                 ma  = 0.0;
                 mai = 0;

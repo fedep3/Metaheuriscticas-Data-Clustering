@@ -320,7 +320,7 @@ instance Show Algorithm where
                                    (show r)  ++ (show i) ++
                                    (show mx) ++ (show mn) ++
                                    (show v)  ++ (show vx)
-    show (WPSO r i mx mn v vx w) = " --a PSO --weighted" ++
+    show (WPSO r i mx mn v vx w) = " --a PSO" ++
                                    (show w) ++ (show r) ++
                                    (show i) ++ (show mx) ++
                                    (show mn) ++ (show v) ++
@@ -467,9 +467,9 @@ instance Arbitrary PopulationBee where
     arbitrary = do
         i  <- choose (20, 30)
         m  <- choose (5, 10)
-        e  <- choose (1, 5)
+        e  <- choose (1, m - 1)
         eb <- choose (5, 10)
-        ob <- choose (1, 5)
+        ob <- choose (1, m - e)
         return (IBee i m e eb ob)
 
 -- | Velocidad de las partículas de PSO.
@@ -489,10 +489,10 @@ instance Show Velocity where
 -- | Instancia de Arbitrary para Weight.
 instance Arbitrary Velocity where
     arbitrary = do
-        a <- suchThat (arbitrary :: Gen Float) (>= 0.0)
-        b <- suchThat (arbitrary :: Gen Float) (>= 0.0)
+        a <- choose (0.0, 2.0)
+        b <- choose (0.0, 2.0)
         let prop_vel = (\x y z -> ( ( ( ( (x + y) * 0.5) - 1.0) < z )
-                                   && (z >= 0.0) ))
+                                   && (2.0 >= z && z >= 0.0) ))
         c <- suchThat (arbitrary :: Gen Float) (prop_vel a b)
         return (Velocity a b c)
 
