@@ -151,7 +151,7 @@ void DE::run(int type){
     float **auxCent;
     int *auxSol;
     float auxOf = 0;
-    int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0, auxK = Kmax;
+    int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0;
 
     auxCent = (float**) calloc(Kmax, sizeof(float*));
     if(auxCent == NULL) exit(1);
@@ -165,8 +165,6 @@ void DE::run(int type){
     for(i = 0; i < I; i++){
 
         assign(solution[i], centroid[i]);
-
-        renamer(solution[i], centroid[i], &Ks[i]);
 
         of[i] = foMin(solution[i], centroid[i], Ks[i]);
 
@@ -210,9 +208,7 @@ void DE::run(int type){
 
             assign(auxSol, auxCent);
 
-            renamer(auxSol, auxCent, &auxK);
-
-            if((auxOf = foMin(auxSol, auxCent, auxK)) < of[i]){
+            if((auxOf = foMin(auxSol, auxCent, Kmax)) < of[i]){
             
                 for(j = 0; j < N; j++)
                     solution[i][j] = auxSol[j];
@@ -414,6 +410,7 @@ void DE::assign(int *solution, float **centroid){
                 size[solution[largest]] -= 1;
                 solution[largest] = i;
                 size[i] += 1;
+
                 for(j = 0; j < M; ++j){
                     centroid[i][j] = data[largest][j];
                 }
@@ -435,7 +432,7 @@ void DE::assign(int *solution, float **centroid){
                     }
                 }
                 //Reinicializaciones.
-                i = 0;
+                i = -1;
                 largest = mai;
                 ma  = 0.0;
                 mai = 0;

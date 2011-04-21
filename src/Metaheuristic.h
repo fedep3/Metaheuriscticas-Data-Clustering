@@ -327,16 +327,6 @@ class Metaheuristic{
         int renamer(int i, int* k, int* size);
 
         /**
-         * Renombra los elementos de un vector y sus centroides.
-         *
-         * @param sol  Vector solución.
-         * @param cent Centroides para el vector solución.
-         * @param k    Cantidad de clusters del mismo.
-         *
-         */
-        void renamer(int* sol, float **cent, int *k);
-
-        /**
          * Renombra los elementos de un vector y calcula, además,
          * los centroides.
          *

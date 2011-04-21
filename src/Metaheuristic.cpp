@@ -562,43 +562,6 @@ int Metaheuristic::renamer(int i, int* k, int* csize){
 
 
 /**
- * Renombra los elementos de un vector y sus centroides.
- *
- * @param sol  Vector solución.
- * @param cent Centroides para el vector solución.
- * @param k    Cantidad de clusters del mismo.
- *
- */
-void Metaheuristic::renamer(int* sol, float **cent, int *k){
-
-    int i, index = 0;
-    vector<int> v(Kmax,-1);
-    
-    for(i = 0; i < N; ++i){
-
-        if(v[ sol[i] ] == -1){
-            v[ sol[i] ] = index;
-            ++index;
-        }
-
-        sol[i] = v[ sol[i] ];
-
-    }
-
-    float *aux;
-
-    for(i = 0; i < Kmax; i++){
-        if(v[i] != -1 && v[i] != i){
-            aux = cent[i];
-            cent[i] = cent[v[i]];
-            cent[v[i]] = aux;
-        }
-    }
-
-    *k = index;
-}
-
-/**
  * Renombra los elementos de un vector y calcula, además,
  * los centroides.
  *
