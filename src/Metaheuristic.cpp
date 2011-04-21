@@ -234,6 +234,7 @@ float Metaheuristic::DB(int i, int k){
 float Metaheuristic::DB(int* sol, float** cent, int k){
     int j, l, cluster;
     float m, t1, t2;
+    float sum = 0.0;
 
     if(k <= 1) return (numeric_limits<float>::infinity());
 
@@ -264,9 +265,11 @@ float Metaheuristic::DB(int* sol, float** cent, int k){
     }
 
     //Cálculo de max R_{i,j}
-    m = -1.0;
     for(j = 0; j < k; ++j){
-        for(l = j + 1; l < k; ++l){
+        m = -1.0;
+        for(l = 0; l < k; ++l){
+            if(l == j) continue;
+
             //Si dos centroides están a 0 distancia, probablemente
             //haya que unirlos.
             t1 = d(cent[j], cent[l]);
@@ -279,12 +282,13 @@ float Metaheuristic::DB(int* sol, float** cent, int k){
                 m = t2;
             }
         }
+        sum += m;
     }
 
     delete [] S;
     delete [] csize;
 
-    return ( m / ( (float) k ) );
+    return ( sum / ( (float) k ) );
 }
 
 /**
