@@ -18,12 +18,12 @@ main = do
             runAnova (genBee 3) "Bee" 30
         2 -> do
             putStrLn "-- Algoritmo: DE."
-            runAnova (genDE 30 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "DE" 30
+            runAnova (genDE 20 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "DE" 30
             putStrLn "-- Algoritmo: SDE."
-            runAnova (genSDE 30 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "SDE" 30
+            runAnova (genSDE 20 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "SDE" 30
         3 -> do
-            --putStrLn "-- Algoritmo: PSO."
-            --runAnova (genPSO 3 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "PSO" 30
+            putStrLn "-- Algoritmo: PSO."
+            runAnova (genPSO 3 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "PSO" 30
             putStrLn "-- Algoritmo: WPSO."
             runAnova (genWPSO 3 (255.0, 255.0, 255.0) (0.0,0.0,0.0)) "WPSO" 30
         4 -> do
