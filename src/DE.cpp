@@ -52,13 +52,15 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
     centroid    = (float ***) calloc(I, sizeof(float**));
     if(centroid == NULL) exit(1);
     for(i = 0; i < I; ++i){
-        centroid[i] = (float**) calloc(K, sizeof(float*));
+        centroid[i] = (float**) calloc(Kmax, sizeof(float*));
         if(centroid[i] == NULL) exit(1);
-        for(j = 0; j < K; ++j)
+        for(j = 0; j < Kmax; ++j)
             centroid[i][j] = new float[M];
     }
 
     of = new float[I]; //Valor de las funciones objetivo.
+
+    Ks = new int[I];
 
 }
 
@@ -105,13 +107,15 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr,
     centroid    = (float ***) calloc(I, sizeof(float**));
     if(centroid == NULL) exit(1);
     for(i = 0; i < I; ++i){
-        centroid[i] = (float**) calloc(K, sizeof(float*));
+        centroid[i] = (float**) calloc(Kmax, sizeof(float*));
         if(centroid[i] == NULL) exit(1);
-        for(j = 0; j < K; ++j)
+        for(j = 0; j < Kmax; ++j)
             centroid[i][j] = new float[M];
     }
 
     of = new float[I]; //Valor de las funciones objetivo.
+
+    Ks = new int[I];
 
 }
 
@@ -146,7 +150,7 @@ void DE::run(int type){
 
     float **auxCent;
     int *auxSol;
-    int auxOf = 0;
+    float auxOf = 0;
     int m = 0, i = 0, j = 0, k = 0, l = 0, h = 0, p = 0;
 
     auxCent = (float**) calloc(Kmax, sizeof(float*));
@@ -162,7 +166,7 @@ void DE::run(int type){
 
         assign(solution[i], centroid[i]);
 
-        of[i] = foMin(solution[i], centroid[i], K);
+        of[i] = foMin(solution[i], centroid[i], Ks[i]);
 
     }
 
@@ -192,7 +196,7 @@ void DE::run(int type){
 
             p = rand()%Kmax;
 
-            for(l = 0; l < K; l++){
+            for(l = 0; l < Kmax; l++){
                 if(((float)rand())/((float)RAND_MAX) < Cr || l == p){
                     for(h = 0; h < M; h++)
                         auxCent[l][h] = centroid[m][l][h] + F*(centroid[j][l][h] - centroid[k][l][h]);
@@ -204,12 +208,12 @@ void DE::run(int type){
 
             assign(auxSol, auxCent);
 
-            if((auxOf = foMin(auxSol, auxCent, K)) < of[i]){
+            if((auxOf = foMin(auxSol, auxCent, Kmax)) < of[i]){
             
                 for(j = 0; j < N; j++)
                     solution[i][j] = auxSol[j];
 
-                for(j = 0; j < K; j++)
+                for(j = 0; j < Kmax; j++)
                     for(m = 0; m < M; m++)
                         centroid[i][j][m] = auxCent[j][m];
 
@@ -220,7 +224,7 @@ void DE::run(int type){
 
     }
 
-    for(i = 0; i < K; i++)
+    for(i = 0; i < Kmax; i++)
         delete [] auxCent[i];
     
     free(auxCent);
@@ -341,6 +345,8 @@ void DE::initialize(){
         for(l = 0; l < N; ++l)
             done[l] = l;
         
+        Ks[i] = Kmax;
+
         size = N;
 
         for(j = 0; j < Kmax; ++j){
@@ -395,13 +401,16 @@ void DE::assign(int *solution, float **centroid){
     mai = 0;
 
     //Asegurar que en la reasignación no queden clusters vacíos.
+
     for(i = 0; i < Kmax; ++i){
         switch(size[i]){
             case 0:
             case 1:
                 //Creación de un nuevo cluster:
+                size[solution[largest]] -= 1;
                 solution[largest] = i;
                 size[i] += 1;
+
                 for(j = 0; j < M; ++j){
                     centroid[i][j] = data[largest][j];
                 }
@@ -423,7 +432,7 @@ void DE::assign(int *solution, float **centroid){
                     }
                 }
                 //Reinicializaciones.
-                i = 0;
+                i = -1;
                 largest = mai;
                 ma  = 0.0;
                 mai = 0;
@@ -516,12 +525,10 @@ void DE::reconstruct(int type){
     for(j = 0; j < N; j++)
         bestSolution[j] = solution[best][j];
 
-    for(j = 0; j < K; j++)
+    for(j = 0; j < Kmax; j++)
         for(m = 0; m < M; m++)
             bestCentroids[j][m] = centroid[best][j][m];
 
     bestFO = of[best];
-
-    renamer(bestSolution, &K);
 
 }
