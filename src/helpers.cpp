@@ -1232,7 +1232,7 @@ definirlos.\n");
             aux = aux && optdeopso[c];
 
         if(aux){
-            if((_w1 + _w2 + _w1) - 1.0 > 0.1){
+            if((_w1 + _w2 + _w3) - 1.0 > 0.1){
                 fprintf(stderr, "La suma de los pesos debe ser 1.0.\n");
                 aux = false;
             }
