@@ -27,7 +27,7 @@ main = do
             runAnova (genBee 3) "Bee" 30
         3 -> do
             putStrLn "-- Algoritmo: Ant."
-            runAnova (genAnt 3) "Ant" 30
+            runAnova (genAnt 100000) "Ant" 30
         _ -> do
             putStrLn "Debe elegir un set de pruebas adecuado."
     
