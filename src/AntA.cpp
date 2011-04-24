@@ -352,7 +352,7 @@ float AntA::f(int pixel, int cell){
     if(size == 0) return 0.0;
 
     for ( it= cells[cell].begin() ; it < cells[cell].end(); it++ ){
-        sum += alpha2/(alpha2 + pow(d(pixel, *it),2) );
+        sum += alpha2/(alpha2 + powf(d(pixel, *it),2) );
     }
         
     sum = sum / size;

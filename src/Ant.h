@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#define MM 0
+#define MM 3
 
 
 class Ant{
