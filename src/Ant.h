@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#define MM 5
+#define MM 0
 
 
 class Ant{
@@ -48,29 +48,6 @@ class Ant{
          * @param cell Célula donde va a dejar el pixel.
          */
         void drop(int cell);
-
-        /*
-         * Devuelve el parámetro pixel de la clase.
-         */        
-        int getPixel();
-
-        /*
-         * Devuelve la posicion pos del arreglo de momoria.
-         * @param pos Posición a acceder.
-         */        
-        int getM(int pos);
-        
-        /*
-         * Devuelve el tamaño de la memoria.
-         */
-        int getMSize();
-
-        /*
-         * Indica si la hormiga carga un pixel o no.
-         */
-        bool isFree();
-
-    private:
 
         /*
          * Pixel que carga.

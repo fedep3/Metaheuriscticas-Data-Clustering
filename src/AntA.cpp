@@ -102,7 +102,7 @@ void AntA::run(int type){
 
         ra = rand()%nA;
         
-        if(ants[ra].isFree())
+        if(ants[ra].free)
             pickAnt(ra);
         else
             dropAnt(ra);
@@ -161,9 +161,9 @@ void AntA::reconstruct(int type){
     printf("-- Reconstruyendo solución\n");
 
     for(i = 0; i < nA; i++){
-        if(!ants[i].isFree()){
+        if(!ants[i].free){
             max = -1.0;
-            rp = ants[i].getPixel();
+            rp = ants[i].pixel;
             for(j = 0; j < N; j++){
                 if(cells[j].size() >0){
                     if((actual = f(rp, j)) > max){
@@ -238,15 +238,15 @@ void AntA::reconstruct(int type){
  */
 void AntA::dropAnt(int ra){
 
-    int j = 0, best = 0, rc = ants[ra].getPixel(), rp = ants[ra].getPixel();
+    int j = 0, best = 0, rc = ants[ra].pixel, rp = ants[ra].pixel;
     int actual = 0;
     float max = -1.0, rn = 0.0;
     bool done = false;
     
-    if(ants[ra].getMSize() > 0){
+    if(ants[ra].msize > 0){
     
-        for( j = 0; j < ants[ra].getMSize(); j++){
-            rc =ants[ra].getM(j);
+        for( j = 0; j < ants[ra].msize; j++){
+            rc =ants[ra].memory[j];
             actual = f(rp, rc);
             if(actual > max){
                 max = actual;
