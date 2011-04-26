@@ -152,8 +152,6 @@ class AntA : public Metaheuristic{
          */
         void dropAnt(int ra);
 
-        float fv(int pixel, int cell);
-
         /*
          * Arreglo con los pixeles libres y en que célula se encuentra.
          */
@@ -173,6 +171,11 @@ class AntA : public Metaheuristic{
          * Número de iteraciones.
          */
         int maxit;
+
+        /*
+         * Parámetro usado en la función renconstruct.
+         */
+        float alpha;
 
         /*
          * Parámetro usado para calcular f.

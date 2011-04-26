@@ -77,7 +77,7 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, float _alpha2,
  */
 AntA::~AntA(){
 
-    delete [] free;    
+    delete [] free;
     delete [] cells;
     delete [] ants;   
 
@@ -190,14 +190,12 @@ void AntA::reconstruct(int type){
         }
     }
 
-    int *count = new int[K];
-
     for(i = 0; i < K; i++){
 
         for(j = 0; j < M; j++)
             bestCentroids[i][j] = 0.0;
 
-        count[i] = 0;
+        size[i] = 0;
 
     }
 
@@ -206,15 +204,122 @@ void AntA::reconstruct(int type){
         for(j = 0; j < M; j++)
             bestCentroids[bestSolution[i]][j] += data[i][j];
 
-        count[bestSolution[i]]++;
+        size[bestSolution[i]]++;
 
     }
 
     for(i = 0; i < K; i++)
         for(j = 0; j < M; j++)
-            bestCentroids[i][j] = bestCentroids[i][j] / count[i];
+            bestCentroids[i][j] = bestCentroids[i][j] / size[i];
 
-    delete [] count;
+    int m = 0;
+    bool done[K];
+    int change[K];
+
+    for(i = 0; i < K; i++){
+        change[i] = i;
+        done[i] = false;
+    }
+
+    for(i = 0; i < K; i++){
+
+        if(!done[i]){
+
+            if(size[i] == 1){
+
+                float min = 442.0;
+                int mini = 0;
+
+                for(j = 0; j < K; j++){
+
+                    if(i == j || done[j]) continue;
+
+                    if( (actual = d(bestCentroids[i], bestCentroids[j])) < min){
+                        min = actual;
+                        mini = j;
+
+                    }
+
+                }
+
+                change[mini] = i;
+
+                done[mini] = true;
+
+                for(m = 0; m < M; m++){
+
+                    bestCentroids[i][m]    = bestCentroids[i][m] * ((float) size[i]);
+                    bestCentroids[mini][m] = bestCentroids[mini][m] * ((float) size[mini]);
+                    bestCentroids[i][m]   += bestCentroids[mini][m];
+
+                }
+
+                size[i] += size[mini];
+
+                for(m = 0; m < M; m++)
+                    bestCentroids[i][m] = bestCentroids[i][m]/((float) size[i]);
+
+
+            }else{
+
+                for(j = 0; j < K; j++){
+
+                    if(i == j || done[j]) continue;
+
+                    if((actual = d(bestCentroids[i], bestCentroids[j])) < alpha/4.0){
+
+                        change[j] = i;
+
+                        done[j] = true;
+
+                        for(m = 0; m < M; m++){
+
+                            bestCentroids[i][m]  = bestCentroids[i][m] * ((float) size[i]);
+                            bestCentroids[j][m]  = bestCentroids[j][m] * ((float) size[j]);
+                            bestCentroids[i][m] += bestCentroids[j][m];
+
+                        }
+
+                        size[i] += size[j];
+
+                        for(m = 0; m < M; m++)
+                            bestCentroids[i][m] = bestCentroids[i][m]/((float) size[i]);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    for(i = 0; i < N; i++)
+        bestSolution[i] = change[bestSolution[i]];
+
+    int index = 0;
+    int v[K];
+
+    for(i = 0; i < K; i++)
+        v[i] = -1;
+    
+    for(i = 0; i < N; i++){
+
+        if(v[ bestSolution[i] ] == -1){
+            v[ bestSolution[i] ] = index;
+            index++;
+        }
+
+        bestSolution[i] = v[ bestSolution[i] ];
+    }
+
+    for(i = 0; i < K; i++)
+        if(v[i] != -1)
+            for(m = 0; m < M; m++)
+                bestCentroids[v[i]][m] = bestCentroids[i][m];
+
+    K = index;
 
     bestFO = 1.0/(DB(bestSolution, bestCentroids, K));
 
@@ -430,6 +535,9 @@ void AntA::calcAlpha(){
             atemp += 2.0 * ( (double) d(i, j) );
 
     atemp = atemp / s;
+
+    alpha = (float) atemp;
+
     atemp = atemp * atemp;
 
     alpha2 = (float) atemp;
