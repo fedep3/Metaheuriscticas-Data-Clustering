@@ -175,11 +175,6 @@ class AntA : public Metaheuristic{
         int maxit;
 
         /*
-         * Parámetro usado para calcular fv.
-         */
-        float alpha;
-        
-        /*
          * Parámetro usado para calcular f.
          */
         float alpha2;

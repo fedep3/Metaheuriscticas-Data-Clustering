@@ -136,7 +136,6 @@ void AntA::pickAnt(int ra){
 
     if(rn <= ppick(rp, rc)){
 
-    
         for(it = cells[rc].begin(); it < cells[rc].end(); it++)
             if(*it == rp)
                 cells[rc].erase(it);
@@ -258,7 +257,7 @@ void AntA::dropAnt(int ra){
         rn = ((float)rand())/((float)RAND_MAX);
 
         if(rn <= pdrop(rp, rc)){
-        
+
             cells[rc].push_back(rp);
 
             free[rp] = rc;
@@ -318,7 +317,7 @@ float AntA::ppick(int pixel, int cell){
     if(size == 2)
         return 0.7;
     else
-        return powf(cos(PIH * f(pixel, cell)),2 );
+        return pow(cos(PIH * f(pixel, cell)),2 );
 
 }
 
@@ -331,7 +330,7 @@ float AntA::ppick(int pixel, int cell){
  */
 float AntA::pdrop(int pixel, int cell){
 
-    return 1 - powf(cos(PIH * f(pixel, cell)),2 );
+    return 1 - pow(cos(PIH * f(pixel, cell)),2 );
 
 }
 
@@ -352,7 +351,7 @@ float AntA::f(int pixel, int cell){
     if(size == 0) return 0.0;
 
     for ( it= cells[cell].begin() ; it < cells[cell].end(); it++ ){
-        sum += alpha2/(alpha2 + powf(d(pixel, *it),2) );
+        sum += alpha2/(alpha2 + pow(d(pixel, *it),2) );
     }
         
     sum = sum / size;
@@ -409,7 +408,6 @@ void AntA::initialize(){
         free[done[i]] = c;
         cells[c].push_back(done[i]);
     }
-
 
     if(!ac){
         printf("Calculando Alfa^2...\n");
