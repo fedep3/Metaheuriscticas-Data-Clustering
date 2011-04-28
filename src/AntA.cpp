@@ -159,6 +159,8 @@ void AntA::reconstruct(int type){
 
     printf("-- Reconstruyendo solución\n");
 
+    //Suelto los píxeles que cargan las hormigas en la célula que más les
+    //conviene.
     for(i = 0; i < nA; i++){
         if(!ants[i].free){
             max = -1.0;
@@ -177,6 +179,7 @@ void AntA::reconstruct(int type){
         }
     }
 
+    //Armó los clusters y sus centroides a partir de las células
     K = 0;
 
     for(i = 0; i < N; i++){
@@ -216,74 +219,83 @@ void AntA::reconstruct(int type){
     bool done[K];
     int change[K];
 
-    for(i = 0; i < K; i++){
-        change[i] = i;
-        done[i] = false;
-    }
+    //Procedo a agrupar mejor los clusters.
+    if(K > 1){
 
-    for(i = 0; i < K; i++){
+        for(i = 0; i < K; i++){
+            change[i] = i;
+            done[i] = false;
+        }
 
-        if(!done[i]){
+        //Procedor a compactar más.
+        for(i = 0; i < K; i++){
 
-            if(size[i] == 1){
+            if(!done[i]){
 
-                float min = 442.0;
-                int mini = 0;
+                //Si es de sólo una elemento, buscó otro cluster que sea el más
+                //parecido a él y los uno.
+                if(size[i] == 1){
 
-                for(j = 0; j < K; j++){
+                    float min = numeric_limits<float>::infinity();
+                    int mini = 0;
 
-                    if(i == j || done[j]) continue;
+                    for(j = 0; j < K; j++){
 
-                    if( (actual = d(bestCentroids[i], bestCentroids[j])) < min){
-                        min = actual;
-                        mini = j;
+                        if(i == j || done[j]) continue;
 
-                    }
-
-                }
-
-                change[mini] = i;
-
-                done[mini] = true;
-
-                for(m = 0; m < M; m++){
-
-                    bestCentroids[i][m]    = bestCentroids[i][m] * ((float) size[i]);
-                    bestCentroids[mini][m] = bestCentroids[mini][m] * ((float) size[mini]);
-                    bestCentroids[i][m]   += bestCentroids[mini][m];
-
-                }
-
-                size[i] += size[mini];
-
-                for(m = 0; m < M; m++)
-                    bestCentroids[i][m] = bestCentroids[i][m]/((float) size[i]);
-
-
-            }else{
-
-                for(j = 0; j < K; j++){
-
-                    if(i == j || done[j]) continue;
-
-                    if((actual = d(bestCentroids[i], bestCentroids[j])) < alpha/4.0){
-
-                        change[j] = i;
-
-                        done[j] = true;
-
-                        for(m = 0; m < M; m++){
-
-                            bestCentroids[i][m]  = bestCentroids[i][m] * ((float) size[i]);
-                            bestCentroids[j][m]  = bestCentroids[j][m] * ((float) size[j]);
-                            bestCentroids[i][m] += bestCentroids[j][m];
+                        if( (actual = d(bestCentroids[i], bestCentroids[j])) < min){
+                            min = actual;
+                            mini = j;
 
                         }
 
-                        size[i] += size[j];
+                    }
 
-                        for(m = 0; m < M; m++)
-                            bestCentroids[i][m] = bestCentroids[i][m]/((float) size[i]);
+                    change[mini] = i;
+
+                    done[mini] = true;
+
+                    for(m = 0; m < M; m++){
+
+                        bestCentroids[mini][m] = bestCentroids[mini][m] * ((float) size[mini]);
+                        bestCentroids[i][m]   += bestCentroids[mini][m];
+
+                    }
+
+                    size[i] += size[mini];
+
+                    for(m = 0; m < M; m++)
+                        bestCentroids[i][m] = bestCentroids[i][m]/((float) size[i]);
+
+
+                //Sino procedo a buscar un cluster que se parezca y los uno con 
+                //varios que se le parezcan.
+                }else{
+
+                    for(j = 0; j < K; j++){
+
+                        if(i == j || done[j]) continue;
+
+                        if((actual = d(bestCentroids[i], bestCentroids[j])) < alpha/4.0){
+
+                            change[j] = i;
+
+                            done[j] = true;
+
+                            for(m = 0; m < M; m++){
+
+                                bestCentroids[i][m]  = bestCentroids[i][m] * ((float) size[i]);
+                                bestCentroids[j][m]  = bestCentroids[j][m] * ((float) size[j]);
+                                bestCentroids[i][m] += bestCentroids[j][m];
+
+                            }
+
+                            size[i] += size[j];
+
+                            for(m = 0; m < M; m++)
+                                bestCentroids[i][m] = bestCentroids[i][m]/((float) size[i]);
+
+                        }
 
                     }
 
@@ -293,33 +305,36 @@ void AntA::reconstruct(int type){
 
         }
 
-    }
+        //Renombro los clusters.
+        for(i = 0; i < N; i++)
+            bestSolution[i] = change[bestSolution[i]];
 
-    for(i = 0; i < N; i++)
-        bestSolution[i] = change[bestSolution[i]];
+        //Los renombro de nuevo para que empiecen desde el 0 hasta el número de
+        //clusters que se redujo.
+        int index = 0;
+        int v[K];
 
-    int index = 0;
-    int v[K];
+        for(i = 0; i < K; i++)
+            v[i] = -1;
+        
+        for(i = 0; i < N; i++){
 
-    for(i = 0; i < K; i++)
-        v[i] = -1;
-    
-    for(i = 0; i < N; i++){
+            if(v[ bestSolution[i] ] == -1){
+                v[ bestSolution[i] ] = index;
+                index++;
+            }
 
-        if(v[ bestSolution[i] ] == -1){
-            v[ bestSolution[i] ] = index;
-            index++;
+            bestSolution[i] = v[ bestSolution[i] ];
         }
 
-        bestSolution[i] = v[ bestSolution[i] ];
+        for(i = 0; i < K; i++)
+            if(v[i] != -1)
+                for(m = 0; m < M; m++)
+                    bestCentroids[v[i]][m] = bestCentroids[i][m];
+
+        K = index;
+
     }
-
-    for(i = 0; i < K; i++)
-        if(v[i] != -1)
-            for(m = 0; m < M; m++)
-                bestCentroids[v[i]][m] = bestCentroids[i][m];
-
-    K = index;
 
     bestFO = 1.0/(DB(bestSolution, bestCentroids, K));
 
