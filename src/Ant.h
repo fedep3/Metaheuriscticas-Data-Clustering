@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#define MM 3
+#define MM 5
 
 
 class Ant{
@@ -68,6 +68,16 @@ class Ant{
          * Tamaño actual de la memoria..
          */
         int msize;
+
+        /*
+         * Cuenta el número de veces que se ha agragado cada célula.
+        */
+        int *count;
+
+        /*
+         * Cuenta el número de iteraciones.
+         */
+        int nit;
 
 
 };

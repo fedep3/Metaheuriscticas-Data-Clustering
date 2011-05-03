@@ -346,7 +346,6 @@ void AntA::reconstruct(int type){
  * del siguiente modo:
  *
  * Si (memoria de la hormiga tiene por lo menos 1)
-
  *     entonces Revisa la memoria local de la hormiga y elige la mejor 
  *         célula donde dejar, en caso que no logre soltar el
  *         pixel intenta en una ceĺula aleatoria
