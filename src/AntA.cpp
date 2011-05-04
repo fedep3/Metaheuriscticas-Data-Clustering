@@ -365,8 +365,7 @@ void AntA::dropAnt(int ra){
     
         for( j = 0; j < ants[ra].msize; j++){
             rc =ants[ra].memory[j];
-            actual = f(rp, rc);
-            if(actual > max){
+            if( (actual = f(rp, rc)) > max){
                 max = actual;
                 best = rc;
             }
@@ -375,7 +374,7 @@ void AntA::dropAnt(int ra){
         rc = best;
         rn = ((float)rand())/((float)RAND_MAX);
 
-        if(rn <= pdrop(rp, rc)){
+        if(rn <= (1 - pow(cos(PIH * max),2 )) ){
 
             cells[rc].push_back(rp);
 
