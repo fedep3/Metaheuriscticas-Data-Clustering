@@ -243,6 +243,11 @@ float d_6 = -1.0;
  */
 float d_7 = -1.0;
 
+/**
+ * Error Je.
+ */
+float d_8 = -1.0;
+
 /***/
 
 /**
@@ -383,6 +388,11 @@ void debugging(){
     else
         printf(",\\emph{N.A.}");
 
+    if(d_8 != -1.0)
+        printf(",%.4f",d_8);
+    else
+        printf(",\\emph{N.A.}");
+
     printf("\n");
 }
 
@@ -475,6 +485,8 @@ void longEnough(int sig){
 
         m->calcGFO();
 
+        m->calcJe();
+
         printf("-- Cantidad de Clusters Final: %d\n", m->K);
         if(debug) d_3 = m->K;
 
@@ -486,6 +498,9 @@ void longEnough(int sig){
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
         if(debug) d_7 = m->bestDB;
+
+        printf("-- Valor del error Je: %.4f\n", m->JeValue);
+        if(debug) d_8 = m->JeValue;
 
         if(debug) debugging();
 
@@ -527,6 +542,8 @@ void killIt(int sig){
             
             m->calcGFO();
 
+            m->calcJe();
+
             endTime();
             if(debug) d_2 = runtime;
 
@@ -550,6 +567,9 @@ void killIt(int sig){
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
         if(debug) d_7 = m->bestDB;
+
+        printf("-- Valor del error Je: %.4f\n", m->JeValue);
+        if(debug) d_8 = m->JeValue;
 
         if(debug) debugging();
 
@@ -1386,6 +1406,8 @@ void runIt(){
         
         m->calcGFO();
 
+        m->calcJe();
+
         endTime();
         if(debug) d_2 = runtime;
 
@@ -1409,6 +1431,12 @@ void runIt(){
 
     printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
     if(debug) d_7 = m->bestDB;
+
+    printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
+    if(debug) d_7 = m->bestDB;
+
+    printf("-- Valor del error Je: %.4f\n", m->JeValue);
+    if(debug) d_8 = m->JeValue;
 
     if(debug) debugging();
 

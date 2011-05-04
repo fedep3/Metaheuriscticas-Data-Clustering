@@ -68,6 +68,11 @@ class Metaheuristic{
         virtual void calcGFO();
 
         /**
+         * Calcula el error.
+         */
+        void calcJe();
+
+        /**
          * Destructor de la clase Metaheuristic.
          */
         virtual ~Metaheuristic();
@@ -96,6 +101,11 @@ class Metaheuristic{
          * Mejor valor heurístico usando la métrica DB.
          */
         float bestDB;
+
+        /**
+         * Error de la solución.
+         */
+        float JeValue;
 
         /**
          * Cantidad de datos.

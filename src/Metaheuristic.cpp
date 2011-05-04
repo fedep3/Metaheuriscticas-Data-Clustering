@@ -698,3 +698,30 @@ void Metaheuristic::reconstruct(int type){}
 void Metaheuristic::calcGFO(){
     bestDB = 1.0/(DB(bestSolution, bestCentroids, K));
 }
+
+/**
+ * Calcula el error.
+ */
+void Metaheuristic::calcJe(){
+    int i;
+    float sum   = 0.0;
+    float* sums = new float[K];
+    for(i = 0; i < K; ++i){
+        sums[i] = 0.0;
+        size[i] = 0;
+    }
+
+    //Cálculo de sumas internas.
+    for(i = 0; i < N; ++i){
+        sums[bestSolution[i]] = sums[bestSolution[i]] +
+                                d(data[i], bestCentroids[ bestSolution[i] ]);
+        ++size[ bestSolution[i] ];
+    }
+
+    //Cálculo de suma externa.
+    for(i = 0; i < K; ++i)
+        sum = sum + ( sums[i] / ((float) size[i]) );
+
+    //Cáculo final.
+    JeValue = (sum / K);
+}
