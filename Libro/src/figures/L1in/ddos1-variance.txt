@@ -1,0 +1,181 @@
+Start Time: Tue Mar  7 10:21:36 2000
+End Time: Tue Mar  7 13:35:48 2000
+Total time elapsed in stream: 11652.000726 seconds
+
+Total number of filtered frames seen: 649787
+Total bytes in filtered frames seen: 111685562
+Maximum time interval between filtered frames is: 1.502093
+Minimum time interval between filtred frames is: 0.000003
+Average time interval between filtered frames is: 0.017932
+
+Total number of IPv4 packets seen: 646703
+Total bytes seen in IPv4 packets: 100410462
+Number of unique IPv4 flows: 35595
+Number of unique IPv4 addresses: 34515
+Maximum time interval between frames is: 8.591505
+Minimum time interval between frames is: 0.000003
+Average time interval between IPv4 packets is: 0.018018
+
+Total number of UDP packets seen: 137156
+Total bytes seen in UDP packets: 13271430
+Number of unique IP addresses using UDP: 42
+Number of unique UDP flows: 40532
+Maximum time interval between UDP packets is: 30.000153
+Minimum time interval between UDP packets is: 0.000045
+Average time interval between UDP packets is: 0.084873
+
+Total number of TCP packets seen: 509327
+Total bytes seen in TCP packets: 76238932
+Number of unique IP addresses using TCP: 34501
+Number of unique TCP flows: 93899
+Maximum time interval between TCP packets is: 10.016011
+Minimum time interval between TCP packets is: 0.000003
+Average time interval between TCP packets is: 0.022877
+
+Total number of ICMP packets seen: 220
+Total bytes seen in ICMP packets: 9236
+Number of unique IP addresses using ICMP: 21
+Maximum time interval between ICMP packets is: 1923.866289
+Minimum time interval between ICMP packets is: 0.000050
+Average time interval between ICMP packets is: 43.815878
+
+Standard deviation is: 0.072317
+Jump size and log base will be: 2.
+Our delta time will be: 0.004000
+Our starting second will be: 5400.00
+Our ending second will be: 9000.00
+
+Looking for window divisble by powers of 2 and using a delta time of 0.004000s
+Max floored power of the initial window of 4125 is 12
+Window is not entirely divisible by a power of 2
+Changed to a window size of 4096
+
+Total number of xt points: 900000
+Window size is: 16.384001 seconds.
+Window size will use: 4096 xt points.
+Sliding window size is: 1.000000 seconds.
+Sliding window size will use: 250 xt points.
+
+Calculating Hurst parameter over time via Variance-time plots, 2 threads.
+Averaged Hurst over time: 0.689117
+Standard deviation of Hurst over time: 0.134025
+REPORT: Biggest change of Hurst in stream is 1.348841
+REPORT: at Tue Mar  7 12:27:48 2000
+REPORT: Windows 2156 and 2157
+REPORT: Average change was: 0.051449
+REPORT: Std deviation was: 0.064960
+
+Testing for DDoS attacks with:
+Hthreshold of 0.937280--0.313670
+Chgthreshold of 0.171637
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 11:55:30 2000
+REPORT: Hurst change of 0.484270 seen between window 218 and 219
+REPORT: Values of 0.674003 and 0.189733
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 11:57:06 2000
+REPORT: Hurst change of 0.269623 seen between window 314 and 315
+REPORT: Values of 0.524457 and 0.254834
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 11:58:40 2000
+REPORT: Hurst change of 0.230215 seen between window 408 and 409
+REPORT: Values of 0.319212 and 0.088997
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:00:08 2000
+REPORT: Hurst change of 0.232318 seen between window 496 and 497
+REPORT: Values of 0.450585 and 0.218268
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:00:37 2000
+REPORT: Hurst change of 0.277816 seen between window 525 and 526
+REPORT: Values of 0.559699 and 0.281883
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:01:10 2000
+REPORT: Hurst change of 0.382457 seen between window 558 and 559
+REPORT: Values of 0.524481 and 0.142024
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:03:27 2000
+REPORT: Hurst change of 0.180199 seen between window 695 and 696
+REPORT: Values of 0.473292 and 0.293092
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:05:07 2000
+REPORT: Hurst change of 0.439740 seen between window 795 and 796
+REPORT: Values of 0.730562 and 0.290822
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:07:13 2000
+REPORT: Hurst change of 0.234929 seen between window 921 and 922
+REPORT: Values of 0.545236 and 0.310308
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:13:13 2000
+REPORT: Hurst change of 0.214460 seen between window 1281 and 1282
+REPORT: Values of 0.510116 and 0.295656
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:15:28 2000
+REPORT: Hurst change of 0.316672 seen between window 1416 and 1417
+REPORT: Values of 0.598055 and 0.281383
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:17:14 2000
+REPORT: Hurst change of 0.371536 seen between window 1522 and 1523
+REPORT: Values of 0.421648 and 0.050111
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:18:02 2000
+REPORT: Hurst change of 0.291091 seen between window 1570 and 1571
+REPORT: Values of 0.497622 and 0.206531
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:18:39 2000
+REPORT: Hurst change of 0.326458 seen between window 1607 and 1608
+REPORT: Values of 0.594682 and 0.268224
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:21:32 2000
+REPORT: Hurst change of 0.276449 seen between window 1780 and 1781
+REPORT: Values of 0.557582 and 0.281133
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:24:21 2000
+REPORT: Hurst change of 0.365535 seen between window 1949 and 1950
+REPORT: Values of 0.660879 and 0.295345
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:27:48 2000
+REPORT: Hurst change of 1.348841 seen between window 2156 and 2157
+REPORT: Values of 0.591289 and -0.757553
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:28:14 2000
+REPORT: Hurst change of 0.298222 seen between window 2182 and 2183
+REPORT: Values of 0.483269 and 0.185046
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:32:11 2000
+REPORT: Hurst change of 0.294088 seen between window 2419 and 2420
+REPORT: Values of 0.471912 and 0.177825
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:37:11 2000
+REPORT: Hurst change of 0.390966 seen between window 2719 and 2720
+REPORT: Values of 0.566734 and 0.175768
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:40:58 2000
+REPORT: Hurst change of 0.399898 seen between window 2946 and 2947
+REPORT: Values of 0.593288 and 0.193390
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:51:34 2000
+REPORT: Hurst change of 0.719048 seen between window 3582 and 3583
+REPORT: Values of 0.719048 and 0.000000
+-----------------------------------------------
+Graphing the Hurst parameter changes over time using Variance-time.

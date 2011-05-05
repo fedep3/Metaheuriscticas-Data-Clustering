@@ -1,0 +1,62 @@
+% Planteamiento del Problema
+\chapter{Planteamiento del problema} \label{chap:planning}
+
+
+AQU\'I VA EL DESARROLLO DEL PLANTEAMIENTO DEL PROBLEMA.
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+Para verificar si los m'etodos para detecci'on de ataques de denegaci'on de
+servicio mediante el uso del par'ametro de Hurst, descritos en la secci'on
+son utilizables en tiempo real necesitamos 
+implementarlos e incluirlos en una herramienta que adem'as maneje las trazas
+y sea capaz de graficar los resultados. 
+
+Los requerimientos funcionales y no funcionales para la creaci'on del programa,
+son descritos en las secci'on \ref{sect:requirements}.  
+
+\section{Requerimientos} \label{sect:requirements}
+
+Los requerimientos de la herramienta o software a implementar se mencionan a
+continuaci'on: 
+
+\begin{itemize}
+\item Por posibles cuestiones legales, la implementaci'on de la soluci'on 
+debe ser de c'odigo libre para poder, luego de su validaci'on, ser
+modificados y los m'odulos e incluidos en el AIR-NMS del laboratorio Kinoshita
+de la Universidad de Tohoku.
+\item La herramienta de l'inea de comando debe desarrollarse en el lenguaje
+{\tt C}, ya que se quiere utilizar la librer'ia {\tt libpcap} para manipular
+las trazas de red como fuese necesario.
+\item Con el uso de la liber'ia {\tt libpcap} se debe extraer todo la
+informaci'on posible sobre los tiempos de llegada, cantidad y tama~no de los
+paquetes de distintos protocolos que componen TCP/IP en la traza que alimenta
+el programa.
+\item Debido a que algunos m'etodos de estimaci'on del par'ametro de Hurst
+utilizan gr'aficas, la herramienta debe tener capacidades gr'aficas. 
+El software debe tambi'en poder graficar el cambio del par'ametro en el tiempo
+cuando se usa el mecanismo de ventanas deslizantes, y la serie de tiempo
+creada a partir de la velocidad de captura ($c$).
+\item El programa debe ser flexible. Esto incluye el hacer todos los aspectos
+importantes de la estimaci'on parametrizables, tales como la velocidad de 
+captura ($c$), el tama~no de la ventana ($w$) y el tama~no de la ventana
+deslizante ($s$).
+\item El programa debe incluir al menos 3 m'etodos para la estimaci'on del 
+par'ametro de Hurst. Dichos m'etodos fueron escogidos desde un principio por
+el laboratorio Kinoshita y los criterios de selecci'on se exponen a
+continuaci'on. Ellos ya ten'ian una implementaci'on del estad'istico R/S y
+quer'ian seguir teniendo este m'etodo como alternativa. Debido a los art'iculos 
+\cite{intelligentfuzzy} y \cite{xiang:292} d'onde se hace un an'alisis
+exhaustivo de la estimaci'on del par'ametro de Hurst mediante las gr'aficas
+varianza-tiempo y su comportamiento en ataques de denegaci'on de servicio era
+tambi'en razonable su implementaci'on. Por 'ultimo, el m'etodo de la varianza
+modificada de Allan fue seleccionado ya que hoy en d'ia es uno de los m'etodos 
+m'as novedosos utilizados para la estimaci'on del par'ametro de Hurst y se ha
+demostrado que es bastante preciso, especialmente con muestras peque~nas
+\cite{MAVARStefano}. 
+\item  Por tratarse de un prototipo, todas sus funciones ser'ian para el 
+an'alisis de forma {\it offline}. Los resultados dar'ian una idea del
+comportamiento en un ambiente real.
+\end{itemize}
+
+

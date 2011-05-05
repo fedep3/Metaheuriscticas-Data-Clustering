@@ -1,0 +1,82 @@
+Start Time: Tue Mar  7 10:21:36 2000
+End Time: Tue Mar  7 13:35:48 2000
+Total time elapsed in stream: 11652.000726 seconds
+
+Total number of filtered frames seen: 649787
+Total bytes in filtered frames seen: 111685562
+Maximum time interval between filtered frames is: 1.502093
+Minimum time interval between filtred frames is: 0.000003
+Average time interval between filtered frames is: 0.017932
+
+Total number of IPv4 packets seen: 646703
+Total bytes seen in IPv4 packets: 100410462
+Number of unique IPv4 flows: 35595
+Number of unique IPv4 addresses: 34515
+Maximum time interval between frames is: 8.591505
+Minimum time interval between frames is: 0.000003
+Average time interval between IPv4 packets is: 0.018018
+
+Total number of UDP packets seen: 137156
+Total bytes seen in UDP packets: 13271430
+Number of unique IP addresses using UDP: 42
+Number of unique UDP flows: 40532
+Maximum time interval between UDP packets is: 30.000153
+Minimum time interval between UDP packets is: 0.000045
+Average time interval between UDP packets is: 0.084873
+
+Total number of TCP packets seen: 509327
+Total bytes seen in TCP packets: 76238932
+Number of unique IP addresses using TCP: 34501
+Number of unique TCP flows: 93899
+Maximum time interval between TCP packets is: 10.016011
+Minimum time interval between TCP packets is: 0.000003
+Average time interval between TCP packets is: 0.022877
+
+Total number of ICMP packets seen: 220
+Total bytes seen in ICMP packets: 9236
+Number of unique IP addresses using ICMP: 21
+Maximum time interval between ICMP packets is: 1923.866289
+Minimum time interval between ICMP packets is: 0.000050
+Average time interval between ICMP packets is: 43.815878
+
+Standard deviation is: 0.072317
+Jump size and log base will be: 2.
+Our delta time will be: 0.004000
+Our starting second will be: 5400.00
+Our ending second will be: 9000.00
+
+Looking for window divisble by powers of 2 and using a delta time of 0.004000s
+Max floored power of the initial window of 4125 is 12
+Window is not entirely divisible by a power of 2
+Changed to a window size of 4096
+
+Total number of xt points: 900000
+Window size is: 16.384001 seconds.
+Window size will use: 4096 xt points.
+Sliding window size is: 1.000000 seconds.
+Sliding window size will use: 250 xt points.
+Number of Hurst points: 3583
+
+Calculating Hurst parameters via R/S statistic over time with 2 threads.
+Averaged Hurst over time: 0.716331
+Standard deviation of Hurst over time: 0.061531
+REPORT: Biggest change of Hurst in stream is 0.129312
+REPORT: at Tue Mar  7 12:18:23 2000
+REPORT: Windows 1591 and 1592
+REPORT: Average change was: 0.012475
+REPORT: Std deviation was: 0.013083
+
+Testing for DDoS attacks with:
+Hthreshold of 0.836106--0.516170
+Chgthreshold of 0.043621
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 11:57:29 2000
+REPORT: Hurst change of 0.124192 seen between window 337 and 338
+REPORT: Values of 0.636339 and 0.512147
+-----------------------------------------------
+-----------------------------------------------
+REPORT: Probable 95% DDoS attack at Tue Mar  7 12:51:34 2000
+REPORT: Hurst change of 0.678377 seen between window 3582 and 3583
+REPORT: Values of 0.678377 and 0.000000
+-----------------------------------------------
+Graphing the Hurst parameter changes over time using R/S statistic.

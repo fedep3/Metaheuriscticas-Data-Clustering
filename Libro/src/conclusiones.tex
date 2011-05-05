@@ -1,0 +1,62 @@
+% Conclusiones
+\chapter{Conclusiones y recomendaciones} \label{chap:conclusiones}
+
+AQU\'I VAN LAS CONCLUSIONES Y RECOMENDACIONES.
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+Como resultado de este proyecto se logr'o implementar una herramienta de
+l'inea de comando que pudiese crear series de tiempo a partir de trazas
+producidas por {\tt tcpdump} para estimar el par'ametro de Hurst y graficar sus
+resultados. La estimaci'on se hizo mediante el mecanismo de ventana deslizante,
+limitando el tama~no de datos para cada ventana de forma de probar si de esta
+forma, utilizando las t'ecnicas descritas en, se pod'ian obtener estimaciones del
+par'ametro de Hurst en tiempo real que permitieran detectar ataques de
+denegaci'on de servicio.
+
+Los resultados muestran que aunque la herramienta implementada logra
+crear una serie de tiempo que puede estimar el par'ametro de Hurst con un
+error acceptable y puede graficar sus resultados, su detecci'on de ataques
+de denegaci'on de servicio en tiempo real es mejorable. Si bien se logra
+detectar cambios dr'asticos, en algunos casos cerca de la regi'on del ataque,
+la cantidad de falsos positivos y errores hace su uso casi imposible. 
+
+Para seguir trabajando en la detecci'on de ataques de denegaci'on de servicio
+usando el par'ametro de Hurst se presentan las siguientes recomendaciones: 
+
+\begin{itemize}
+\item Emplear alg'un mecanismo de muestreo de los valores de $n$ utilizados
+en la estimaci'on del par'ametro de Hurst en una ventana con todos los m'etodos
+para mejorar la precisi'on y posiblemente disminuir el tiempo necesario para
+una estimaci'on:
+
+En la herramienta implementada, no se us'o ning'un mecanismo de muestreo en
+la estimaci'on del par'ametro de Hurst, implementando los m'etodos como fueron
+escritos en el cap'itulo \ref{chap:ssimilar}. Esto significa que se tomaron en
+cuenta todos los tama~nos $n$ viables para la creaci'on de las gr'aficas
+$\log - \log$. Parte de la lentitud de los m'etodos en dar un resultado est'a
+en tomar en cuenta todos los $n$ posibles.
+Por otro lado, de acuerdo con \cite{MAVARStefano} usando el m'etodo de varianza
+modificada de Allan, el tomar todos los $n$ acerc'andose a $N/3$ comienza a
+afectar seriamente la estimaci'on. Sin embargo, en el art'iculo no se presenta
+una forma determin'istica que describa hasta que punto se deber'ia tomar en
+cuenta los $n$ para una estimaci'on. 
+\item Encontrar alg'un m'etodo de utilizar la informaci'on obtenida en la 
+estimaci'on de una ventana de tal forma que los c'alculos hechos para la
+primera ventana aceleren la estimaci'on de la siguente ventana
+\cite{intelligentfuzzy}.
+\item Al poder estimar una ventana en menor tiempo tambi'en ser'ia recomendable
+aumentar el n'umero de datos utilizados para una estimaci'on. C'omo no se quiere
+aumentar el tiempo de traza real $w$ usado en una estimaci'on, esto implicar'ia
+usar un $c$ m'as peque~no \cite{hagiwara00highspeed}.
+\item En la estimaci'on de una ventana, si se logra encontrar una forma de
+dividir el c'alculo de tal forma de poder aplicar una paralelizaci'on, el uso
+de m'as de un hilo de ejecuci'on para estimaci'on de la ventana podr'ia ser
+probado \cite{hagiwara00highspeed}.
+\item En lugar de utilizar un 'unico tama~no de $s$ en el mecanismo de ventana
+deslizante, se podr'ia usar un valor flexible a los cambios de la red, de tal
+forma que si el par'ametro de Hurst cambia repentinamente entre dos ventanas, se
+acorte $s$ con tal de verificar si en realidad hay una sucesi'on de paquetes
+uniformemente espaciados que puedan ser parte un ataque de denegaci'on de
+servicio, minimizando la cantidad de falsos positivos \cite{intelligentfuzzy}.
+\end{itemize}

@@ -1,0 +1,108 @@
+ \addcontentsline{toc}{chapter}{Introducci\'on}
+
+% Titulo de la introduccion.
+\begin{center}
+	{\bf Introducci\'on} \label{chap:intro}
+\end{center}
+
+% Contenido de la introduccion.
+
+\label{sect:motivacion}
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+AQU\'I VA EL CONTENIDO DE ANTECEDENTES. 
+
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+\label{sect:justificacion}
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+AQU\'I VA EL CONTENIDO DE LA JUSTIFICACI\'ON.
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+En la Universidad de Tohoku de Sendai, Jap'on, en el laboratorio Kinoshita de
+la facultad de Ciencias de la Computaci'on, se tiene un {\it framework} con el
+cual han creado un {\it Active Information Resource} (AIR) - {\it Network
+Management System} (NMS) \cite{kinoshitaNMSAIR} para gestionar las redes de
+computadoras. Mediante el lenguaje de programaci'on orientado a agentes
+basado en Java, DASH ({\it Repository-based Agent Framework}) y su ambiente
+de dise~no interactivo IDEA ({\it Interactive Design Environment}), la idea
+final es que la red y los elementos que la componen se pueda auto-gestionar
+mediante los agentes instalados en los elementos \cite{545112}, sin la
+necesidad de tener un administrador. El objectivo es identificar y solucionar
+los problemas de la red en tiempo real \cite{AbarAK04} \cite{KonnoAIK07}.
+
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+
+\label{sect:planteamiento}
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+AQU\'I VA EL CONTENIDO DEL PLANTEAMIENTO DEL PROBLEMA.
+
+En los 'ultimos a~nos ha habido un gran inter'es por determinar si los nuevos
+modelos basados en la autosimilaridad y la dependencia de largo alcance pueden
+ser utilizados para la detecci'on de anomal'ias en las redes de datos
+\cite{5475821}. Entre las anomal'ias m'as destacadas se encuentran las de
+ataques de denegaci'on de servicio y su ampliaci'on: el llamado ataque
+distribuido de denegaci'on de servicio \cite{mingliddos} \cite{xiang:292}.
+
+En el trabajo de \cite{mingliddos} se utiliz'o, con buenos resultados, el
+c'alculo del grado de autosimilaridad para detectar anomal'ias en la red. Se
+realiz'o una implementaci'on para un {\it framework} de autogesti'on de redes
+desarrollado en el laboratorio Kinoshita de la Universidad de Tohoku. Como se
+explica en la pr'oxima secci'on la idea del proyecto de grado fue mejorar esta
+implementaci'on.
+
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+\label{sect:objetivo_general}
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+AQU\'I VA EL OBJETIVO GENERAL.
+
+El objetivo principal de este proyecto es el desarrollo de una soluci'on
+flexible de l'inea de comando que estime el par'ametro de Hurst para medir el
+grado de autosimilaridad de una traza de red. La estimaci'on del par'ametro de
+Hurst deber'a ser calculado en tiempo real, sin comprometer la precisi'on de la
+estimaci'on. Para probar la factibilidad de la soluci'on en tiempo real los
+miembros del laboratorio Kinoshita de la Universidad de Tohoku propusieron
+trabajar con el mecanismo de ventanas deslizantes como se presenta en el
+art'iculo \cite{TakahashiAkinori:20070913}.
+
+
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+\label{sect:objetivos_especificos}
+%Puedes quitar esto(es opcional)
+\vspace{5 mm}
+
+AQU\'I VAN LOS OBJETIVOS ESPEC\'IFICOS.
+
+La implementaci'on deber'a tomar como entrada una traza creada por la librer'ia
+{\tt libpcap}\footnote{Esta librer'ia provee una interfaz de alto nivel para la
+captura y manipulaci'on de los paquetes a bajo nivel pudiendo manipular todos 
+los paquetes, incluidos aquellos destinados a otros nodos de red. La librer'ia
+se encuentra disponible en \url{http://www.tcpdump.org}.} y poder
+crear f'acilmente una serie de tiempo para la estimaci'on del par'ametro de
+Hurst, haciendo flexible la estimaci'on con diferentes series de tiempo creadas
+a partir de la misma traza. Como salida, el programa debe graficar los
+resultados de las estimaciones del par'ametro de Hurst, incluyendo el cambio del
+par'ametro en el tiempo, para as'i poder verificar de forma r'apida los
+resultados. 
+
+Una vez validada la estimaci'on del par'ametro de Hurst, se deber'a verificar si
+esta estimaci'on puede ser utilizada para detectar las anomal'ias en tiempo
+real creadas por un ataque distribuido de denegaci'on de servicio en las trazas
+de red.
+
+
