@@ -350,7 +350,6 @@ void AntA::reconstruct(int type){
  *         célula donde dejar, en caso que no logre soltar el
  *         pixel intenta en una ceĺula aleatoria
  * sino Dejar el pixel en una célula aleatoria
-
  *
  * @param ra Número de la hormiga que quiere soltar el pixel.
  */
