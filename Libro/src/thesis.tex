@@ -79,6 +79,23 @@
     pdftex
 }
 
+\lstset{
+   language=Pascal,
+   gobble=2,
+   %frame=single,
+   %framerule=1pt,
+   showstringspaces=false,
+   basicstyle=\footnotesize\ttfamily,
+   keywordstyle=\textbf,
+   %backgroundcolor=\color{lightgrey},
+   literate={á}{{\'a}}1
+            {é}{{\'e}}1
+            {í}{{\'i}}1
+            {ó}{{\'o}}1
+            {ú}{{\'u}}1
+            {ñ}{{\~n}}1
+}
+
 % Crea el glosario
 \makeglossaries
 

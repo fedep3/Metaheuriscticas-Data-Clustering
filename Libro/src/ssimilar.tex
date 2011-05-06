@@ -178,23 +178,29 @@ desaparece con el tiempo, el reforzado si otras hormigas usan ese mismo camino.
 Por lo tanto, las mejores v\'ias incrementan su nivel de feromonas con el tiempo, 
 y al contrario con los peores. Fue propuesto por Marco Dorigo en 1992, 
 y lo ha expandidos en sus trabajos posteriores.
-{\bf QySMwaDT9JeE.pdf , RvrEnVdawC.pdf}
+\cite{GePo2010} \cite{Le2007}
 
-Su funcionamiento es el siguiente: primero, m hormigas contruyen
+Su funcionamiento es el siguiente: primero, $m$ hormigas contruyen
 soluciones del problema, sesgada por la informaci\'on de las feromonas y posiblemente
 por las disponible por parte de las heur\'isticas. Una vez que las hormigas hallan completado
 sus soluciones, se pueden mejorar mediante una b\'usqueda local. Finalmente,
 antes de empezar con la siguiente iteraci\'on , los ratros de feromonas son
 actualizados para reflejar la experiencia de b\'usqueda de las hormigas:
 
-Pseudoc\'oidigo.
+\begin{lstlisting}[mathescape, language=Pascal]
+  Incialización.
+  Mientras no se cumpla el criterio de parada.
+    Construcción de las soluciones.
+    Aplicar búsqueda local.
+    Actualizar feromonas.
+\end{lstlisting}
 
 \begin{itemize}
 
 \item {\bf Inicializaci\'on:} Los par\'ametros son establecidos y todas las variables 
 de feromonas son puestas en t$_{0}$, el cual es un par\'ametro del algoritmo.
 
-\item {\bf Construcci\'on de la soluci\'on:} Cada hormiga empieza con una soluci\'on vac\'ia
+\item {\bf Construcci\'on de las soluciones:} Cada hormiga empieza con una soluci\'on vac\'ia
 $s_p = \emptyset $. En cada paso de las construcci\'on , una hormiga
 extiende su soluci\'on parcial actual $s_p$ eligiendo un posible componente $c_i^j \in N(s_p) \subseteq C$ 
 y agregandolo a \'esta. $N(s_p)$ es el conjunto de los
@@ -230,8 +236,7 @@ que est\'an asociados con un conjunto selccionado $S_{upd}$ de buenas soluciones
 El segundo es la evaporaci\'on del rastro de feromonas, el cual es un mecanismo
 que decrece a medida que el tiempo pasa el dep\'osito de feromonas. Desde el punto de
 vista pr\'actico, \'este es necesario para evitar la r\'apida convergencia del algoritmo
-en una regi\'on sub\'optima. \'Este implemente una manera bastante \'util de olvidar,
-favoreciendo la exploraci\'on de nuevas \'areas. Es comunmente implementada de la siguiente
+en una regi\'on sub\'optima. Es comunmente implementada de la siguiente
 manera:
 
 \[
@@ -275,20 +280,19 @@ P_p(i) = {k_1 \over {k_1 + f(i)}}
 \]
 
 \[
-P_d(i) = \left\{
-  \begin{array}{l l}
+P_d(i) = 
+  \begin{cases}
     2f(i) & \quad \text{si $f(i)<k_2$}\\
     1     & \quad \text{si $f(i) < k_2s$}\\
-  \end{array} \right
+  \end{cases}
 \]
 
 \[
-f(i) = \left\{ 
-  \begin{array}{l l}
+f(i) =
+  \begin{cases}
     {{1} \over {s^2}} \sum_{j \in R(r(i))} {{1 - {d(i,j)}} \over \alpha} & \quad \text{si $f > 0$}\\
-    0     & \quad \text{cualquier otro caso}\\
-  \end{array} \right
-
+    0     & \quad \text{sino}
+  \end{cases} 
 \]
 
 Donde $r(i)$ es la posici\'on del dato $i$ dado en el grid y $f(i)$ es una medida
@@ -300,14 +304,12 @@ es la escala de disimilaridad y es clave en la ejecuci\'on del algoritmo:
 \alpha = {{1 \over {N(N-1)}} \sum_{i=1}^N \sum_{j=1}^N d(p_i,p_j)}
 \]
 
-{\bf An Efficient Ant Algorithm for Swarm-Based Image Clustering.pdf}
+\cite{OuBa2007}
 
 El n\'umero de aplicaciones es bastante grande: resolver problemas
 desde data clustering, programaci\'on (scheduling), balanceo
 de l\'inea de equilibrio, TSP probabil\'istico, secuenciaci\'on de 
-ADN, etc. 
-
-{\bf QySMwaDT9JeE.pdf}
+ADN, etc. \cite{GePo2010}
 
 
 \subsection{PSO}
