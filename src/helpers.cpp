@@ -1432,9 +1432,6 @@ void runIt(){
     printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
     if(debug) d_7 = m->bestDB;
 
-    printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-    if(debug) d_7 = m->bestDB;
-
     printf("-- Valor del error Je: %.4f\n", m->JeValue);
     if(debug) d_8 = m->JeValue;
 
