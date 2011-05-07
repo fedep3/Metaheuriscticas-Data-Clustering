@@ -3,7 +3,8 @@ all:
 	cp -R src/* output ;\
 	cd output ;\
 	pdflatex thesis.tex ;\
-	bibtex myrefs.bib ;\
+	bibtex thesis.aux ;\
+	pdflatex thesis.tex ;\
 	pdflatex thesis.tex ;\
 	cd .. ;\
 	cp output/thesis.pdf . ;\
