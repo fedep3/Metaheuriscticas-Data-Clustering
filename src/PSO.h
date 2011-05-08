@@ -216,7 +216,7 @@ class PSO : public Metaheuristic{
         /**
          * Máxima velocidad de las partículas.
          */
-        float Vmax;
+        float* Vmax;
 
         ///////////////////////////////////////
         // Variables de la función objetivo.

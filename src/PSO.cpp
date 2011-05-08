@@ -54,12 +54,16 @@ PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
     w3   = _w3;
     REPS = _reps;
 
+    Vmax = new float[M];
     Zmax = 0.0;
-    for(i = 0; i < M; ++i)
+    for(i = 0; i < M; ++i){
         Zmax += (_zmx[i] - _zmn[i]) * (_zmx[i] - _zmn[i]);
+        Vmax[i] = _zmx[i] * _vmx;
+    }
     Zmax = sqrtf(Zmax);
 
-    Vmax = _vmx;
+    
+    //Vmax = _vmx;
     metric = F_WEIGHTED;
 
     //////////////////////////////////
@@ -142,12 +146,15 @@ PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
     w3   = 0.0;
     REPS = _reps;
 
+    Vmax = new float[M];
     Zmax = 0.0;
-    for(i = 0; i < M; ++i)
+    for(i = 0; i < M; ++i){
         Zmax += (_zmx[i] - _zmn[i]) * (_zmx[i] - _zmn[i]);
+        Vmax[i] = _zmx[i] * _vmx;
+    }
     Zmax = sqrtf(Zmax);
 
-    Vmax = _vmx;
+    //Vmax = _vmx;
     metric = F_NON_WEIGHTED;
 
     //////////////////////////////////
@@ -220,6 +227,7 @@ PSO::~PSO(){
     free(velocity);
     free(bestParticle);
 
+    delete [] Vmax;
     delete [] of;
     delete [] Ks;
 }
@@ -319,7 +327,7 @@ void PSO::updateVelocity(int p){
                 c1 * r1 * (bestParticle[p][i][j] - centroid[p][i][j]) +
                 c2 * r2 * (bestCentroids[i][j]   - centroid[p][i][j]);
 
-            if(v < Vmax){
+            if(v < Vmax[j]){
                 velocity[p][i][j] = v;
             }
         }
