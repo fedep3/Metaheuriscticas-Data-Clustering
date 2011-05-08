@@ -439,6 +439,9 @@ void restoreHandlers(){
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
         if(debug) d_7 = m->bestDB;
 
+        printf("-- Valor del error Je: %.4f\n", m->JeValue);
+        if(debug) d_8 = m->JeValue;
+
         if(debug) debugging();
 
         r->write(_output, m->bestSolution, m->K);
@@ -1102,8 +1105,8 @@ entre 0.0 y 1.0\n");
                 break;
             case 'U':
                 _vmx = atof(optarg);
-                if(_vmx < 0.0){
-                    fprintf(stderr, "El vmx debe ser positivo.\n");
+                if(0.1 <= _vmx <= 1.0){
+                    fprintf(stderr, "El vmx debe estar en el rango de 0.1 a 1.0\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
