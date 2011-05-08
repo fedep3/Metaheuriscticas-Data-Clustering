@@ -165,6 +165,51 @@ de los patrones.
 
 \subsection{DE}
 
+Es un algoritmo basado en poblaci\'on de
+optimizaci\'on global que hace uso de una representaci\'on de punto flotante
+(codificaci\'on real), bastante parecido al gen\'etico. Se tienen los pasos de cruce 
+y selecci\'on, pero no mutaci\'on.
+El $i$-\'esimo vector individual (cromosoma)
+de la poblaci\'on con tiempo (generaci\'on) $t$ tiene $d$ componentes
+dimensiones:
+
+%Ejemplo de vector.
+%INICIO
+\begin{center}
+$ \overrightarrow{Z_i}(t) = [ Z_{i,1}(t), Z_{i,2}, \cdots, Z_{i,d}(t) ] $
+\end{center}
+%END
+
+Para cada vector individual $\overrightarrow{Z_k}(t)$ que pertenece
+a la poblaci\'on actual, el DE aleatoriamente toma tres individuos
+$\overrightarrow{Z_i}(t)$, $\overrightarrow{Z_j}(t)$ y $\overrightarrow{Z_m}(t)$ de la misma generaci\'on (de modo que sean distintos $k$, 
+$i$, $j$ y $m$). Entonces calcula la diferencia entre $\overrightarrow{Z_i}(t)$ y $\overrightarrow{Z_j}(t)$, lo escala por un escalar $F$
+(usualmente $F \in [0, 1]$) y crea un hijo prueba $\overrightarrow{U_i}(t + 1)$ a\~nadiendo el resultado a $\overrightarrow{Z_m}(t)$. De modo
+que para la $n$-\'esima componente del vector:
+
+\[
+  U_{k,n}(t+1) =
+  \begin{cases}
+    Z_{m,n}(t) + F(Z_{i,n}(t) - Z_{j,n}(t))  & \text{si } rand_n(0,1) < Cr\\
+    Z_{k,n}(t)                               & \text{sino}
+  \end{cases}
+\]
+
+Donde $Cr \in [0, 1]$ es un escalar que es par\'ametro de el algoritmo,
+llamado la \emph{tasa de cruce}. Si el nuevo hijo tiene mejor valor
+con la funci\'on objetivo, entonces reemplaza al padre en la siguiente
+generaci\'on, sino, el padre entonces se queda en la misma:
+\[
+  \overrightarrow{Z_i}(t+1) =
+  \begin{cases}
+    \overrightarrow{U_i}(t+1) & \text{si } f(\overrightarrow{U_i}(t+1)) > f(\overrightarrow{Z_i}(t)) \\
+    \overrightarrow{Z_i}(t)   & \text{si } f(\overrightarrow{U_i}(t+1)) \leq f(\overrightarrow{Z_i}(t))
+  \end{cases}
+\]
+donde $f$ es la funci\'on objetivo a ser maximizada.
+
+\cite{SwAjAm2008}
+
 \subsection{Gen\'etico}
 
 \subsection{Hormiga}
