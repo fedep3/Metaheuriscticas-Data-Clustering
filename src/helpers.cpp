@@ -1105,7 +1105,7 @@ entre 0.0 y 1.0\n");
                 break;
             case 'U':
                 _vmx = atof(optarg);
-                if(0.1 <= _vmx <= 1.0){
+                if(0.1 > _vmx || _vmx > 1.0){
                     fprintf(stderr, "El vmx debe estar en el rango de 0.1 a 1.0\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;

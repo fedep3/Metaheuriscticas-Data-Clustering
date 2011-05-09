@@ -36,10 +36,15 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
     nA = _nA;
     maxit = _it;
     ac = false;
+    mit = 0;
+    msize = 0;
+    cellsSize = N/4;
 
     free = new int[N];
-    cells = new vector<int>[N];    
+    cells = new vector<int>[cellsSize];    
     ants = new Ant[nA];
+    memory = new int[MM];
+    mcount = new int[MM];
 
 }
 
@@ -65,10 +70,15 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, float _alpha2,
     maxit = _it;
     alpha2 = _alpha2;
     ac = true;
+    mit = 0;
+    msize = 0;
+    cellsSize = N/4;
 
     free = new int[N];
-    cells = new vector<int>[N];    
+    cells = new vector<int>[cellsSize];    
     ants = new Ant[nA];
+    memory = new int[MM];
+    mcount = new int[MM];
 
 }
 
@@ -79,7 +89,9 @@ AntA::~AntA(){
 
     delete [] free;
     delete [] cells;
-    delete [] ants;   
+    delete [] ants; 
+    delete [] memory;
+    delete [] mcount;  
 
 }
 
@@ -165,7 +177,7 @@ void AntA::reconstruct(int type){
         if(!ants[i].free){
             max = -1.0;
             rp = ants[i].pixel;
-            for(j = 0; j < N; j++){
+            for(j = 0; j < cellsSize; j++){
                 if(cells[j].size() >0){
                     if((actual = f(rp, j)) > max){
                         max = actual;
@@ -175,14 +187,14 @@ void AntA::reconstruct(int type){
             }
             free[rp] = best;
             cells[best].push_back(rp);
-            ants[i].drop(best);
+            ants[i].drop();
         }
     }
 
     //Armó los clusters y sus centroides a partir de las células
     K = 0;
 
-    for(i = 0; i < N; i++){
+    for(i = 0; i < cellsSize; i++){
         if(cells[i].size() > 0){
 
             for(it = cells[i].begin(); it < cells[i].end(); it++)
@@ -341,12 +353,11 @@ void AntA::reconstruct(int type){
 }
 
 /*
-
  * Procedimiento que se encarga de soltar el pixel de una hormiga. Funciona
  * del siguiente modo:
  *
  * Si (memoria de la hormiga tiene por lo menos 1)
- *     entonces Revisa la memoria local de la hormiga y elige la mejor 
+ *     entonces Revisa la memoria global y elige la mejor 
  *         célula donde dejar, en caso que no logre soltar el
  *         pixel intenta en una ceĺula aleatoria
  * sino Dejar el pixel en una célula aleatoria
@@ -359,11 +370,11 @@ void AntA::dropAnt(int ra){
     int actual = 0;
     float max = -1.0, rn = 0.0;
     bool done = false;
+
+    if(msize > 0){
     
-    if(ants[ra].msize > 0){
-    
-        for( j = 0; j < ants[ra].msize; j++){
-            rc =ants[ra].memory[j];
+        for( j = 0; j < msize; j++){
+            rc = memory[j];
             if( (actual = f(rp, rc)) > max){
                 max = actual;
                 best = rc;
@@ -378,14 +389,15 @@ void AntA::dropAnt(int ra){
             cells[rc].push_back(rp);
 
             free[rp] = rc;
-            ants[ra].drop(rc);
+            ants[ra].drop();
+            addMemory(rc);
             done = true;
 
         }
 
-        if(!done){
+        if(!done && msize < MM){
 
-            rc = rand()%N;
+            rc = rand()%cellsSize;
 
             rn = ((float)rand())/((float)RAND_MAX);
 
@@ -394,7 +406,8 @@ void AntA::dropAnt(int ra){
                 cells[rc].push_back(rp);
 
                 free[rp] = rc;
-                ants[ra].drop(rc);
+                ants[ra].drop();
+                addMemory(rc);
 
             }
 
@@ -402,7 +415,7 @@ void AntA::dropAnt(int ra){
 
     }else{
 
-        rc = rand()%N;
+        rc = rand()%cellsSize;
 
         rn = ((float)rand())/((float)RAND_MAX);
 
@@ -411,11 +424,69 @@ void AntA::dropAnt(int ra){
             cells[rc].push_back(rp);
 
             free[rp] = rc;
-            ants[ra].drop(rc);
+            ants[ra].drop();
+            addMemory(rc);
 
         }
 
     }
+}
+
+/*
+ * Agrega a la memoria la celula dada, si ya existe simplemente 
+ * cuenta que dejo una vez ahi. Cada cierto numero de iteraciones
+ * vacia un elemento de la memoria.
+ *
+ * @param cell Celula donde se solto el pixel.
+ */
+void AntA::addMemory(int cell){
+
+    int i;
+    bool done = false;
+
+    mit++;
+
+    for(i = 0; i < MM; i++){
+        if(memory[i] == cell){
+            done = true;
+            mcount[i]++;
+            break;
+        }
+    }
+    
+    if(!done){
+
+        if(msize < MM){
+        
+            memory[msize] = cell;
+            mcount[msize]++;
+            msize++;
+            
+        }
+    }
+
+    if(mit == MIT){
+
+        int min = 20, mini = 0, aux;
+
+        for(i = 0; i < MM; i++){
+            if( (aux = mcount[i]) < min){
+                min = aux;
+                mini = i;
+            }
+        }
+
+        for( i = mini; i < MM-1; i++)
+            memory[i] = memory[i+1];
+
+        msize--;
+        mit = 0;
+
+        for(i = 0; i < MM; i++)
+            mcount[i] = 0;
+
+    }
+
 }
 
 /*
@@ -521,7 +592,7 @@ void AntA::initialize(){
     }
 
     for(i = 0; i < size; i++){
-        c = rand()%N;
+        c = rand()%cellsSize;
         free[done[i]] = c;
         cells[c].push_back(done[i]);
     }

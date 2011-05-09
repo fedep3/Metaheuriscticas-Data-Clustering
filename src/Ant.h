@@ -20,9 +20,6 @@
 
 using namespace std;
 
-#define MM 5
-
-
 class Ant{
     public:
 
@@ -43,11 +40,9 @@ class Ant{
         void pick(int p);
 
         /*
-         * Suelta el pixel que tiene y modifica su memoria agregando a ella
-         * donde lo dejó.
-         * @param cell Célula donde va a dejar el pixel.
+         * Suelta el pixel.
          */
-        void drop(int cell);
+        void drop();
 
         /*
          * Pixel que carga.
@@ -58,27 +53,6 @@ class Ant{
          * Booleano que indica si carga o no un pixel.
          */
         bool free;
-
-        /*
-         * Arreglo de memoria.
-         */
-        int *memory;
-
-        /*
-         * Tamaño actual de la memoria..
-         */
-        int msize;
-
-        /*
-         * Cuenta el número de veces que se ha agragado cada célula.
-        */
-        int *count;
-
-        /*
-         * Cuenta el número de iteraciones.
-         */
-        int nit;
-
 
 };
 #endif

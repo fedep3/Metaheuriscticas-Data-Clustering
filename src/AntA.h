@@ -24,6 +24,8 @@
 using namespace std;
 
 #define PIH 1.570796327
+#define MM 10
+#define MIT 100
 
 class AntA : public Metaheuristic{
     public:
@@ -153,6 +155,15 @@ class AntA : public Metaheuristic{
         void dropAnt(int ra);
 
         /*
+         * Agrega a la memoria la celula dada, si ya existe simplemente 
+         * cuenta que dejo una vez ahi. Cada cierto numero de iteraciones
+         * vacia un elemento de la memoria.
+         *
+         * @param cell Celula donde se solto el pixel.
+         */
+        void addMemory(int cell);
+
+        /*
          * Arreglo con los pixeles libres y en que célula se encuentra.
          */
         int* free;
@@ -173,6 +184,11 @@ class AntA : public Metaheuristic{
         int maxit;
 
         /*
+         * Tamano del arreglo de celulas.
+         */
+        int cellsSize;
+
+        /*
          * Parámetro usado en la función renconstruct.
          */
         float alpha;
@@ -191,6 +207,27 @@ class AntA : public Metaheuristic{
          * Booleano que indica si el parámetro alpha2 fue dado.
          */
         bool ac;
+
+        /*
+         * Arreglo de tamano MM, que se usara como la memoria.
+         */
+        int *memory;
+
+        /*
+         * Es para contar cuantas veces se ha dejado en un casilla de la 
+         * memoria.
+         */
+        int *mcount;
+
+        /*
+         * Tamano de la memoria.
+         */
+        int msize;
+
+        /*
+         * Numero de iteraciones que se ha agregado en la memoria.
+         */
+        int mit;
 
 };
 #endif
