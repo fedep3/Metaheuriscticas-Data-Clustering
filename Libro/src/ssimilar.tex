@@ -159,6 +159,52 @@ donde PC es un partici\'on del conjunto C y $f$ es una funci\'on objetivo que
 cuantifica la calidad del particionamiento en base a la similaridad o disimilaridad
 de los patrones.
 
+\section{K-means}
+
+Es uno de los algoritmos m\'as usados para atacar el problema de clustering.
+Fue dise\~na do para datos num\'ericos en donde cada cluster tiene un centro llamado
+media (mean). Este tiene un n\'umero $K$ de clusters ya establecidos. Funciona
+del siguiente modo: para unos $K$ clusters ya inicializados, va a ir tomando 
+un objeto, luego buscar si su distancia con respecto a la media de otro
+cluster es menor a la del suyo, cambiarlo y recalcular las medias. \'Este
+ciclo va a ir ejecutantodose hasta que cierta condici\'on de parada se cumpla.\cite{GePo2010}
+
+La media, tambi\'en llamada centroide,  de un cluster $C_i$ (con $1 \leq i \leq K$)
+se define del siguiente modo:
+
+\[
+{1 \over |C_{i}|} \sum_{v \in C_{i}} v
+\]
+
+El pseudoc\'odigo es el siguiente:
+
+\begin{lstlisting}[mathescape, language=Pascal]
+  Incialización.
+  Mientras no se cumpla el criterio de parada.
+    Tomar $i$ de un cluster.
+    Buscar un clusjer j tal que d(i,media de j) sea la menor entre todos los clusters.
+    Cambiar $i$ al cluster $j$.
+    Recalcular los centroides.
+\end{lstlisting}
+
+La inicializaci\'on puede ser aleatoria o bien mediante un m\'etodo m\'as
+sofiticado como un algoritmo greedy.
+
+Sus propiedades m\'as importantes son las siguientes:
+
+\begin{itemize}
+
+\item Es bastante eficiente para hacer clustering de grandes conjuntos de datos,
+ya que su complejidad es lineal al n\'umero de datos $O(N)$.
+
+\item Tiende a quedarse en \'optimos locales.
+
+\item S\'olo sirve en datos num\'ericos.
+
+\item Su buen funcionamiento depende de la inicializaci\'on de los clusters.
+
+\end{itemize}
+
 \section{Metaheur\'isticas}
 
 \subsection{Abeja}
@@ -225,7 +271,7 @@ y al contrario con los peores. Fue propuesto por Marco Dorigo en 1992,
 y lo ha expandidos en sus trabajos posteriores.
 \cite{GePo2010} \cite{Le2007}
 
-Su funcionamiento es el siguiente: primero, $m$ hormigas contruyen
+Su funcionamiento como explica \cite{GePo2010} es el siguiente: primero, $m$ hormigas contruyen
 soluciones del problema, sesgada por la informaci\'on de las feromonas y posiblemente
 por las disponible por parte de las heur\'isticas. Una vez que las hormigas hallan completado
 sus soluciones, se pueden mejorar mediante una b\'usqueda local. Finalmente,
@@ -294,8 +340,8 @@ $g(.):S \rightarrow  \Re^+$ es una funci\'on que determina la calidad
 de la soluci\'on.
 \end{itemize}
 
-Actualmente los cient\'ificos est\'an empezando a inspirarse en 
-la manera que las hormigas crean sus cementerios: limpian sus nidos
+Adem\'as en \cite{OuBa2007} exponen que actualmente los cient\'ificos est\'an 
+empezando a inspirarse en la manera que las hormigas crean sus cementerios: limpian sus nidos
 y crean pilas de cad\'averes. 
 Tambi\'en de la organizaci\'on de cr\'ias, donde son agrupadas
 de acuerdo a su tama\~no. El principio recae en la atracci\'on
@@ -348,8 +394,6 @@ es la escala de disimilaridad y es clave en la ejecuci\'on del algoritmo:
 \[
 \alpha = {{1 \over {N(N-1)}} \sum_{i=1}^N \sum_{j=1}^N d(p_i,p_j)}
 \]
-
-\cite{OuBa2007}
 
 El n\'umero de aplicaciones es bastante grande: resolver problemas
 desde data clustering, programaci\'on (scheduling), balanceo
