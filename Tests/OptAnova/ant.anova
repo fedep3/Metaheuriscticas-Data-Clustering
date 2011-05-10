@@ -1,0 +1,6 @@
+([("../mhs", (InputFile "../img/lenamini.png" PNG), Max, 9, (Mn (0.0, 0.0, 0.0)), (Mx (255.0, 255.0, 255.0)) )],
+ [ ("Ant", AntOpt (Iter 3,
+          LG (10, 40, 10),
+          LG (0.0, 400.0, 50.0)))
+ ]
+)

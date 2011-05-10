@@ -1,5 +1,6 @@
 module Pruebas(
     Results(..),
+    Options(..),
     runTestsAnova,
     runTestsFinal,
     runTestsAll
@@ -370,6 +371,21 @@ data AlgOpt = GAOpt (Repetitions,     -- * Repeticiones sin mejora.
                        ListGen Float, -- * Peso cognitivo.
                        ListGen Float, -- * Peso social.
                        ListGen Float) -- * Velocidad máxima.
+            | DEOpt   (Iterations,    -- * Iteraciones del algoritmo.
+                       ListGen Int,   -- * Población.
+                       ListGen Float, -- * W1.
+                       ListGen Float, -- * W2.
+                       ListGen Float) -- * W3.
+            | SDEOpt  (Iterations,    -- * Iteraciones del algoritmo.
+                       ListGen Int,   -- * Población.
+                       ListGen Float, -- * W1.
+                       ListGen Float, -- * W2.
+                       ListGen Float, -- * W3.
+                       ListGen Float, -- * Parámetro de escalado.
+                       ListGen Float) -- * Probabilidad de cruce.
+            | AntOpt (Iterations,     -- * Iteraciones del algoritmo.
+                      ListGen Int,    -- * Población.
+                      ListGen Float)  -- * Alpha.
             | BeeOpt (Repetitions,    -- * Repeticiones sin mejora.
                       ListGen Int,    -- * Población.
                       ListGen Int,    -- * Parches.
@@ -387,10 +403,11 @@ type Options = ([Files], [(String, AlgOpt)])
 -- | Dada una lista de opciones de algoritmos, genera varios algoritmos.
 genPrograms :: Options    -- * Opciones del los algoritmos.
             -> [Program]  -- * Algoritmos.
-genPrograms (f, xs) = progs
+genPrograms (f@(_, InputFile n _, _, _ , _, _), xs) = progs
     where algopt = concatMap aux0 $ DL.foldl' (genAlgorithm) [] xs
           aux0   = (\(s, xs) -> snd $ DL.foldl' (aux1 s) (0, []) xs )
-          aux1   = (\x (i , y) z -> (i + 1, ((x ++ (show i) ++ ".png", z):y)))
+          n'     = filter (\x -> x /= '/' && x /= '.') n
+          aux1   = (\x (i , y) z -> (i + 1, ((x ++ (show i) ++ "-" ++ n' ++ ".png", z):y)))
           progs  = [ (Program p fi (OutputFile fo) ot (K k) mn mx alg) |
                      (p, fi, ot, k, mn, mx) <- f,
                      (fo, alg) <- algopt
@@ -434,6 +451,29 @@ genAlgorithm' (WPSOOpt (r, p, w1, w2, w3, w, c1, c2, vmx)) =
       c2'  <- listGen c2,
       vmx' <- listGen vmx,
       ( ((c1' + c2') * 0.5) - 1.0 < w' ) && ( ((w1' + w2' + w3') - 1.0) < 0.1 )
+    ]
+genAlgorithm' (DEOpt (r, p, w1, w2, w3)) =
+    [ (DE r (I p') (Weight w1' w2' w3')) |
+      p'  <- listGen p,
+      w1'  <- listGen w1,
+      w2'  <- listGen w2,
+      w3'  <- listGen w3,
+      ( ((w1' + w2' + w3') - 1.0) < 0.1 )
+    ]
+genAlgorithm' (SDEOpt (r, p, w1, w2, w3, f, pc)) =
+    [ (SDE r (I p') (Weight w1' w2' w3') (Scale f') (Pc pc')) |
+      p'   <- listGen p,
+      w1'  <- listGen w1,
+      w2'  <- listGen w2,
+      w3'  <- listGen w3,
+      f'   <- listGen f,
+      pc'  <- listGen pc,
+      ( ((w1' + w2' + w3') - 1.0) < 0.1 )
+    ]
+genAlgorithm' (AntOpt (r, p, a)) =
+    [ (Ant r (IAnt p') a') | 
+       p' <- listGen p,
+       a' <- listGen a
     ]
 genAlgorithm' (BeeOpt (r, p, m, e, eb, ob)) =
     [ (Bee r (IBee p' m' e' eb' ob')) |
