@@ -258,6 +258,158 @@ donde $f$ es la funci\'on objetivo a ser maximizada.
 
 \subsection{Gen\'etico}
 
+Imita la evoluci\'on gen\'etica de las especias. Un aspecto importante es que
+explora varias soluciones a la vez, y no se enfoca en s\'olo una. A medida que
+se ejecuta, las soluciones, tambi\'en llamadas individuos o cromosomas, 
+toman parte en un proceso reporoductivo, donde interactuan, mezclan y producen
+hijos que retiene algunas caracter\'isticas de sus padres. \'Este proceso
+que conlleva a la creaci\'on de nuevas soluciones (hijos) esta basada en
+la selecci\'on, cruce y mutaci\'on\cite{DoGeGr2007}.
+
+Los cromosomas se pueden codificarse de bastantes modos, donde el m\'as 
+com\'un es mediante strings de n\'umeros binarios (100101110101).
+
+En el clustering exiten los siguientes, tal como explica \cite{HrCaFr2009}:
+
+\begin{itemize}
+
+\item {\bf Binar\'ia:} Es un string de logitud $N$, donde en cada posici\'on
+corresponde a un objeto en particular. El valor es 1 o 0 dependiendo si 
+el objeto es un centroide o no.
+
+{\em Ejemplo:} si se tienen 8 objetos, 3 clusters y el es cromosoma 00101001, los objetos 3, 5 y 8
+son centroides.
+
+{\bf Entera:}
+
+Es posible las siguientes dos:
+
+\begin{itemize}
+
+\item Por etiqueta: Se tiene un arreglo de tama\~no $N$ donde en cada posici\'on
+se coloca el cluster al cual pertenece el objeto.
+
+{\em Ejemplo:} Si se tiene 2 clusters y 6 objetos, donde el primero, segundo 
+y quinto pertenece al primero cluster y el resto al segundo. Su representaci\'on
+ser\'ia la siguiente: [1 1 2 2 1 2].
+
+El problema de \'esta recae en que se pueden repetir muchas veces una soluci\'on.
+Por ejemplo [2 2 1 1 2 1] es quivalante a la soluci\'on de arriba. De hecho son
+$K!$ maneras.
+
+\item Por centroides: Si se tienen $K$ clusters se usa un arreglo de este tama\~no
+indicando cual es el centroide de cada clusters.
+
+{\em Ejemplo:} [3 4 6] indica que el centroide del cluster 1 es el objeto 3, el del
+2 es el 4 y el del 3 el 6.
+
+\end{itemize}
+
+{\bf Real:} Sirve para representar las coordenadas de los centroides de los clusters.
+Su longitud va a ser $K \times M$.
+
+{\em Ejemplo:} Si se tienen 3 clusters donde sus objetos tienen 2 atributos [2.5 4 1 0.5 5.5 6]
+indica que [2.5 4] es el centroide del primero cluster, [1 0.5] el del segundo y 
+[5.5 6] el del tercero. 
+
+\end{itemize}
+
+El pseudoc\'odigo es de la siguiente manera (hay m\'as interpretaciones posibles):
+
+\begin{lstlisting}[mathescape, language=Pascal]
+  Inicializacion.
+  Mientras no se cumpla el criterio de parada.
+    Si rand(0,1) <= pc
+      Seleccion.
+      Cruce.
+      Si rand(0,1) <= pm
+        Mutacion.
+      Si los hijos tiene mejor funcion objetico que los papas.
+        Colocarlos en la poblacion y eliminar a los padres.
+\end{lstlisting}
+
+Donde pc es la probabilidad de cruce, pm la de mutaci\'on y rand(0,1)
+es una funci\'on que devuelve un n\'umero aleatorio entre 0 y 1. Y el resto
+se define como :
+
+\begin{itemize}
+
+\item {\bf Inicializaci\'on:} Los par\'ametros son fijados y se
+crean los cromosomas de la poblaci\'on.
+
+\item {\bf Selecci\'on:} Consiste en elegir los padres. 
+
+En \cite{GePo2010} comentan sus formas de implementar m\'as comunes:
+
+\begin{itemize}
+
+\item Tomar m\'as cuenta los individuos
+con mejor funci\'on objetvo. Para ello se puede usar el m\'etodo bastante conocido
+llamado roulette-wheel. 
+
+\item Selecci\'on por torneo, en
+donde un conjunto de cromosomas $\tau$ son elegisdos y comparados, los mejores
+son elegidos para ser padres. 
+
+Una de sus ventajas es que s\'olo necesita un orden de preferencia entre pares,
+y puede por lo tanto hacer frente a situaciones en las que no hay ninguna función objetivo formal,
+es decir puede tratar con casos donde la funci\'on objetivo es muy subjetiva.
+
+\end{itemize}
+
+\item {\bf Cruce:}
+
+Consiste en replazar los genes de uno de los padres por los del otro. Se puede hacer
+de la siguiente manera continuando \cite{GePo2010}:
+
+\begin{itemize}
+
+\item {\bf De un punto:} Si se tienen dos padres de longitud $X$, se va a tomar
+un punto entre $[1,X-1]$ y se generan dos hijos de la siguiente manera: el primero,
+de 0 al punto con los genes del primer padre y del punto a $X$, y el segundo es 
+lo contrario.
+
+{\em Ejemplo:} Si se tienen los padres [1 3 2 4 6]  y [5 1 3 6 2] y el punto 
+de crude es el 2, entonces se generan los siguientes hijos:
+
+[1 3 3 6 2] y [5 1 2 4 6]
+
+\item {\bf De dos punto:} Ac\'a se eligen dos puntos distintos que cumplan con la 
+misma condici\'on como en el de un punto. Para explicar es mucho mas sencillo
+mediante un ejemplo:
+
+Si se tienen los padres [1 3 2 4 6]  y [5 1 3 6 2] y los puntos 
+de crude son el 2 y 4, entonces se generan los siguientes hijos:
+
+[1 3 3 6 6] y [5 1 2 6 2]
+
+De esta misma forma se puede extender para m\'as puntos.
+
+\end{itemize}
+
+\item {\bf Mutaci\'on:}
+
+Consiste en modificar uno de los cromosomas bien sea de la poblaci\'on
+o uno de los hijos generados. Un caso bastante com\'un es el de usar una m\'ascara
+cuando los cromosomas son binarios\cite{GePo2010}.
+
+Por su lado \cite{GePo2010} habla que para clustering se pueden usar los siguientes:
+
+\begin{itemize}
+
+\item En el caso que se use la representaci\'on binaria, alternar los bits es un
+buen operador.
+
+\item Cuando la representaci\'on es de enteros de etiquedas, se puede cambiar
+el cluster al cual pertenece uno de los objetos.
+
+\item Remplazar uno de los centroides por uno de los objetos pertenecientes a ese
+cluster.
+
+\end{itemize}
+
+\end{itemize}
+
 \subsection{Hormiga}
 
 Hormiga es una metaheurística usada para resolver problemas combinatorios
