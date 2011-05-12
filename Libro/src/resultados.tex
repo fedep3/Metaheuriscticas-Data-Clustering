@@ -1,9 +1,83 @@
 % Resultados
-\chapter{Resultados} \label{chap:resultados}
+\chapter{Implementaci\'on y Resultados} \label{chap:impresultados}
 
-AQUI VA EL CONTENIDO DE RESULTADOS.
 %Puedes quitar esto(es opcional)
 \vspace{5 mm}
+
+\section{Lenguaje usado}
+
+El proyecto fue hecho usando el lenguaje C++. Se elegi\'o este ya que es sumamente
+eficiente, ya que compila a c\'odigo de m\'aquina y adem\'as permite una buena
+abstraci\'on de los problemas con las clases. Su librer\'ia ya contiene bastantes
+cosas ya hechas, por lo que va a ahorrar tiempo de programaci\'on.
+
+El dise\~no de las clases es el siguiente:
+
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.35]{figures/clases.eps}
+\caption{Dise\~no de clases}
+\label{fig:jclases}
+\end{figure}
+
+Donde Metaheuristics es una clase abstracta, que posee las m\'etodos que seran
+usados por las diversas metaheur\'isticas hijas. En especial tienen dos 
+importantes: initialize y run. El primero se va a encargar de inicializar el algoritmo
+para que luego sea ejecutado. Por ejemplo en el gen\'etico inicializa aleatoriamente
+las soluciones. Y el run es en s\'i el que va a ejecutar el algoritmo haciendo 
+uso de los par\'ametros y variables ya inicilizadas.
+
+Por el otro lado Reader tambi\'en
+es una clase abstracta y es la que se encarga de definir lo m\'etodos que van a 
+tener sus descendientes a la hora de leer un archivo, que se implement\'o para 
+tres tipos: csv, png y tiff.
+
+\section{M'aquina de prueba} \label{sect:testbed}
+
+Todas las pruebas fueron realizadas con el computador cuyas caracter'isticas
+aparecen en el cuadro \ref{tb:testbed}. La herramienta {\tt mhs} fue
+compilada sobre esa m'aquina, exclusivamente con optimizaci'on gcc de nivel 3,
+que es el nivel m\'as alto que posee gcc y aplica todas las mejoras
+que este posee.
+
+\begin{table}[htb]
+\footnotesize
+\begin{center}
+\begin{tabular}{|>{\columncolor{lightgray}}c|c|}
+\hline
+CPU & Intel Core I5 650 \\
+\hline
+RAM & 6 GB \\
+\hline
+Distribuci'on & Ubuntu 11.04 x86\_64 bits \\
+\hline
+Kernel Linux & 2.6.38-8-generic \\
+\hline
+Versi'on gcc & 4.5.2 \\
+\hline
+\end{tabular}
+\caption{Computador usado para las pruebas}
+\label{tb:testbed}
+\end{center}
+\end{table}
+
+\section{M\'etrica usada}
+
+\section{K-means}
+
+\'Este fue implementado tal cual como se explic\'o en \ref{sect:kmeans}. La
+inicializaci\'on es totalmente aleatoria. Y la condici\'on de paradas
+va a ser hasta que no se mejores un n\'umero de veces dado.
+
+\section{Bee}
+
+\section{Gen\'etico}
+
+\section{DE}
+
+\section{PSO}
+
+\section{Hormiga}
 
 Los resultados que se quieren evaluar est'an divididos en tres partes: 
 Primero, es necesario verificar la calidad de estimaci'on del par'ametro
@@ -20,35 +94,6 @@ tiempo necesario para la estimaci'on se presentan en la secci'on
 preciso es la implementaci'on de los m'etodos y cu'anto tiempo en promedio
 necesita la herramienta para estimar el valor del par'ametro de Hurst en una
 ventana. 
-
-\section{M'aquina de prueba} \label{sect:testbed}
-
-Todas las pruebas fueron realizadas con el computador cuyas caracter'isticas
-aparecen en el cuadro \ref{tb:testbed}. La herramienta {\tt d2Hgr} fue
-compilada sobre esa m'aquina, exclusivamente con optimizaci'on gcc de nivel 2,
-que optimiza el binario resultante de la compilaci'on con respecto a bloques
-repetitivos y c'alculos punto flotante.
-
-\begin{table}[htb]
-\footnotesize
-\begin{center}
-\begin{tabular}{|>{\columncolor{lightgray}}c|c|}
-\hline
-CPU & Althon 64 X2 4200+ \\
-\hline
-RAM & 4 GB \\
-\hline
-Distribuci'on & Slackware 13.0 x86\_64 \\
-\hline
-Kernel Linux & 2.6.29.6 \\
-\hline
-Versi'on gcc & 4.3.3 \\
-\hline
-\end{tabular}
-\caption{Computador usado para las pruebas}
-\label{tb:testbed}
-\end{center}
-\end{table}
 
 \section{Validaci'on de los estimados} \label{sect:validacion}
 

@@ -36,21 +36,21 @@ del agua), y un tercero que va a contener a la rana, ya que puede vivir en los d
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.35,type=png,ext=.png,read=.png]{figures/ejemplo1}
+\includegraphics[scale=0.3]{figures/ejemplo1.eps}
 \caption{Clustering usando como criterio la manera que llevan a cabo su descendencia}
 \label{fig:ejemplo1}
 \end{figure}
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.35,type=png,ext=.png,read=.png]{figures/ejemplo2}
+\includegraphics[scale=0.3]{figures/ejemplo2.eps}
 \caption{Clustering usando como criterio la existencia de pulmones}
 \label{fig:ejemplo2}
 \end{figure}
 
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.35,type=png,ext=.png,read=.png]{figures/ejemplo3}
+\includegraphics[scale=0.3]{figures/ejemplo3.eps}
 \caption{Clustering usado como criterio el ambiente donde viven}
 \label{fig:ejemplo3}
 \end{figure}
@@ -98,7 +98,7 @@ que posiblemente humano no logre identificar, lo que es extremadamente
 Brucker en \cite{Br1978} ilustr\'o que el problema es NP-hard cuando el n\'umero 
 de clusters excede 3.
 
-\subsection{Definici\'on} \label{sect:dclustdef}
+\subsection{Definici\'on} \label{sect:dclustdef} \label{sect:dclustd}
 
 Siguiendo con \cite{SwAjAm2009} antes de dar un definici\'on matem\'atica al problema hay que hablar de 
 los siguientes t\'erminos que van a ser usados a trav\'es de la tesis:
@@ -159,7 +159,83 @@ donde PC es un partici\'on del conjunto C y $f$ es una funci\'on objetivo que
 cuantifica la calidad del particionamiento en base a la similaridad o disimilaridad
 de los patrones.
 
-\section{K-means}
+\section{M\'etricas de distancia} \label{sect:mdist}
+
+En  \cite{SwAjAm2009} explican que comunmente hay dos tipos: la que mide la disimilaridad y el caso contrario (la
+similaridad). La primero es mas grande a medida que dos patrones son
+m\'as diferentes. La segunda es justamente el opuesto, es m\'as
+grande a medida que los patrones se parecen m\'as.
+
+Entre las de disimilaridad las m\'as populares donde la distancia euclideana entre
+dos vectores $Z_i$ y $Z_v$ es la siguiente:
+
+\[
+d(Z_u,Z_v) = \sqrt {\sum_{i=1}^M {(Z_{u,i} - Z_{v,i})}^2} = \parallel Z_u - Z_v \parallel
+\]
+
+\'Esta no es mas que un caso especial para ($\alpha = 2$) de la m\'etrica de 
+Minkowski, definida como:
+
+\[
+d^{\alpha}(Z_u,Z_v) = \sum_{i=1}^M {(Z_{u,i} - Z_{v,i})}^{1 \over \alpha} = \parallel Z_u - Z_v \parallel ^ {1 \over \alpha}
+\]
+
+Cuando $\alpha = 1$ se conoce como la distancia Manhattan. Otra bastante com\'un es
+la de la distancia del coseno, que es lo siguiente:
+
+\[
+Z_u . Z_v =  {{\sum_{i=1}^M {Z_{u,i} . Z_{v,i}}}  \over { \parallel Z_u \parallel \parallel Z_v \parallel}}
+\]
+
+\section{Funci\'on objetivo} \label{sect:fobjetivo}
+
+\'Esta se va a encargar de medir la calidad de una soluci\'on por ello
+debe medir dos cosas: cohesi\'on, es decir, los patrones en el mismo clusters
+deben ser similares, y separaci\'on, que significa que los clusters
+deben estar bien separados.
+
+Dos de los m\'as comunes como explica \cite{SwAjAm2009} son:
+
+\begin{itemize}
+
+\item {\bf Davis-Bouldin:}
+
+Esta medida es la la propoci\'on de la suma intra-cluster entre
+la separaci\'on entre los clusters, y use tanto los clusters como sus medias. Se tiene:
+
+\[
+S_{i,r} = {[{ { {1} \over {N_i}} {\sum_{Z \in C_i} { \parallel Z - m_i \parallel }_2^r}} ]^{1 \over r}}
+\]
+
+\[
+d_{ij,t} = \{ \sum_{p=1}^M |m_{i,p} - m_{j,p}|^t \} ^{1 \over t} = \parallel m_i - m_j \parallel_t
+\]
+
+donde $m_i$ es el centroide del cluster $i$, $r$ y $t$ son enteros y pueden ser elegidos
+independientemente, $N_i$ es el numero de objetos en el $i$-\'esimo cluster $C_i$.
+
+\[
+R_{i,rt} = {max_{j \in K, j \neq i} \{ {{S_{i,r} + S_{j,r}} \over {d_{ij,t}}} \}}
+\]
+
+Finalmente:
+
+\[
+DB(K) = {1 \over K} \sum_{i=1}^K R_{i,rt}
+\]
+
+\item {\bf Medida CS:} Es bantante parecido al DB y se calcula de la siguiente manera:
+
+\[
+CS(K) = {{\sum_{i=1}^K [{ 1 \over |C_i|} \sum_{Z_p \in C_i} max_{Z_y \in C_i} \{ d(Z_p,Z_y) \} ]} \over {\sum_{i=1}^K [min_{j \in K, j \neq i} \{ d(m_i, n_j) \}]}}
+\]
+
+\'Esta es mucho mas eficiente atacando clusters con diferentes densidad y/o tama\~nos,
+pero es muy costosa en t\'ermino de carga computacional.
+
+\end{itemize}
+
+\section{K-means} \label{sect:kmeans}
 
 Es uno de los algoritmos m\'as usados para atacar el problema de clustering.
 Fue dise\~na do para datos num\'ericos en donde cada cluster tiene un centro llamado
@@ -205,58 +281,11 @@ ya que su complejidad es lineal al n\'umero de datos $O(N)$.
 
 \end{itemize}
 
-\section{Metaheur\'isticas}
+\section{Metaheur\'isticas} \label{sect:meta}
 
-\subsection{Abeja}
+\subsection{Abeja} \label{sect:metabee}
 
-\subsection{DE}
-
-Es un algoritmo basado en poblaci\'on de
-optimizaci\'on global que hace uso de una representaci\'on de punto flotante
-(codificaci\'on real), bastante parecido al gen\'etico. Se tienen los pasos de cruce 
-y selecci\'on, pero no mutaci\'on.
-El $i$-\'esimo vector individual (cromosoma)
-de la poblaci\'on con tiempo (generaci\'on) $t$ tiene $d$ componentes
-dimensiones:
-
-%Ejemplo de vector.
-%INICIO
-\begin{center}
-$ \overrightarrow{Z_i}(t) = [ Z_{i,1}(t), Z_{i,2}, \cdots, Z_{i,d}(t) ] $
-\end{center}
-%END
-
-Para cada vector individual $\overrightarrow{Z_k}(t)$ que pertenece
-a la poblaci\'on actual, el DE aleatoriamente toma tres individuos
-$\overrightarrow{Z_i}(t)$, $\overrightarrow{Z_j}(t)$ y $\overrightarrow{Z_m}(t)$ de la misma generaci\'on (de modo que sean distintos $k$, 
-$i$, $j$ y $m$). Entonces calcula la diferencia entre $\overrightarrow{Z_i}(t)$ y $\overrightarrow{Z_j}(t)$, lo escala por un escalar $F$
-(usualmente $F \in [0, 1]$) y crea un hijo prueba $\overrightarrow{U_i}(t + 1)$ a\~nadiendo el resultado a $\overrightarrow{Z_m}(t)$. De modo
-que para la $n$-\'esima componente del vector:
-
-\[
-  U_{k,n}(t+1) =
-  \begin{cases}
-    Z_{m,n}(t) + F(Z_{i,n}(t) - Z_{j,n}(t))  & \text{si } rand_n(0,1) < Cr\\
-    Z_{k,n}(t)                               & \text{sino}
-  \end{cases}
-\]
-
-Donde $Cr \in [0, 1]$ es un escalar que es par\'ametro de el algoritmo,
-llamado la \emph{tasa de cruce}. Si el nuevo hijo tiene mejor valor
-con la funci\'on objetivo, entonces reemplaza al padre en la siguiente
-generaci\'on, sino, el padre entonces se queda en la misma:
-\[
-  \overrightarrow{Z_i}(t+1) =
-  \begin{cases}
-    \overrightarrow{U_i}(t+1) & \text{si } f(\overrightarrow{U_i}(t+1)) > f(\overrightarrow{Z_i}(t)) \\
-    \overrightarrow{Z_i}(t)   & \text{si } f(\overrightarrow{U_i}(t+1)) \leq f(\overrightarrow{Z_i}(t))
-  \end{cases}
-\]
-donde $f$ es la funci\'on objetivo a ser maximizada.
-
-\cite{SwAjAm2008}
-
-\subsection{Gen\'etico}
+\subsection{Gen\'etico} \label{sect:metaga}
 
 Imita la evoluci\'on gen\'etica de las especias. Un aspecto importante es que
 explora varias soluciones a la vez, y no se enfoca en s\'olo una. A medida que
@@ -410,7 +439,56 @@ cluster.
 
 \end{itemize}
 
-\subsection{Hormiga}
+\subsection{DE} \label{sect:metade}
+
+Es un algoritmo basado en poblaci\'on de
+optimizaci\'on global que hace uso de una representaci\'on de punto flotante
+(codificaci\'on real), bastante parecido al gen\'etico. Se tienen los pasos de cruce 
+y selecci\'on, pero no mutaci\'on.
+El $i$-\'esimo vector individual (cromosoma)
+de la poblaci\'on con tiempo (generaci\'on) $t$ tiene $d$ componentes
+dimensiones:
+
+%Ejemplo de vector.
+%INICIO
+\begin{center}
+$ \overrightarrow{Z_i}(t) = [ Z_{i,1}(t), Z_{i,2}, \cdots, Z_{i,d}(t) ] $
+\end{center}
+%END
+
+Para cada vector individual $\overrightarrow{Z_k}(t)$ que pertenece
+a la poblaci\'on actual, el DE aleatoriamente toma tres individuos
+$\overrightarrow{Z_i}(t)$, $\overrightarrow{Z_j}(t)$ y $\overrightarrow{Z_m}(t)$ de la misma generaci\'on (de modo que sean distintos $k$, 
+$i$, $j$ y $m$). Entonces calcula la diferencia entre $\overrightarrow{Z_i}(t)$ y $\overrightarrow{Z_j}(t)$, lo escala por un escalar $F$
+(usualmente $F \in [0, 1]$) y crea un hijo prueba $\overrightarrow{U_i}(t + 1)$ a\~nadiendo el resultado a $\overrightarrow{Z_m}(t)$. De modo
+que para la $n$-\'esima componente del vector:
+
+\[
+  U_{k,n}(t+1) =
+  \begin{cases}
+    Z_{m,n}(t) + F(Z_{i,n}(t) - Z_{j,n}(t))  & \text{si } rand_n(0,1) < Cr\\
+    Z_{k,n}(t)                               & \text{sino}
+  \end{cases}
+\]
+
+Donde $Cr \in [0, 1]$ es un escalar que es par\'ametro de el algoritmo,
+llamado la \emph{tasa de cruce}. Si el nuevo hijo tiene mejor valor
+con la funci\'on objetivo, entonces reemplaza al padre en la siguiente
+generaci\'on, sino, el padre entonces se queda en la misma:
+\[
+  \overrightarrow{Z_i}(t+1) =
+  \begin{cases}
+    \overrightarrow{U_i}(t+1) & \text{si } f(\overrightarrow{U_i}(t+1)) > f(\overrightarrow{Z_i}(t)) \\
+    \overrightarrow{Z_i}(t)   & \text{si } f(\overrightarrow{U_i}(t+1)) \leq f(\overrightarrow{Z_i}(t))
+  \end{cases}
+\]
+donde $f$ es la funci\'on objetivo a ser maximizada.
+
+\cite{SwAjAm2008}
+
+\subsection{PSO} \label{sect:metapso}
+
+\subsection{Hormiga} \label{sect:metaant}
 
 Hormiga es una metaheurística usada para resolver problemas combinatorios
 difíciles. \'Esta se inspira en los diversos comportamientos de las hormigas.
@@ -551,6 +629,3 @@ El n\'umero de aplicaciones es bastante grande: resolver problemas
 desde data clustering, programaci\'on (scheduling), balanceo
 de l\'inea de equilibrio, TSP probabil\'istico, secuenciaci\'on de 
 ADN, etc. \cite{GePo2010}
-
-
-\subsection{PSO}
