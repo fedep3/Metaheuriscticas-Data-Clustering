@@ -235,6 +235,47 @@ pero es muy costosa en t\'ermino de carga computacional.
 
 \end{itemize}
 
+Otra es la que explica \cite{OmEnSa2005} es que en el contexto de 
+clustering de datos, una partícula o indivuduo representa
+los $K$ centroides de los clusters. Así que cada partícula $x_i$ es
+construída como $x_i = (m_{i,1}, ..., m_{i,k}, ..., m_{i,K})$ donde
+$m_{i,k}$ se refiere al centroide del $k$-ésimo cluster. La calidad
+de cada uno es medida usando:
+
+\[
+f(x_i,Z_i) = w_1 \overline{d}_{Max}(Z_i,x_i) + w_2 (z_{Max} - d_{Min}(x_i)) + w_3 J_{e,i}
+\]
+
+donde $z_{Max}$ es el máximo valor del conjunto de datos (en el contexto
+de imágenes digitales $z_{Max} = 2^s - 1$ para una imagen de $s$-bits);
+$Z_i$ es la matriz representando la asignación de patrones a los clusters
+de la partícula $i$. Las constantes $w_1$, $w_2$ y $w_3$ son definidas por el usuario
+usadas para determinar la contribución de cada uno de los sub-objetivos.
+También:
+
+\[
+\overline{d}_{Max}(Z_i,x_i) = \max_{1 \leq k \leq K} \left[ \displaystyle\sum_{\forall z_p \in C_{i,k}} d(z_p,m_{i,k})/n_{i,k}\right]
+\]
+
+es la máxima distancia Euclediana promedio de las partículas en sus
+clusters asociados.
+
+\[
+\overline{d}_{Min}(x_i) = \min_{\forall k, l, k \neq l} \left[ d(m_{i,k},m_{i,l})\right]
+\]
+
+es la distancia Euclediana mínima entre un par de clusters.
+
+Y:
+
+\[
+J_e = \cfrac{\displaystyle\sum_{k = 1}^K \left[ \displaystyle\sum_{\forall Z_p \in C_k} d(Z_p, m_k) \right] / n_k}{K}
+\]
+
+es la cuantificación del error, donde $C_k$ es el $k$-ésimo cluster y $n_k$ es el número de pixeles
+en $C_k$.
+
+
 \section{K-means} \label{sect:kmeans}
 
 Es uno de los algoritmos m\'as usados para atacar el problema de clustering.
@@ -444,7 +485,9 @@ cluster.
 Es un algoritmo basado en poblaci\'on de
 optimizaci\'on global que hace uso de una representaci\'on de punto flotante
 (codificaci\'on real), bastante parecido al gen\'etico. Se tienen los pasos de cruce 
-y selecci\'on, pero no mutaci\'on.
+y selecci\'on, pero no mutaci\'on. Su funcionamiento seg\'un \cite{SwAjAm2008}
+es el siguiente:
+
 El $i$-\'esimo vector individual (cromosoma)
 de la poblaci\'on con tiempo (generaci\'on) $t$ tiene $d$ componentes
 dimensiones:
@@ -483,8 +526,6 @@ generaci\'on, sino, el padre entonces se queda en la misma:
   \end{cases}
 \]
 donde $f$ es la funci\'on objetivo a ser maximizada.
-
-\cite{SwAjAm2008}
 
 \subsection{PSO} \label{sect:metapso}
 

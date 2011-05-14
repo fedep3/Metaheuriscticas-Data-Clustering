@@ -4,7 +4,7 @@
 %Puedes quitar esto(es opcional)
 \vspace{5 mm}
 
-\section{Lenguaje usado}
+\section{Lenguaje usado}  \label{sec:lusado}
 
 El proyecto fue hecho usando el lenguaje C++. Se elegi\'o este ya que es sumamente
 eficiente, ya que compila a c\'odigo de m\'aquina y adem\'as permite una buena
@@ -61,23 +61,82 @@ Versi'on gcc & 4.5.2 \\
 \end{center}
 \end{table}
 
-\section{M\'etrica usada}
+\section{M\'etricas usadas}  \label{chap:meusada}
 
-\section{K-means}
+Para medir la distancia entre dos patrones se va a usar la euclidiana que
+ya fue explicada en \ref{sect:mdist}. Se elegi\'o esta debido
+a su f\'acil implementaci\'on, buenos resultado y rapidez.
+
+La funci\'on objetivo principal es la DB, comentada en \ref{sect:fobjetivo}.
+Su baja complejidad algor\'itmitca en comparaci\'on con las dem\'as existentes y
+su eficacia en medir bien las dos cosas que se buscan en los cluster (distancia
+intracluster baja e intercluster alta) fueron los motivos para su elecci\'on. 
+
+El DE y PSO tienen otra funci\'on objetivo. La tercera comentada en \ref{sect:fobjetivo}.
+
+\section{Ajuste de par\'ametros}  \label{chap:ajustep}
+
+Para cada metaheut\'istica hay que ver la influencia que sus par\'ametros 
+poseen, buscar los m\'as adecuados y dar los resultados obtenidos.
+Para ellos los pruebas se har\'an en dos pasos:
+
+\begin{enumerate}
+
+\item Hacer pruebas con todas las metaheur\'isticas variando los par\'ametros 
+en todo su rango.
+
+\item Con estos resultados, hacer un an\'alisis ANOVA para ver la influencia de cada
+uno y de esta forma crear pruebas mucho m\'as espec\'ificas.
+
+\end{enumerate}
+
+\section{K-means}  \label{chap:ikmeans}
 
 \'Este fue implementado tal cual como se explic\'o en \ref{sect:kmeans}. La
 inicializaci\'on es totalmente aleatoria. Y la condici\'on de paradas
 va a ser hasta que no se mejores un n\'umero de veces dado.
 
-\section{Bee}
+\section{Bee}  \label{chap:ibee}
 
-\section{Gen\'etico}
+\section{Gen\'etico}  \label{chap:igenetico}
 
-\section{DE}
+\section{DE}  \label{chap:ide}
 
-\section{PSO}
+Se bas\'o en los trabajos hecho por \cite{SwAjAm2008} y \cite{OmEnSa2005}, especialmente
+de \'este \'ultimo.
 
-\section{Hormiga}
+Se requiere un $K$ de antemano y los individuos van a ser arreglos de $K$ centroides.
+El algoritmo funciona tal cual como se explic\'o en \ref{sect:metade}. Las cosas
+diferentes es primero el cruce, que lo que se hace adicional, es que 
+un punto entre $[1,M|$ haga tenga 100\% de probabilidad de cruce. La condici\'on
+de parada es un n\'umero de iteraciones dado. Con respecto
+a los par\'ametros $F$ y $Cr$, pueden ser establecidos o funcionar como se propone
+en el primer art\'iculo, con ciertas modificaciones:
+
+\begin{itemize}
+
+\item {\bf $F$:} En cada iteraci\'on se calcula un nuevo $F$, con la siguiente expresi\'on:
+$0.5 \times (1 + rand(0,1))$, donde $rand(0,1)$ es un n\'umero aletorio entre $[0,1]$.
+La media de \'este va a ser 0.75. \'Esto permite variaciones estoc\'asticas en el vector diferencia, y
+por lo tando ayuda a mantener dibersa la poblaci\'on a medida que la b\'usqueda progresa.
+
+\item {\bf $Cr$:} Se establece un $Cr_{max}$ y $Cr_{min}$. La idea es que vaya
+decrementando linealmente desde el primero hasta el segundo. El motivo es que al comienzo
+se desea que explore el espacio de b\'usqueda y al final se enfoque y mejores las soluciones
+que ya se llevan. Es f\'acil ver a medida que el $Cr$ disminuye, los hijos heradan m\'as
+del padre. Se tomaron $Cr_{max} = 1.0$ y $Cr_{min} = 0.5$. La variaci\'on esta expresada por:
+
+\[
+(Cr_{max}-Cr_{min}) \times {{maxit - it} \over maxit} + Cr_{min}
+\]
+
+donde $maxit$ es el n\'umero de iteraciones tope dado al algoritmo e $it$ es la iteraci\'on actual.
+
+\end{itemize}
+
+\section{PSO}  \label{chap:ipso}
+
+\section{Hormiga}  \label{chap:ihormiga}
 
 Los resultados que se quieren evaluar est'an divididos en tres partes: 
 Primero, es necesario verificar la calidad de estimaci'on del par'ametro
