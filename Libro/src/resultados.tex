@@ -6,9 +6,9 @@
 
 \section{Lenguaje usado}  \label{sec:lusado}
 
-El proyecto fue hecho usando el lenguaje C++. Se elegi\'o este ya que es sumamente
-eficiente, ya que compila a c\'odigo de m\'aquina y adem\'as permite una buena
-abstraci\'on de los problemas con las clases. Su librer\'ia ya contiene bastantes
+El proyecto fue hecho usando C++. Se elegi\'o \'este debido 
+a su eficiencia, ya que compila a c\'odigo de m\'aquina y permite una buena
+abstraci\'on de los problemas con las clases. Adem\'as, su librer\'ia ya contiene bastantes
 cosas ya hechas, por lo que va a ahorrar tiempo de programaci\'on.
 
 El dise\~no de las clases es el siguiente:
@@ -72,7 +72,7 @@ Su baja complejidad algor\'itmitca en comparaci\'on con las dem\'as existentes y
 su eficacia en medir bien las dos cosas que se buscan en los cluster (distancia
 intracluster baja e intercluster alta) fueron los motivos para su elecci\'on. 
 
-El DE y PSO tienen otra funci\'on objetivo. La tercera comentada en \ref{sect:fobjetivo}.
+El DE y PSO tienen la tercera comentada en \ref{sect:fobjetivo}.
 
 \section{Ajuste de par\'ametros}  \label{chap:ajustep}
 
@@ -86,7 +86,7 @@ Para ellos los pruebas se har\'an en dos pasos:
 en todo su rango.
 
 \item Con estos resultados, hacer un an\'alisis ANOVA para ver la influencia de cada
-uno y de esta forma crear pruebas mucho m\'as espec\'ificas.
+uno y de esta forma crear otras pruebas mucho m\'as espec\'ificas.
 
 \end{enumerate}
 
@@ -106,9 +106,9 @@ Se bas\'o en los trabajos hecho por \cite{SwAjAm2008} y \cite{OmEnSa2005}, espec
 de \'este \'ultimo.
 
 Se requiere un $K$ de antemano y los individuos van a ser arreglos de $K$ centroides.
-El algoritmo funciona tal cual como se explic\'o en \ref{sect:metade}. Las cosas
-diferentes es primero el cruce, que lo que se hace adicional, es que 
-un punto entre $[1,M|$ haga tenga 100\% de probabilidad de cruce. La condici\'on
+El algoritmo funciona tal cual como se explic\'o en \ref{sect:metade}. Una de las diferencias es
+el cruce, donde adicionalemente se tiene
+un punto entre $[1,M|$ donde es 100\% de probabilidad de cruce. La condici\'on
 de parada es un n\'umero de iteraciones dado. Con respecto
 a los par\'ametros $F$ y $Cr$, pueden ser establecidos o funcionar como se propone
 en el primer art\'iculo, con ciertas modificaciones:
@@ -117,12 +117,12 @@ en el primer art\'iculo, con ciertas modificaciones:
 
 \item {\bf $F$:} En cada iteraci\'on se calcula un nuevo $F$, con la siguiente expresi\'on:
 $0.5 \times (1 + rand(0,1))$, donde $rand(0,1)$ es un n\'umero aletorio entre $[0,1]$.
-La media de \'este va a ser 0.75. \'Esto permite variaciones estoc\'asticas en el vector diferencia, y
-por lo tando ayuda a mantener dibersa la poblaci\'on a medida que la b\'usqueda progresa.
+Es claro que la media va a ser 0.75. \'Esto permite variaciones estoc\'asticas en el vector diferencia, y
+por lo tando ayuda a mantener diversa la poblaci\'on a medida que la b\'usqueda progresa.
 
-\item {\bf $Cr$:} Se establece un $Cr_{max}$ y $Cr_{min}$. La idea es que vaya
-decrementando linealmente desde el primero hasta el segundo. El motivo es que al comienzo
-se desea que explore el espacio de b\'usqueda y al final se enfoque y mejores las soluciones
+\item {\bf $Cr$:} Se establece un $Cr_{max}$ y $Cr_{min}$. La idea es que el $Cr$ vaya
+decrementando linealmente desde el primero hasta el segundo. Al comienzo
+se desea que explorar el espacio de b\'usqueda y al final se enfoquarse y mejorar las soluciones
 que ya se llevan. Es f\'acil ver a medida que el $Cr$ disminuye, los hijos heradan m\'as
 del padre. Se tomaron $Cr_{max} = 1.0$ y $Cr_{min} = 0.5$. La variaci\'on esta expresada por:
 
@@ -137,6 +137,93 @@ donde $maxit$ es el n\'umero de iteraciones tope dado al algoritmo e $it$ es la 
 \section{PSO}  \label{chap:ipso}
 
 \section{Hormiga}  \label{chap:ihormiga}
+
+Como se mencion\'o en /ref{sect:metaant} hay varias visiones de esta metaheur\'istica.
+La primera es la que se basa en la b\'usqueda de comida por parte de las hormigas.
+\'Esta es inviable para hacer clustering porque no se puede representar 
+una soluci\'on mediante un grafo. Por ello es usada la otra perspectiva basada en c\'omo
+las hormigas arman sus cementerios u organizan de las c\'rias. 
+
+En \'esta las hormigas se van a mover en un grid de dos dimensiones. Si 
+el tama\~no es muy peque\~no van a hacer muchos movimientos en vista que
+no van a conseguir espacios vacios donde soltar el objeto que cargan. En cambio,
+si es muy grande se haran movimientos innecesarios cuando la hormiga no lleva nada.
+No hay una gu\'ia te\'orica del tama\~no adecuado. Por ello la implemetaci\'on que
+se hizo fue basada de \cite{OuBa2007}, donde se propone usar un arreglo 
+de $N/4$ c\'elulas en el cual las hormigas se pueden mover libremente.
+Una de las ventajas es lo f\'acil de identificar los clusters a diferencia
+de un grid donde no existe un modo establecido para lograrlo.
+
+Al comienzo los $N$ patrones son colocados
+en las c\'elulas de forma aleatoria. Luego se tienen $na$ hormigas que van a tomar
+un pixel de forma aleatoria. Posterior comienza un ciclo donde se selecciona una hormiga
+aleatoriamente. Si la hormiga no carga ning\'un pixel, est\'a busca un pixel
+que no este siendo cargado por otra hormiga y probabilisticamente decide si agarrarlo o dejarlo.
+En el caso contrario, busca una c\'elula donde soltar su pixel e igual que antes
+probabil\'isticamente decide si soltarlo o quedarselo. Las hormigas van a poseer
+una memoria colectiva o global donde van a recordad donde han soltado los p\'ixeles.
+De tal forma primero revisa en estos recuerdo e intenta dejarlo con el que tenga 
+mayor probabilidad de hacerlo, sino simplemente trate en una c\'elula
+aleatoria. Cada 100 iteraciones se va a eliminar de
+el menos usado y de esta forma se va variando la memoria, y se mantienen los que
+esten ayudando m\'as/.
+
+Se tiene
+
+\[
+f(p_i,c_k) = {1 \over n_k} \sum_{p_j \in c_k} {\alpha^2 \over {\alpha^2 + d(p_i,p_j)^2}}
+\]
+
+donde $d_(p_i,p_j)$ es una funci\'on de disimilaridad
+entres dos patrones y $\alpha$ es el promedio de todas
+las diferencias entre los patrones:
+
+\[
+\alpha = {1 \over {N*(N-1)}} \sum_{j=1}^N \sum_{i=j+1}^N {2 \times d(p_i,p_j)}
+\]
+
+La probabilidad de agarrar un pixel es:
+
+\[
+p_{pick}(p_i,c_k) = 
+\begin{cases}
+1 & \text{si } |c_k| = 1 \\
+q & \text{si } |c_k| = 2 \\
+\cos( {\pi \over 2} f(p_i, c_k) )^2  & \text {sino}
+\end{cases}
+\]
+
+Y la de soltarlo es:
+
+\[
+p_{drop}(p_i,c_k) = 1 - \cos( {\pi \over 2} f(p_i, c_k) )^2 
+\]
+
+El $q$ usado es el recomendado (0.7). Un psudoc\'odigo es
+el siguiente:
+
+\begin{lstlisting}[mathescape, language=Pascal]
+  Inicializacion.
+  Hacer maxit veces
+    Se toma una hormiga rn aleatoriamente
+	Si rn tiene un pixel
+	  Si la memoria no esta vacia
+	    Buscar soltarlo en alguno de la memoria
+		Sino lo dejo
+		  Tratar de dejarlo en una celula aleatoria
+	  Sino
+	    Tratar de dejarlo en una celula aleatoria
+	Sino
+	  Tomar un pixel que no cargue ninguna hormiga de forma aleatoria
+	  Tratar de tomarlo
+  Reconstruir solucion
+\end{lstlisting}
+
+El \'unico detalle que falta explicar es la parte de reconstruir la soluci\'on.
+Primero lo que se hace es colocar en una c\'elula los pixeles
+que no han soltado las hormigas. Luego se pasa de las c\'elulas al 
+arreglo de soluci\'on usado por todas las metaheur\'isticas. Finalmente
+se unen los clusters muy parecidos o que s\'olo tengan un elemento.
 
 Los resultados que se quieren evaluar est'an divididos en tres partes: 
 Primero, es necesario verificar la calidad de estimaci'on del par'ametro
