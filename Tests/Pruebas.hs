@@ -218,26 +218,27 @@ instance Show Iterations where
     show (Iter r) = " --reps " ++ (show r) ++ " "
 
 -- | Vector de tamaño máximo.
-data Mx = Mx (Float, Float, Float)
+data Mx = Mx [Float]
     deriving(Read, Eq)
 
 -- | Instancia de Show para Mx.
 instance Show Mx where
-    show (Mx (a, b, c)) = " --mx " ++ (show a) ++
-                          "," ++ (show b) ++
-                          "," ++ (show c) ++
-                          " "
+    show (Mx x) = " --mx " ++ (buildVector x) ++ " "
 
 -- | Vector de tamaño máximo.
-data Mn = Mn (Float, Float, Float)
+data Mn = Mn [Float]
     deriving(Read, Eq)
 
 -- | Instancia de Show para Mx.
 instance Show Mn where
-    show (Mn (a, b, c)) = " --mn " ++ (show a) ++
-                          "," ++ (show b) ++
-                          "," ++ (show c) ++
-                          " "
+    show (Mn x) = " --mn " ++ (buildVector x) ++ " "
+
+-- | Convierte un arreglo de Float a un vector.
+buildVector :: [Float]
+            -> String
+buildVector = DL.foldl' f ""
+    where f = (\a b -> if a == "" then (show b)
+                                  else a ++ "," ++ (show b))
 
 {-
  - Aleatorios. 
@@ -403,7 +404,7 @@ type Options = ([Files], [(String, AlgOpt)])
 -- | Dada una lista de opciones de algoritmos, genera varios algoritmos.
 genPrograms :: Options    -- * Opciones del los algoritmos.
             -> [Program]  -- * Algoritmos.
-genPrograms (f@(_, InputFile n _, _, _ , _, _), xs) = progs
+genPrograms (f@((_, InputFile n _, _, _ , _, _):_), xs) = progs
     where algopt = concatMap aux0 $ DL.foldl' (genAlgorithm) [] xs
           aux0   = (\(s, xs) -> snd $ DL.foldl' (aux1 s) (0, []) xs )
           n'     = filter (\x -> x /= '/' && x /= '.') n
@@ -412,7 +413,6 @@ genPrograms (f@(_, InputFile n _, _, _ , _, _), xs) = progs
                      (p, fi, ot, k, mn, mx) <- f,
                      (fo, alg) <- algopt
                    ]
-          
 
 -- | Operador binario de genAlgorithms.
 genAlgorithm :: [(String, [Algorithm])] -- * Lista de algoritmos.

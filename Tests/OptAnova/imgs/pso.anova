@@ -1,4 +1,4 @@
-([("../mhs", (InputFile "../img/lenamini.png" PNG), Max, 9, (Mn (0.0, 0.0, 0.0)), (Mx (255.0, 255.0, 255.0)) )],
+([("../mhs", (InputFile "../img/lenamini.png" PNG), Max, 9, (Mn [0.0, 0.0, 0.0]), (Mx [255.0, 255.0, 255.0]) )],
  [ ("PSO", PSOOpt (Reps 3,
            LG (10, 40, 10),
            LG (0.6,1.2,0.2),
