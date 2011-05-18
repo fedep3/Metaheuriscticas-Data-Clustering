@@ -347,9 +347,6 @@ En el clustering exiten los siguientes, tal como explica \cite{HrCaFr2009}:
 corresponde a un objeto en particular. El valor es 1 o 0 dependiendo si 
 el objeto es un centroide o no.
 
-{\em Ejemplo:} si se tienen 8 objetos, 3 clusters y el es cromosoma 00101001, los objetos 3, 5 y 8
-son centroides.
-
 {\bf Entera:}
 
 Es posible las siguientes dos:
@@ -359,43 +356,30 @@ Es posible las siguientes dos:
 \item Por etiqueta: Se tiene un arreglo de tama\~no $N$ donde en cada posici\'on
 se coloca el cluster al cual pertenece el objeto.
 
-{\em Ejemplo:} Si se tiene 2 clusters y 6 objetos, donde el primero, segundo 
-y quinto pertenece al primero cluster y el resto al segundo. Su representaci\'on
-ser\'ia la siguiente: [1 1 2 2 1 2].
-
-El problema de \'esta recae en que se pueden repetir muchas veces una soluci\'on.
-Por ejemplo [2 2 1 1 2 1] es quivalante a la soluci\'on de arriba. De hecho son
-$K!$ maneras.
+El problema de \'esta recae en que se pueden repetir muchas veces una soluci\'on ($K!$ maneras cada una).
 
 \item Por centroides: Si se tienen $K$ clusters se usa un arreglo de este tama\~no
 indicando cual es el centroide de cada clusters.
-
-{\em Ejemplo:} [3 4 6] indica que el centroide del cluster 1 es el objeto 3, el del
-2 es el 4 y el del 3 el 6.
 
 \end{itemize}
 
 {\bf Real:} Sirve para representar las coordenadas de los centroides de los clusters.
 Su longitud va a ser $K \times M$.
 
-{\em Ejemplo:} Si se tienen 3 clusters donde sus objetos tienen 2 atributos [2.5 4 1 0.5 5.5 6]
-indica que [2.5 4] es el centroide del primero cluster, [1 0.5] el del segundo y 
-[5.5 6] el del tercero. 
-
 \end{itemize}
 
 El pseudoc\'odigo es de la siguiente manera (hay m\'as interpretaciones posibles):
 
 \begin{lstlisting}[mathescape, language=Pascal]
-  Inicializacion.
+  Inicialización.
   Mientras no se cumpla el criterio de parada.
     Si rand(0,1) <= pc
-      Seleccion.
+      Selección.
       Cruce.
       Si rand(0,1) <= pm
-        Mutacion.
-      Si los hijos tiene mejor funcion objetico que los papas.
-        Colocarlos en la poblacion y eliminar a los padres.
+        Mutación.
+      Si los hijos tiene mejor función objetico que los papas.
+        Colocarlos en la población y eliminar a los padres.
 \end{lstlisting}
 
 Donde pc es la probabilidad de cruce, pm la de mutaci\'on y rand(0,1)
@@ -439,7 +423,7 @@ un punto entre $[1,X-1]$ y se generan dos hijos de la siguiente manera: el prime
 de 0 al punto con los genes del primer padre y del punto a $X$, y el segundo es 
 lo contrario.
 
-{\em Ejemplo:} Si se tienen los padres [1 3 2 4 6]  y [5 1 3 6 2] y el punto 
+Si se tienen los padres [1 3 2 4 6]  y [5 1 3 6 2] y el punto 
 de crude es el 2, entonces se generan los siguientes hijos:
 
 [1 3 3 6 2] y [5 1 2 4 6]
@@ -463,7 +447,7 @@ Consiste en modificar uno de los cromosomas bien sea de la poblaci\'on
 o uno de los hijos generados. Un caso bastante com\'un es el de usar una m\'ascara
 cuando los cromosomas son binarios\cite{GePo2010}.
 
-Por su lado \cite{GePo2010} habla que para clustering se pueden usar los siguientes:
+Por su lado en esa misma referencia se comenta que para clustering se pueden usar los siguientes:
 
 \begin{itemize}
 
