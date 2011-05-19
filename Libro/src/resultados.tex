@@ -74,6 +74,9 @@ intracluster baja e intercluster alta) fueron los motivos para su elecci\'on.
 
 El DE y PSO tienen la tercera comentada en \ref{sect:fobjetivo}.
 
+Para comparar que tan bueno es un algoritmo en comparacaci\'on a los otros, todos son evaluados al final con $1/DB(K)$, que 
+es la forma de maximizaci\'on de la m\'etrica DB, y la del error $J_e$.
+
 \section{Ajuste de par\'ametros}  \label{chap:ajustep}
 
 Para cada metaheut\'istica hay que ver la influencia que sus par\'ametros 
@@ -99,6 +102,32 @@ va a ser hasta que no se mejores un n\'umero de veces dado.
 \section{Bee}  \label{chap:ibee}
 
 \section{Gen\'etico}  \label{chap:igenetico}
+
+Se leyeron todas las posbibles formas propuestas por \cite{HrCaFr2009} y se decidi\'o
+lo siguiente:
+
+\begin{itemize}
+
+\item Los cromosomas van a ser los centroides de los clusters, de un tama\~no de $K$
+dado. Esto permite que las operaciones que se hagan sobre los individuos tengan
+un efecto mas fuerte sobre el cluster y trabajen de manera mas global: sobre cluster y
+no con objetos.
+
+\item La mutaci\'on no es exclusiva de los hijos como se propuso en el marco te\'orico,
+sino que es a cualquier miembro de la poblaci\'on. Son tres posibles: dividir un cluster
+en dos, creando uno nuevo, unir dos cluster, y cambiar un elemento de un cluster a otro.
+De esta forma hay una buena variedad y buenos cambios que pueden lograr obtener buenos
+resultados.
+
+\item La selecci\'on es por torneo, donde al comienzo del algoritmo se especifica 
+el tama\~no de \'esta.
+
+\item La condici\'on de parada es un n\'umero dado de veces que no se mejore lo 
+que se tiene.
+
+\item El resto del algoritmo sigue tal cual como ya se explic\'o.
+
+\end{itemize}
 
 \section{DE}  \label{chap:ide}
 
@@ -138,7 +167,7 @@ donde $maxit$ es el n\'umero de iteraciones tope dado al algoritmo e $it$ es la 
 
 \section{Hormiga}  \label{chap:ihormiga}
 
-Como se mencion\'o en /ref{sect:metaant} hay varias visiones de esta metaheur\'istica.
+Como se mencion\'o en \ref{sect:metaant} hay varias visiones de esta metaheur\'istica.
 La primera es la que se basa en la b\'usqueda de comida por parte de las hormigas.
 \'Esta es inviable para hacer clustering porque no se puede representar 
 una soluci\'on mediante un grafo. Por ello es usada la otra perspectiva basada en c\'omo
@@ -203,20 +232,20 @@ El $q$ usado es el recomendado (0.7). Un psudoc\'odigo es
 el siguiente:
 
 \begin{lstlisting}[mathescape, language=Pascal]
-  Inicializacion.
+  Inicialización.
   Hacer maxit veces
     Se toma una hormiga rn aleatoriamente
 	Si rn tiene un pixel
-	  Si la memoria no esta vacia
+	  Si la memoria no esta vacía
 	    Buscar soltarlo en alguno de la memoria
 		Sino lo dejo
-		  Tratar de dejarlo en una celula aleatoria
+		  Tratar de dejarlo en una célula aleatoria
 	  Sino
-	    Tratar de dejarlo en una celula aleatoria
+	    Tratar de dejarlo en una célula aleatoria
 	Sino
 	  Tomar un pixel que no cargue ninguna hormiga de forma aleatoria
 	  Tratar de tomarlo
-  Reconstruir solucion
+  Reconstruir solución
 \end{lstlisting}
 
 El \'unico detalle que falta explicar es la parte de reconstruir la soluci\'on.
