@@ -61,8 +61,9 @@ PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
         Vmax[i] = _zmx[i] * _vmx;
     }
     Zmax = sqrtf(Zmax);
+    zmx = _zmx;
+    zmn = _zmn;
 
-    
     //Vmax = _vmx;
     metric = F_WEIGHTED;
 
@@ -153,6 +154,8 @@ PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
         Vmax[i] = _zmx[i] * _vmx;
     }
     Zmax = sqrtf(Zmax);
+    zmx = _zmx;
+    zmn = _zmn;
 
     //Vmax = _vmx;
     metric = F_NON_WEIGHTED;
@@ -343,10 +346,14 @@ void PSO::updateVelocity(int p){
  */
 void PSO::updateParticle(int p){
     int i, j;
+    float t;
 
     for(i = 0; i < Kmax; ++i)
-        for(j = 0; j < M; ++j)
-            centroid[p][i][j] += velocity[p][i][j];
+        for(j = 0; j < M; ++j){
+            t = centroid[p][i][j] + velocity[p][i][j];
+            if(zmn[j] <= t && t <= zmx[j])
+                centroid[p][i][j] = t;
+        }
 
     return;
 }

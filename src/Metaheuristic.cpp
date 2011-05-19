@@ -196,7 +196,7 @@ int Metaheuristic::bestCluster(float **centroid, int e){
     float mn = numeric_limits<float>::infinity();
     float t;
     int c = -1;
-    for(j = 0; j < K; ++j){
+    for(j = 0; j < Kmax; ++j){
         t = d(centroid[j], data[e]);
         if(mn > t){
             mn = t;
