@@ -301,6 +301,7 @@ void PSO::run(int type){
 
             //Actualiza posición de la partícula.
             updateParticle(p);
+
         }
 
         if(improved){
@@ -308,6 +309,7 @@ void PSO::run(int type){
             improved = false;
         }else
             ++count;
+
     }
 
     renamer(bestSolution, &K);
