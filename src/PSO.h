@@ -245,5 +245,15 @@ class PSO : public Metaheuristic{
          * Cantidad de repeticiones sin mejora.
          */
         int REPS;
+
+        /**
+         * Máximo vector de la población.
+         */
+        float* zmx;
+
+        /**
+         * Mínimo vector de la población.
+         */
+        float* zmn;
 };
 #endif
