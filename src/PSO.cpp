@@ -285,19 +285,29 @@ void PSO::run(int type){
             assign(p);
             fo = foMin(p, Kmax, 0);
 
+            printf("PASO 1\n");
+
             //Actualiza los mejores.
             updateBestParticle(p, fo);
+
+            printf("PASO 2\n");
 
             if(!improved)
                 improved = updateBest(p, fo);
             else
                 updateBest(p, fo);
 
+            printf("PASO 3\n");
+
             //Actualiza la velocidad de la partícula.
             updateVelocity(p);
 
+            printf("PASO 4\n");
+
             //Actualiza posición de la partícula.
             updateParticle(p);
+
+            printf("PASO 5\n");
         }
 
         if(improved){
@@ -305,7 +315,11 @@ void PSO::run(int type){
             improved = false;
         }else
             ++count;
+
+        printf("PASO 6\n");
     }
+
+    printf("PASO 7\n");
 
     renamer(bestSolution, &K);
 }
@@ -336,7 +350,7 @@ void PSO::updateVelocity(int p){
     return;
 }
 
-/**
+/*
  * Actualiza una partícula de acuerdo a su velocidad.
  *
  * @param p Partícula.
@@ -346,7 +360,8 @@ void PSO::updateParticle(int p){
 
     for(i = 0; i < Kmax; ++i)
         for(j = 0; j < M; ++j)
-            centroid[p][i][j] += velocity[p][i][j];
+            if(centroid[p][i][j] + velocity[p][i][j] <= Vmax[j])
+                centroid[p][i][j] += velocity[p][i][j];
 
     return;
 }
@@ -413,19 +428,31 @@ void PSO::assign(int p){
     for(i = 0; i < Kmax; ++i)
         size[i] = 0;
 
+    printf("PASO 1.1\n");
+
     //Reasignar elementos a clusters.
     for(i = 0; i < N; ++i){
+
+        if(solution[p][i] >= K || solution[p][i] < 0) printf("ANTES MIERRRRRRRRRDA %d\n",solution[p][i] );
+
+        if(p >= P || p < 0) printf("ANTES LA MIERDA MAS GRANDE %d\n", p);
+
         solution[p][i] = bestCluster(p, i);
 
         size[ solution[p][i] ] += 1;
+
+        if(solution[p][i] >= K || solution[p][i] < 0) printf("MIERRRRRRRRRDA %d con i %d\n", solution[p][i], i);
+
+        if(p >= P || p < 0) printf("LA MIERDA MAS GRANDE %d\n", p);
 
         t1 = d(data[i], centroid[p][solution[p][i]]);
         if(t1 > ma){
             ma  = t1;
             mai = i;
-        } 
+        }
     }
 
+    printf("PASO 1.2\n");
     //Reinicializaciones
     largest = mai;
     ma = 0.0;
@@ -472,6 +499,8 @@ void PSO::assign(int p){
                 break;
         }
     }
+
+    printf("PASO 1.3\n");
 
     return;
 }
