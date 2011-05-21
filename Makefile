@@ -1,5 +1,4 @@
 CC       := gcc
-CFLAGS   := -c -g
 CFLAGS   := -c -Wall -O3
 LDFLAGS  := -lstdc++ -ltiff -lm
 OBJFILES := $(patsubst src/%.cpp,obj/%.o,$(wildcard src/*.cpp))
