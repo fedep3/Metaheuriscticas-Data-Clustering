@@ -334,9 +334,8 @@ void PSO::updateVelocity(int p){
                 c1 * r1 * (bestParticle[p][i][j] - centroid[p][i][j]) +
                 c2 * r2 * (bestCentroids[i][j]   - centroid[p][i][j]);
 
-            if(ABS(v) <= ABS(Vmax[j])){
+            if((-Vmax[j]) <= v && v <= Vmax[j])
                 velocity[p][i][j] = v;
-            }
             else
                 velocity[p][i][j] = Vmax[j];
         }

@@ -19,7 +19,6 @@
 
 #define F_NON_WEIGHTED 0
 #define F_WEIGHTED     1
-#define ABS(X) (((X) < 0) ? -(X) : (X))
 
 using namespace std;
 
