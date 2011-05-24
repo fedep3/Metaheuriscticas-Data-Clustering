@@ -204,14 +204,6 @@ int Metaheuristic::bestCluster(float **centroid, int e){
         }
     }
 
-    if(c == -1){
-        for(j = 0; j < K; ++j)
-            printf("centroid[j]: %4f,%4f,%4f, d(centroid[j], data[e]) %4f ||", centroid[j][0], centroid[j][1], centroid[j][2], d(centroid[j], data[e]));
-
-        printf("\n");
-    }
-        
-
     return c;
 }
 

@@ -262,6 +262,8 @@ void PSO::initialize(){
         }
 
         assign(i);
+
+        of[i] = numeric_limits<float>::infinity();
     }
 
     bestFO = numeric_limits<float>::infinity();
@@ -332,9 +334,10 @@ void PSO::updateVelocity(int p){
                 c1 * r1 * (bestParticle[p][i][j] - centroid[p][i][j]) +
                 c2 * r2 * (bestCentroids[i][j]   - centroid[p][i][j]);
 
-            if(v < Vmax[j]){
+            if((-Vmax[j]) <= v && v <= Vmax[j])
                 velocity[p][i][j] = v;
-            }
+            else
+                velocity[p][i][j] = Vmax[j];
         }
     }
 
@@ -355,6 +358,7 @@ void PSO::updateParticle(int p){
             t = centroid[p][i][j] + velocity[p][i][j];
             if(zmn[j] <= t && t <= zmx[j])
                 centroid[p][i][j] = t;
+
         }
 
     return;
