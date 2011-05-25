@@ -408,7 +408,7 @@ genPrograms (f@((_, InputFile n _, _, _ , _, _):_), xs) = progs
     where algopt = concatMap aux0 $ DL.foldl' (genAlgorithm) [] xs
           aux0   = (\(s, xs) -> snd $ DL.foldl' (aux1 s) (0, []) xs )
           n'     = filter (\x -> x /= '/' && x /= '.') n
-          aux1   = (\x (i , y) z -> (i + 1, ((x ++ (show i) ++ "-" ++ n' ++ ".result", z):y)))
+          aux1   = (\x (i , y) z -> (i + 1, ((x ++ (show i) ++ "-" ++ n' ++ ".png", z):y)))
           progs  = [ (Program p fi (OutputFile fo) ot (K k) mn mx alg) |
                      (p, fi, ot, k, mn, mx) <- f,
                      (fo, alg) <- algopt
