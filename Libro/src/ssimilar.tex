@@ -7,37 +7,37 @@
 
 \subsection{Introducci\'on} \label{sect:dclusti}
 
-Data clustering (o s\'olo clustering), tambien llamado an\'alisis de clusters, an\'alisis de segmentaci\'on,
-an\'alisis de taxionom\'ia, o clasificaci\'on no supervisada, es un m\'etodo de crear grupos de objetos,
-o clusters, de tal manera que cada los objetos dentro de un cluster sean similares y los objetos 
-en clusters distintos sean diferents. \cite{GaChJi2007}
+Data clustering (o s\'olo clustering), tambien llamado an\'alisis de clusters o 
+clasificaci\'on no supervisada, es un m\'etodo de crear grupos de objetos,
+de tal manera que los objetos dentro de un cluster sean similares y 
+en clusters distintos sean diferentes. \cite{GaChJi2007}
 
-En \cite{SwAjAm2009} hablan de ciertos puntos importantes:
+Este problema tiene las siguiente caracte\'isticas a considerar: \cite{SwAjAm2009}
 
 \begin{itemize}
 
 \item Hay muchas definciones porpuestas por una diversa cantidad de personas,
  lo que demuestra la dificultad de proveer una \'unica definici\'on formal. Ésto radica en que
-es bastante complejo capturar por los medios de cualquier criterio individual que se 
-use la noci\'on que tiene un humano. El siguiente ejemplo va a poner en claro.
+no existe un criterio individual que se acerque a la noci\'on que tiene un humano. 
+El siguiente ejemplo va a poner en claro.
 
 Considere los siguientes animales: oveja, perro, gato (mam\'iferos), gorri\'on, gaviota (aves),
 v\'ivora, lagarto (rept\'iles), pez de colores, salmonete, tibur\'on azul (peces), y rana (anf\'ibio).
 Para organizar estos animales en clusters, se tiene que definir un criterio. Por ello, si 
-empleamos la manera en que estos animales llevan a cabo su descendencia, la oveja, perro, gato
-y tibur\'on azul van a ser asignados al mismo cluster, mientras que el resto van a dormar un segundo
+elejimos la manera como se reproducen, la oveja, perro, gato
+y tibur\'on azul van a ser asignados al mismo cluster, mientras que el resto van a formar un segundo
 (Figura \ref{fig:ejemplo1}).  En cambio, si el criterio es la existencia de pulmones, 
 el pez de colores, el salmonete y el tibur\'on son
 asignados al mismo cluster, mientras que el resto a otro (Figura \ref{fig:ejemplo2}).
- Por otro lado, si el criterio es el ambiente
-donde viven los anoamles, la oveja, perro, gato, gorri\'on, gaviota, v\'ivora y el lagarto van a formar un cluster
+Por otro lado, si el criterio es el ambiente
+donde viven los animales, la oveja, perro, gato, gorri\'on, gaviota, v\'ivora y el lagarto van a formar un cluster
 (viven fuera del agua), el pez de colores, salmonete y el tibur\'on azul van a formar un otro (viven afuera
 del agua), y un tercero que va a contener a la rana, ya que puede vivir en los dos (Figura \ref{fig:ejemplo3}). 
 
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.3]{figures/ejemplo1.eps}
-\caption{Clustering usando como criterio la manera que llevan a cabo su descendencia}
+\caption{Clustering usando como criterio la forma como se reproducen}
 \label{fig:ejemplo1}
 \end{figure}
 
@@ -60,42 +60,41 @@ Se puede ver que gracias a la falta de un criterio universal para el clustering,
 
 \item Se puede ver desde el punto de vista de aprendizaje autom\'atico, donde los clusters
 correponden a patrones escondidos en los datos, la b\'usqueda de clusters 
-es una especie de aprendizaje no supervisado, y el sistema resultante representa
-un concepto de datos. Es importante entender la diferencia
-entre clustering (aprendizaje no supervisado) y clasificaci\'on supervisada 
-(an\'alisis discriminante). En esta \'ultima, se provee una colecci\'on patrones etiquetados
-(preclasificados); el problema es etiquetar a un patr\'on recien encontrado, a\'un no etiquetado. 
-Tipicamente, los patrones etiquetados (entrenamiento) ya dados son usados para obtener
-la descripciones de las clases, que a su vez se utilizan para etiquetar un nuevo patr\'on.
-En este caso de clustering, el problema consiste en agrupar una colecci\'on de patrones no etiquetados
-en clusters significativos. En este sentidos, las etiquetas se asocian con los clusters tambi\'en,
-pero esta categor\'ia de etiquetas son basados en datos, es decir, que se obtienen unicamente
+es una especie de aprendizaje no supervisado. Es importante entender la diferencia
+entre clustering (aprendizaje no supervisado) y clasificaci\'on supervisada. 
+En esta \'ultima, se provee una colecci\'on patrones etiquetados
+(preclasificados); el problema es etiquetar un patr\'on recien encontrado. 
+Tipicamente, los patrones etiquetados (entrenamiento) ya son usados para obtener
+las descripciones de las clases, que a su vez se utilizan para etiquetar un nuevo patr\'on.
+
+En el caso de clustering, el problema consiste en agrupar una colecci\'on de patrones no etiquetados
+en grupos significativos. En este sentidos, las etiquetas se asocian con los clusters tambi\'en,
+pero esta categor\'ia de etiquetas est\'an basadas en datos, es decir, que se obtienen unicamente
 de \'estos.
 
 \item Un algoritmos de clustering se espera que descubra el agrupamiento natural
-(pertinente a la noci\'on de los humanos clustering) que existe en una conjunto 
-de patrones o puntos de datos. Cada patr\'on puede ser identificado como un punto en un hiperespacio,
-llamado espacio de caracter\'isticas, abarcado por las caracter\'isticas asociadas a \'el. La entrada
+ que existe en una conjunto de patrones o puntos de datos. 
+Cada patr\'on puede ser identificado como un punto en un hiperespacio,
+llamado espacio de caracter\'isticas. La entrada
 es un conjunto esos puntos en el espacio carater\'istico multidimensional. Un algoritmo ideal de 
-clustering preciso debe presentar como su salida, la etiqueda para cada patr\'on, es decir,
-el cluster a cual pertenece cada punto.
+clustering debe devolver como salida, la etiqueda para cada patr\'on, es decir,
+el grupo al cual pertenece cada punto.
 
 \end{itemize}
 
 \'Este problema a sido abordado por diversos campos del conocimiento como la estad\'istica
 (an\'aslisis multivariado), teor\'ia de grafos, computaci\'on evolutiva, redes neurales y
-as\'i sucesivamente\cite{SwAjAm2009}. Entre sus aplicaciones se encuentra la miner\'ia de datos, expresi\'on de los genes, 
-segmentaciones de clientes y procesamiento de im\'agenes, muchas otras. \cite{GaChJi2007}
+as\'i sucesivamente\cite{SwAjAm2009}. Entre sus aplicaciones se encuentra la miner\'ia de datos, 
+segmentaciones de clientes y procesamiento de im\'agenes, entre otras. \cite{GaChJi2007}
 
-En especial llama la atenci\'on el \'ultimo mencionado. El procesamiento de im\'agenes es fundamental para los
-humanos. Su importancia radica en que la salida puede ser usada como la entrada para 
+En especial llama la atenci\'on el \'ultimo mencionado. El procesamiento de im\'agenes es muy \'util para los
+humanos. Su importancia radica en que la salida de hacerle clustering a una imagen, puede ser usada como la entrada para 
 un modelo basado en sistemas de reconocimiento de objetos.
 \'Esto le da una gama de aplicaciones gigantescas: cualquier tipo de reconicimiento de im\'agenes.
-Tambi\'en en el \'area m\'edica puede ayudar a encontrar regiones en las im\'agenes que sean tumores,
-que posiblemente humano no logre identificar, lo que es extremadamente
-\'util.
+Tambi\'en en el \'area m\'edica puede ayudar a encontrar regiones en las im\'agenes que sean de inter\'es,
+que posiblemente humano no logre identificar.
 
-Brucker en \cite{Br1978} ilustr\'o que el problema es NP-hard cuando el n\'umero 
+Brucker en \cite{Br1978} demotr\'o que el problema es NP-hard cuando el n\'umero 
 de clusters excede 3.
 
 \subsection{Definici\'on} \label{sect:dclustdef} \label{sect:dclustd}
@@ -105,18 +104,17 @@ los siguientes t\'erminos que van a ser usados a trav\'es de la tesis:
 
 \begin{itemize}
 
-\item {\bf Patr\'on o vector caracter\'istico:} Se va a encargar de abstraer matem\'aticamente las
+\item {\bf Patr\'on o vector caracter\'istico:} Representa las
 caracter\'isticas que poseen los objetos a los cuales se les har\'a el clustering.
 
-\item {\bf Caracter\'istica:} Es una componente de un patr\'on. \'Esta representa
-la base usada para clasificaci\'on de los patrones.
+\item {\bf Caracter\'istica:} Es una componente de un patr\'on. \'Estas son
+la base para la clasificaci\'on de los patrones.
 
-\item {\bf Cluster:} Es un grupo de patrones similares, y los patrones de dos clusters 
-distintos no deben ser similares.
+\item {\bf Cluster:} Es un grupo de patrones similares.
 
-\item {\bf Hard clustering:} Cada patr\'on se asigna solamente a un cluster.
+\item {\bf Hard clustering:} Cada patr\'on pertenece a un \'unico un cluster.
 
-\item {\bf Medici\'on de distancia:} Es la m\'etrica con la cual se va a evaluar
+\item {\bf Medici\'on de Distancia:} Es la m\'etrica con la cual se va a evaluar
 la disimilaridad entre los patrones. M\'as adelante se habl\'a en m\'as detalle.
 
 \end{itemize}
@@ -129,16 +127,16 @@ ser reprentados por una matriz $Z_{NxM}$. El vector de la fila $i$ caracteriza a
 patr\'on $i$ del conjunto $P$ y cada elemento $Z_{i,j}$ en $Z_i$ su caracter\'istica $j$.
 Dada tal matriz Z$_{NxM}$ la idea es que un algoritmo de clustering intente hallar
 el particionamiento $C = \{ C_1, C_2, \dots , C_K \}$ tal que los patrones
-en el mismo cluster $C_i$ su similaridad sea la mayor y entre clusteres diferentes
-sean lo más disimilar:
+de un mismo cluster $C_i$ sean similares y entre clusteres diferentes
+sean disimilares:
 
-\begin{enumerate}
+\begin{enumerate} \label{en:properties}
 
 \item Cada cluster debe tener por lo menos un patr\'on asignado:
 
 $\forall i | i \in \{1, 2, \dots, K\} : C_i \neq \emptyset$
 
-\item Dos patrones distintos no tienen ning\'un patr\'on en com\'un:
+\item Dos clusters distintos no tienen ning\'un patr\'on en com\'un:
 
 $\forall i,j | i,j\in \{1, 2, \dots, K\} \land i \neq j:  C_i \cap C_j \neq \emptyset$
 
@@ -148,32 +146,42 @@ $\bigcup_{i=1}^{K} C_i = P$
 
 \end{enumerate}
 
-Dado que el conjunto de datos dados puede ser partidionado de varias maneras
-manteniendo las propiedades de arriba, es necesaria una función objetico o en otras palabras
+Dado que el conjunto de datos puede ser particionado de varias maneras
+consevando las propiedades de arriba, es necesaria una función objetico o en otras palabras
 una medida de que tan buena es la partici\'on. El problema se comvierte en hallar
 una partici\'on $C^*$  \'optima o lo m\'as cercano a ella en comparaci\'on a 
 las otras soluciones posible $C = \{ C^1, C^2, \dots, C^{T(N,K)} \}$ donde 
 $T(N,K) = { {1 \over K!} \times {\sum_{i=1}^{K} (-1)^i  \binom{K}{i} (K-i)^i} }$
 es el n\'umero de particiones posibles. \'Esto es lo mismo que optimizar $f(Z_{NxM}, PC)$,
-donde PC es un partici\'on del conjunto C y $f$ es una funci\'on objetivo que
+donde PC es un partici\'on del conjunto C y $f$ es una funci\'on que
 cuantifica la calidad del particionamiento en base a la similaridad o disimilaridad
 de los patrones.
 
-\section{M\'etricas de distancia} \label{sect:mdist}
+\section{M\'etricas de semejanza entre patrones} \label{sect:mdist}
 
-En  \cite{SwAjAm2009} explican que comunmente hay dos tipos: la que mide la disimilaridad y el caso contrario (la
-similaridad). La primero es mas grande a medida que dos patrones son
-m\'as diferentes. La segunda es justamente el opuesto, es m\'as
+En  \cite{SwAjAm2009} se presentan dos formas de evaluar la semenjanza de dos patrones: la que mide la distancia y el caso contrario (la
+proximidad). La primera es mas grande a medida que dos patrones no tienen caracter\'isticas en co\'un.
+La segunda es justamente la opuesta, es m\'as
 grande a medida que los patrones se parecen m\'as.
 
-Entre las de disimilaridad las m\'as populares donde la distancia euclideana entre
-dos vectores $Z_i$ y $Z_v$ es la siguiente:
+Entre las de distancia ls m\'as popular es la distancia euclidea entre
+dos patrones $Z_i$ y $Z_v$ es la siguiente:
 
 \[
 d(Z_u,Z_v) = \sqrt {\sum_{i=1}^M {(Z_{u,i} - Z_{v,i})}^2} = \parallel Z_u - Z_v \parallel
 \]
 
-\'Esta no es mas que un caso especial para ($\alpha = 2$) de la m\'etrica de 
+donde
+
+\[
+  \begin{cases}
+    d(Z_u,Z_u) = 0\\
+    d(Z_u,Z_v) = d(Z_v,Z_u)\\
+    d(Z_u,Z_v) \leq d(Z_u,Z_k) + d(Z_k,Z_v)
+  \end{cases}
+\]
+
+\'Esta no es mas que un caso particular ($\alpha = 2$) de la m\'etrica de 
 Minkowski, definida como:
 
 \[
@@ -189,19 +197,22 @@ Z_u . Z_v =  {{\sum_{i=1}^M {Z_{u,i} . Z_{v,i}}}  \over { \parallel Z_u \paralle
 
 \section{Funci\'on objetivo} \label{sect:fobjetivo}
 
-\'Esta se va a encargar de medir la calidad de una soluci\'on por ello
-debe medir dos cosas: cohesi\'on, es decir, los patrones en el mismo clusters
-deben ser similares, y separaci\'on, que significa que los clusters
-deben estar bien separados.
+\'Esta se va a encargar de medir la calidad de la partici\'on en 
+funci\'on de la bondad de los clusters. Por ello se requiere de una funci\'on $f$ que cumpla
+con las tres condiciones en \ref{en:properties}, y que adem\'as la soluci\'on
+\'optima sea c\'onsona con el criterio de lo que significa agrupar. Para ellos,
+asociado a una soluci\'on se utiliza una clase de funci\'on matem\'atica/estad\'istica,
+basadas en la noci\'on de proximidad entre patrones, que permita medir la validez
+de la soluci\'on del algoritmo de Clustering(agrupamiento).
 
-Dos de los m\'as comunes como explica \cite{SwAjAm2009} son:
+Dos de los m\'as comunes son:
 
 \begin{itemize}
 
 \item {\bf Davis-Bouldin:}
-
-Esta medida es la la propoci\'on de la suma intra-cluster entre
-la separaci\'on entre los clusters, y use tanto los clusters como sus medias. Se tiene:
+Es la funci\'on que relacion la separaci'on intra-cluster y la separaci\'on 
+inter-cluster. Utiliza toda la informaci\'on disponible y los candidatos a representantes
+del cluster. Se tiene:
 
 \[
 S_{i,r} = {[{ { {1} \over {N_i}} {\sum_{Z \in C_i} { \parallel Z - m_i \parallel }_2^r}} ]^{1 \over r}}
@@ -212,7 +223,7 @@ d_{ij,t} = \{ \sum_{p=1}^M |m_{i,p} - m_{j,p}|^t \} ^{1 \over t} = \parallel m_i
 \]
 
 donde $m_i$ es el centroide del cluster $i$, $r$ y $t$ son enteros y pueden ser elegidos
-independientemente, $N_i$ es el numero de objetos en el $i$-\'esimo cluster $C_i$.
+independientemente, $N_i$ es el numero de patrones en el $i$-\'esimo cluster $C_i$.
 
 \[
 R_{i,rt} = {max_{j \in K, j \neq i} \{ {{S_{i,r} + S_{j,r}} \over {d_{ij,t}}} \}}
@@ -224,7 +235,9 @@ Finalmente:
 DB(K) = {1 \over K} \sum_{i=1}^K R_{i,rt}
 \]
 
-\item {\bf Medida CS:} Es bantante parecido al DB y se calcula de la siguiente manera:
+\item {\bf Medida CS:} Chou et al \cite{SwAjAm2009} propone esta m\'etrica como forma
+de determinar la bondad de una partici\'on. Para su c\'alculo hace falta calcular los centroides
+de cada grupo y alguna medida de distancia entres vectores $Z_p$ y $Z_y$
 
 \[
 CS(K) = {{\sum_{i=1}^K [{ 1 \over |C_i|} \sum_{Z_p \in C_i} max_{Z_y \in C_i} \{ d(Z_p,Z_y) \} ]} \over {\sum_{i=1}^K [min_{j \in K, j \neq i} \{ d(m_i, n_j) \}]}}
@@ -233,13 +246,9 @@ CS(K) = {{\sum_{i=1}^K [{ 1 \over |C_i|} \sum_{Z_p \in C_i} max_{Z_y \in C_i} \{
 \'Esta es mucho mas eficiente atacando clusters con diferentes densidad y/o tama\~nos,
 pero es muy costosa en t\'ermino de carga computacional.
 
-\end{itemize}
-
-Otra es la que explica \cite{OmEnSa2005} es que en el contexto de 
+\item Otra es la que explica \cite{OmEnSa2005}. En el contexto de 
 clustering de datos, una partícula o indivuduo representa
-los $K$ centroides de los clusters. Así que cada partícula $x_i$ es
-construída como $x_i = (m_{i,1}, ..., m_{i,k}, ..., m_{i,K})$ donde
-$m_{i,k}$ se refiere al centroide del $k$-ésimo cluster. La calidad
+al centroide de un cluster. La calidad
 de cada uno es medida usando:
 
 \[
@@ -251,22 +260,22 @@ de imágenes digitales $z_{Max} = 2^s - 1$ para una imagen de $s$-bits);
 $Z_i$ es la matriz representando la asignación de patrones a los clusters
 de la partícula $i$. Las constantes $w_1$, $w_2$ y $w_3$ son definidas por el usuario
 usadas para determinar la contribución de cada uno de los sub-objetivos.
-También:
+También
 
 \[
 \overline{d}_{Max}(Z_i,x_i) = \max_{1 \leq k \leq K} \left[ \displaystyle\sum_{\forall z_p \in C_{i,k}} d(z_p,m_{i,k})/n_{i,k}\right]
 \]
 
-es la máxima distancia Euclediana promedio de las partículas en sus
-clusters asociados.
+es la máxima distancia eucl\'idea promedio de las partículas en sus
+clusters asociados. Y
 
 \[
 \overline{d}_{Min}(x_i) = \min_{\forall k, l, k \neq l} \left[ d(m_{i,k},m_{i,l})\right]
 \]
 
-es la distancia Euclediana mínima entre un par de clusters.
+es la distancia eucl\'idea mínima entre un par de clusters.
 
-Y:
+Por \'ultimo
 
 \[
 J_e = \cfrac{\displaystyle\sum_{k = 1}^K \left[ \displaystyle\sum_{\forall Z_p \in C_k} d(Z_p, m_k) \right] / n_k}{K}
@@ -275,36 +284,35 @@ J_e = \cfrac{\displaystyle\sum_{k = 1}^K \left[ \displaystyle\sum_{\forall Z_p \
 es la cuantificación del error, donde $C_k$ es el $k$-ésimo cluster y $n_k$ es el número de pixeles
 en $C_k$.
 
+\end{itemize}
 
 \section{K-means} \label{sect:kmeans}
 
 Es uno de los algoritmos m\'as usados para atacar el problema de clustering.
 Fue dise\~na do para datos num\'ericos en donde cada cluster tiene un centro llamado
-media (mean). Este tiene un n\'umero $K$ de clusters ya establecidos. Funciona
-del siguiente modo: para unos $K$ clusters ya inicializados, va a ir tomando 
-un objeto, luego buscar si su distancia con respecto a la media de otro
-cluster es menor a la del suyo, cambiarlo y recalcular las medias. \'Este
-ciclo va a ir ejecutantodose hasta que cierta condici\'on de parada se cumpla.\cite{GePo2010}
+media (mean). Este comienza con un n\'umero $K$ de clusters establecido. Se inicializan
+los centroides y se va a ir cambiando
+los objetos de un cluster a otro con cual su distancia al centroide sea menor
+hasta que cierta condici\'on de parada se cumpla.\cite{GePo2010}
 
 La media, tambi\'en llamada centroide,  de un cluster $C_i$ (con $1 \leq i \leq K$)
 se define del siguiente modo:
 
 \[
-{1 \over |C_{i}|} \sum_{v \in C_{i}} v
+{1 \over |C_{i}|} \sum_{p \in C_{i}} p
 \]
 
 El pseudoc\'odigo es el siguiente:
 
+
 \begin{lstlisting}[mathescape, language=Pascal]
-  Incialización.
+  Seleccionar K patrones. Estos seran los centroides iniciales.
   Mientras no se cumpla el criterio de parada.
-    Tomar $i$ de un cluster.
-    Buscar un clusjer j tal que d(i,media de j) sea la menor entre todos los clusters.
-    Cambiar $i$ al cluster $j$.
-    Recalcular los centroides.
+    Calcular las distancias de los patrones a cada uno de los centroides. Los patrones se asignan a la particion o grupo cuya distancia es minima.
+    Actualizar los centroides con el valor medio de los patrones asignados a la particion.
 \end{lstlisting}
 
-La inicializaci\'on puede ser aleatoria o bien mediante un m\'etodo m\'as
+La inicializaci\'on puede hacerser con un m\'etodo m\'as
 sofiticado como un algoritmo greedy.
 
 Sus propiedades m\'as importantes son las siguientes:
