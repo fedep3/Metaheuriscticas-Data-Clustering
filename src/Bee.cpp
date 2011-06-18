@@ -99,18 +99,21 @@ void Bee::initialize(){
     int i, j, l;
     int k;
 
-    bool* done = new bool[N];
+
+    RandomArray rarr(N);
+    /*bool* done = new bool[N];
     for(i = 0; i < N; ++i)
-        done[i] = false;
+        done[i] = false;*/
 
     for(i = 0; i < I ; ++i){
         for(j = 0; j < K; ++j){
-            k = rand() % N;
+            //k = rand() % N;
             
-            while(done[k])
-                k = rand() % N;
+            //while(done[k])
+            //    k = rand() % N;
                 
-            done[k] = true;
+            //done[k] = true;
+            k = rarr.get();
 
             for(l = 0; l < M; ++l)
                 centroid[i][j][l] = data[k][l];
@@ -123,7 +126,7 @@ void Bee::initialize(){
         renamer(solution[i], centroid[i], &Ks[i], size);
     }
 
-    delete [] done;
+    //delete [] done;
 }
 
 
@@ -227,16 +230,19 @@ void Bee::selectSites(int type){
     for(i = 0; i < m_sites; ++i)
         sites[i]  = -1;
 
-    bool* done  = new bool[I];
-    for(i = 0; i < I; ++i)
-        done[i]  = false;
+    RandomArray rarr(I);
+
+    //bool* done  = new bool[I];
+    //for(i = 0; i < I; ++i)
+    //    done[i]  = false;
 
     ////////////////////////////////////////////////
     //Llena el arreglo de sitios de manera ordenada.
     for(i = 0; i < m_sites; ++i){
-        do
+        r = rarr.get();
+    /*    do
             r = rand() % I;
-        while(done[r]);
+        while(done[r]);*/
 
         
         for(j = 0; j < m_sites; ++j){
@@ -265,7 +271,7 @@ void Bee::selectSites(int type){
             }
         }
 
-        done[r] = true;
+        //done[r] = true;
     }
 
     //////////////////////////////
@@ -276,9 +282,10 @@ void Bee::selectSites(int type){
 
     //Asignar sitios élite.
     for(i = 0; i < e_bees; ++i){
-        do{
+        r = rarr.get();
+        /*do{
             r = rand() % I;
-        }while(done[r]);
+        }while(done[r]);*/
 
         j = rand() % e_sites;
 
@@ -287,9 +294,10 @@ void Bee::selectSites(int type){
 
     //Asignar sitios no-élite
     for(i = 0; i < o_bees; ++i){
-        do{
+        r = rarr.get();
+        /*do{
             r = rand() % I;
-        }while(done[r]);
+        }while(done[r]);*/
 
         j = rand() % o_sites;
 
@@ -301,7 +309,7 @@ void Bee::selectSites(int type){
 
     //Resto de las abejas se mueven aleatoriamente.
     delete [] sites;
-    delete [] done;
+    //delete [] done;
 
 
     //////////////////////////////////////////////////////

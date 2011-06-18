@@ -10,7 +10,7 @@
  * necesarias para ejecutar el algoritmo de abeja.
  */
 #include <cstdio>
-#include <time.h>
+#include "RandomArray.h"
 #include "Metaheuristic.h"
 
 #ifndef _BEE_

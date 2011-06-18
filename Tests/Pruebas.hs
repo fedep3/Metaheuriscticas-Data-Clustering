@@ -43,7 +43,9 @@ filterStdout = unlines . filter ((/=) '-' . head) . lines
 
 helper :: (String, String) -> (String, String)
 helper (xs, ys) = (s ++ "\t" ++ xs, ys)
-    where (s:_, _) = DL.foldl' (helperBinary ',') ([], "") ys
+    where (l, e) = DL.foldl' (helperBinary ',') ([], "") ys
+          l'     = reverse (e:l)
+          s      = l' !! 6
 
 helperBinary :: Char -> ([String], String) -> Char -> ([String], String)
 helperBinary c (x, w) y =

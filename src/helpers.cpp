@@ -234,7 +234,7 @@ int d_4 = -1;
 int d_5 = -1;
 
 /**
- * Función objetivo del algoritmo.
+ * Función objetivo del híbrido.
  */
 float d_6 = -1.0;
 
@@ -247,6 +247,16 @@ float d_7 = -1.0;
  * Error Je.
  */
 float d_8 = -1.0;
+
+/**
+ * Función objetivo del algoritmo.
+ */
+float d_9 = -1.0;
+
+/**
+ * Función objetivo del algoritmo.
+ */
+float bestFO = 0.0;
 
 /***/
 
@@ -378,6 +388,11 @@ void debugging(){
     else
         printf(",\\emph{N.A.}");
 
+    if(d_9 != -1.0)
+        printf(",%.4f",d_9);
+    else
+        printf(",\\emph{N.A.}");
+
     if(d_6 != -1.0)
         printf(",%.4f",d_6);
     else
@@ -433,7 +448,10 @@ void restoreHandlers(){
         printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
         if(debug) d_4 = m->ofEval;
 
-        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
+        if(debug) d_9 = bestFO;
+
+        printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
         if(debug) d_6 = m->bestFO;
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
@@ -486,6 +504,8 @@ void longEnough(int sig){
 
         m->reconstruct(_tf);
 
+        bestFO = m->bestFO;
+
         m->calcGFO();
 
         m->calcJe();
@@ -496,7 +516,10 @@ void longEnough(int sig){
         printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
         if(debug) d_4 = m->ofEval;
 
-        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
+        if(debug) d_9 = bestFO;
+
+        printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
         if(debug) d_6 = m->bestFO;
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
@@ -526,6 +549,8 @@ void longEnough(int sig){
 void killIt(int sig){
     int i = 0;
     try{
+
+        printf("1\n");
         restoreHandlers();
 
         endTime();
@@ -534,6 +559,8 @@ void killIt(int sig){
         m->reconstruct(_tf);
 
         m->calcGFO();
+
+        bestFO = m->bestFO;
 
         if(algorithm != M_KMEANS){
 
@@ -565,7 +592,10 @@ void killIt(int sig){
 
         printf("-- Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
 
-        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
+        if(debug) d_9 = bestFO;
+
+        printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
         if(debug) d_6 = m->bestFO;
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
@@ -785,7 +815,6 @@ void initIt(int argc, char* argv[]){
     bool optdega = false;
     bool* optpso  = new bool[4];
     for(c = 0; c < 4; ++c) optpso[c] = false;
-    bool wieghted = false;
     bool* optdepso  = new bool[2];
     for(c = 0; c < 2; ++c) optdepso[c] = false;
     bool* optdeopso  = new bool[3];
@@ -1072,8 +1101,8 @@ entre 0.0 y 1.0\n");
                 break;
             case 'R':
                 _c1 = atof(optarg);
-                if(_c1 < 0.0){
-                    fprintf(stderr, "El c1 debe ser positivo.\n");
+                if(_c1 <= 0.0){
+                    fprintf(stderr, "El c1 debe mayor que 0.\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
@@ -1083,8 +1112,8 @@ entre 0.0 y 1.0\n");
                 break;
             case 'S':
                 _c2 = atof(optarg);
-                if(_c2 < 0.0){
-                    fprintf(stderr, "El c2 debe ser positivo.\n");
+                if(_c2 <= 0.0){
+                    fprintf(stderr, "El c2 debe mayor que 0.\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
@@ -1094,8 +1123,8 @@ entre 0.0 y 1.0\n");
                 break;
             case 'T':
                 _W = atof(optarg);
-                if(_W < 0.0){
-                    fprintf(stderr, "El W debe ser positivo.\n");
+                if(_W <= 0.0){
+                    fprintf(stderr, "El W debe ser mayor que 0.\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
@@ -1136,7 +1165,7 @@ entre 0.0 y 1.0\n");
                 }
 
                 optdeopso[0] = true;
-
+                weighted = true;
                 break;
             case 'Y':
 
@@ -1146,7 +1175,7 @@ entre 0.0 y 1.0\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
-
+                weighted = true;
                 optdeopso[1] = true;
 
                 break;
@@ -1158,7 +1187,7 @@ entre 0.0 y 1.0\n");
                     fprintf(stderr, "%s no lo es.\n", optarg);
                     noerror = false;
                 }
-
+                weighted = true;
                 optdeopso[2] = true;
 
                 break;
@@ -1167,7 +1196,7 @@ entre 0.0 y 1.0\n");
                 break;
             default:
                 fprintf(stderr, "Opción inválida.\nUse ./mhs --help para ayuda.\n");
-                exit(-1);
+                exit(1);
         }
     }
 
@@ -1209,6 +1238,16 @@ entre 0.0 y 1.0\n");
 
         //i y k
         aux = aux && optindiv && optextra[0];
+
+        if(_I < (_e_bees + _o_bees)){
+            fprintf(stderr, "La suma entre eb y ob debe ser menor a I.\n");
+            aux = false;
+        }
+
+        if(_m_sites <= _e_sites){
+            fprintf(stderr, "m debe ser mayor que e.\n");
+            aux = false;
+        }
 
         if(!aux)
             fprintf(stderr, "Debe definir todas las opciones del Bee.\n");
@@ -1275,11 +1314,6 @@ definirlos.\n");
 
         aux = true;
 
-        //Si pc esta activada, igual f
-        if( (!optdega && optde) || (!optde && optdega) )
-            fprintf(stderr, "Debe definir f y pc (ambos), o simplemente no \
-definirlos.\n");
-
         //c1,c2,w y vmx
         for(c=0; c<4; c++)
             aux = aux && optpso[c];
@@ -1289,10 +1323,16 @@ definirlos.\n");
             aux = aux && optdepso[c];
 
         //pesos
-        if(optdeopso[0] || optdeopso[1] || optdeopso[2]){
-            wieghted = true;
+        if(weighted){
             for(c = 0; c < 3; c++)
                 aux = aux && optdeopso[c];
+
+            if(aux){
+                if((_w1 + _w2 + _w3) - 1.0 > 0.1){
+                    fprintf(stderr, "La suma de los pesos debe ser 1.0.\n");
+                    aux = false;
+                }
+            }
         }
 
         //i y k
@@ -1398,6 +1438,8 @@ void runIt(){
     m->reconstruct(_tf);
 
     m->calcGFO();
+
+    bestFO = m->bestFO;
     
     if(algorithm != M_KMEANS){
 
@@ -1429,7 +1471,10 @@ void runIt(){
 
     printf("-- Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
 
-    printf("-- Valor de la función objetivo del algoritmo: %.4f\n", m->bestFO);
+    printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
+    if(debug) d_9 = bestFO;
+
+    printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
     if(debug) d_6 = m->bestFO;
 
     printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
