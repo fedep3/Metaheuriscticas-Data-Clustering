@@ -214,6 +214,7 @@ void AntA::reconstruct(int type){
 
     }
 
+
     for(i = 0; i < N; i++){
 
         for(j = 0; j < M; j++)
@@ -572,29 +573,20 @@ inline void AntA::swap(int *array, int f, int s){
 void AntA::initialize(){
 
     int i, k, c;
-    int done[N];
-    int size = N;
-
-    for(i = 0; i < N; ++i)
-        done[i] = i;
+    RandomArray r(N);
 
     for(i = 0; i < nA ; ++i){
 
-        int pos = rand()%(size);
-
-        k = done[pos];
-        swap(done, pos, size-1);
-        size--;
-
+        k = r.get();
         ants[i].pick(k);
         free[k] = -1;
 
     }
 
-    for(i = 0; i < size; i++){
+    for(i = 0; i <= r.last; i++){
         c = rand()%cellsSize;
-        free[done[i]] = c;
-        cells[c].push_back(done[i]);
+        free[r.rarr[i]] = c;
+        cells[c].push_back(r.rarr[i]);
     }
 
     if(!ac){

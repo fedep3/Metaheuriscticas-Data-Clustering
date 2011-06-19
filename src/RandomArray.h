@@ -29,6 +29,13 @@ class RandomArray{
         RandomArray(int size);
 
         /**
+         * Para reiniciar la clase
+         *
+         * @param size Tamaño del arreglo.
+         */
+        void reset(int size);
+
+        /**
          * Obtiene un valor aleatorio y sin repetición del arreglo.
          *
          * @return Valor del arreglo.
@@ -40,7 +47,6 @@ class RandomArray{
          */
         ~RandomArray();
 
-    protected:
         /**
          * Tamaño virtual del arreglo.
          */

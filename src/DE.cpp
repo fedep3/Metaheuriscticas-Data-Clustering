@@ -335,26 +335,16 @@ int DE::getBetter(int type){
  */
 void DE::initialize(){
 
-    int i, j, l;
-    int k, size, pos;
+    int i, j, l, k;
+    RandomArray r(N);
 
-    int done[N];
+    for(i = 0; i < I ; ++i, r.reset(N)){
 
-    for(i = 0; i < I ; ++i){
-
-        for(l = 0; l < N; ++l)
-            done[l] = l;
-        
         Ks[i] = Kmax;
-
-        size = N;
 
         for(j = 0; j < Kmax; ++j){
         
-            pos = rand()%size;
-            k = done[pos];
-            swap(done, pos, size-1);
-            size--;
+            k = r.get();
 
             for(l = 0; l < M; ++l)
                 centroid[i][j][l] = data[k][l];

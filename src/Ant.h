@@ -16,6 +16,7 @@
 #include <cstdio>
 #include <time.h>
 #include <vector>
+#include "RandomArray.h"
 #include "Metaheuristic.h"
 
 using namespace std;

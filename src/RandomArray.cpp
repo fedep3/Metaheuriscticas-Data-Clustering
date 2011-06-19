@@ -29,6 +29,22 @@ RandomArray::RandomArray(int size){
 }
 
 /**
+ * Para reiniciar la clase
+ *
+ * @param size Tamaño del arreglo.
+ */
+void RandomArray::reset(int size){
+    int i;
+
+    length = size;
+    last   = length - 1;
+
+    for(i = 0; i < length; ++i){
+        rarr[i] = i;
+    }
+}
+
+/**
  * Obtiene un valor aleatorio y sin repetición del arreglo.
  *
  * @return Valor del arreglo.
