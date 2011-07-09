@@ -406,11 +406,15 @@ type Options = ([Files], [(String, AlgOpt)])
 -- | Dada una lista de opciones de algoritmos, genera varios algoritmos.
 genPrograms :: Options    -- * Opciones del los algoritmos.
             -> [Program]  -- * Algoritmos.
-genPrograms (f@((_, InputFile n _, _, _ , _, _):_), xs) = progs
+genPrograms (f@((_, InputFile n ft, _, _ , _, _):_), xs) = progs
     where algopt = concatMap aux0 $ DL.foldl' (genAlgorithm) [] xs
           aux0   = (\(s, xs) -> snd $ DL.foldl' (aux1 s) (0, []) xs )
           n'     = filter (\x -> x /= '/' && x /= '.') n
-          aux1   = (\x (i , y) z -> (i + 1, ((x ++ (show i) ++ "-" ++ n' ++ ".png", z):y)))
+          ext    = case ft of
+                     PNG  -> ".png"
+                     TIFF -> ".tiff"
+                     CSV  -> ".txt"
+          aux1   = (\x (i , y) z -> (i + 1, ((x ++ (show i) ++ "-" ++ n' ++ ext, z):y)))
           progs  = [ (Program p fi (OutputFile fo) ot (K k) mn mx alg) |
                      (p, fi, ot, k, mn, mx) <- f,
                      (fo, alg) <- algopt
@@ -484,5 +488,5 @@ genAlgorithm' (BeeOpt (r, p, m, e, eb, ob)) =
       e'  <- listGen e,
       eb' <- listGen eb,
       ob' <- listGen ob,
-      (e' < m' - 1) && (ob' < m' - e')
+      (e' < m') && (p' > (eb' + ob'))
     ]
