@@ -38,6 +38,15 @@ class DE : public Metaheuristic{
          * @param _k   Cantidad de clusters (iniciales).
          * @param _i   Cantidad de individuos.
          * @param _it  Número de iteraciones.
+         * @param _w1  Peso de la distancia de los elementos
+         *             dentro de un cluster en la función
+         *             objetivo.
+         * @param _w2  Peso de la distancia entre clusters
+         *             en la función objetivo.
+         * @param _w3  Peso del error en la función objetivo.
+         *             en la función objetivo.
+         * @param _zmx Máximo valor de un atributo.
+         * @param _zmn Mínimo valor de un atributo.
          * @param _met Métrica.
          */
         DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
@@ -55,6 +64,15 @@ class DE : public Metaheuristic{
          * @param _Cr  Probabilidad de cruce.
          * @param _F   Escalar por el cual se multiplica la diferencia, es un 
          *             parámetro.
+         * @param _w1  Peso de la distancia de los elementos
+         *             dentro de un cluster en la función
+         *             objetivo.
+         * @param _w2  Peso de la distancia entre clusters
+         *             en la función objetivo.
+         * @param _w3  Peso del error en la función objetivo.
+         *             en la función objetivo.
+         * @param _zmx Máximo valor de un atributo.
+         * @param _zmn Mínimo valor de un atributo.
          * @param _met Métrica.
          */
         DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr, 
@@ -189,6 +207,16 @@ class DE : public Metaheuristic{
          * Peso del error.
          */
         float w3;
+
+        /**
+         * Máximo valor de un atributo.
+         */
+        float *zmx;
+
+        /**
+         * Mínimo valor de un atributo.
+         */
+        float *zmn;
 
 };
 #endif

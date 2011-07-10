@@ -37,6 +37,15 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
     w2 = _w2;
     w3 = _w3;
 
+    zmx = new float[M];
+    zmn = new float[M];
+
+    for(i = 0; i < M; ++i)
+    {
+        zmx[i] = _zmx[i];
+        zmn[i] = _zmn[i];
+    }
+
     Zmax = 0.0;
     for(i = 0; i < M; ++i)
         Zmax += (_zmx[i] - _zmn[i]) * (_zmx[i] - _zmn[i]);
@@ -84,17 +93,27 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr,
     int i, j;
 
     I = _i;
-    w1 = _w1;
-    w2 = _w2;
-    w3 = _w3;
     maxit = _it;
     F = _F;
     Cr = _Cr;
     var = false;
 
+    w1 = _w1;
+    w2 = _w2;
+    w3 = _w3;
+
+    zmx = new float[M];
+    zmn = new float[M];
+
+    for(i = 0; i < M; ++i)
+    {
+        zmx[i] = _zmx[i];
+        zmn[i] = _zmn[i];
+    }
+
     Zmax = 0.0;
     for(i = 0; i < M; ++i)
-        Zmax += (_zmx[i] - _zmn[i]) * (_zmx[i] - _zmn[i]);
+        Zmax += (zmx[i] - zmn[i]) * (zmx[i] - zmn[i]);
     Zmax = sqrtf(Zmax);
 
     //Se reservan I vectores solución.
@@ -137,6 +156,8 @@ DE::~DE(){
     free(centroid);
     
     delete [] of;
+    delete [] zmx;
+    delete [] zmn;
 }
 
 
@@ -198,18 +219,24 @@ void DE::run(int type){
 
             for(l = 0; l < Kmax; l++){
                 if(((float)rand())/((float)RAND_MAX) < Cr || l == p){
-                    for(h = 0; h < M; h++)
+                    for(h = 0; h < M; h++){
                         auxCent[l][h] = centroid[m][l][h] + F*(centroid[j][l][h] - centroid[k][l][h]);
+                        if(auxCent[l][h] > zmx[h] || auxCent[l][h] < zmn[h])
+                            auxCent[l][h] = (zmx[h]-zmn[h]) * (((float)rand())/((float)RAND_MAX)) + zmn[h];
+                    }
                 }else{
-                    for(h = 0; h < M; h++)
+                    for(h = 0; h < M; h++){
                         auxCent[l][h] = centroid[i][l][h];
+                        if(auxCent[l][h] > zmx[h] || auxCent[l][h] < zmn[h])
+                            auxCent[l][h] = (zmx[h]-zmn[h]) * (((float)rand())/((float)RAND_MAX)) + zmn[h];
+                    }
                 }
             }
 
             assign(auxSol, auxCent);
 
             if((auxOf = foMin(auxSol, auxCent, Kmax)) < of[i]){
-            
+
                 for(j = 0; j < N; j++)
                     solution[i][j] = auxSol[j];
 

@@ -67,5 +67,5 @@ int RandomArray::get(){
  * Destructor de un RandomArray.
  */
 RandomArray::~RandomArray(){
-    delete rarr;
+    delete [] rarr;
 }
