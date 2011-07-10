@@ -350,7 +350,7 @@ void PSO::updateVelocity(int p){
  * @param p Partícula.
  */
 void PSO::updateParticle(int p){
-    int i, j;
+    int i, j, r;
     float t;
 
     for(i = 0; i < Kmax; ++i)
@@ -358,6 +358,11 @@ void PSO::updateParticle(int p){
             t = centroid[p][i][j] + velocity[p][i][j];
             if(zmn[j] <= t && t <= zmx[j])
                 centroid[p][i][j] = t;
+            else{
+                r = rand() % N;
+                centroid[p][i][j] = data[r][j];
+            }
+                
 
         }
 
