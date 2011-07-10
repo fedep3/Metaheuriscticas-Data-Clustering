@@ -1368,9 +1368,6 @@ definirlos.\n");
                                 _c1, _c2, _W,
                                 _mxv, _mnv, _vmx, F_NON_WEIGHTED, _reps);
                 }
-
-                delete [] _mxv;
-                delete [] _mnv;
                 break;
             case M_DE:
                 if(optde){
