@@ -38,13 +38,14 @@ void Csv::read(char* input){
     string line;
     while(getline(lines,line)){
         if(strcmp(line.c_str(), "") == 0) continue;
-        stringstream  lineStream(line);
-        string cell;
 
-        j = 0;
-        while(getline(lineStream, cell, ',')){
+        char * pch;
+        pch = strtok (((char *)line.c_str()),",");
+
+        while (pch != NULL){
             if(first) ++J;
-            v.push_back( atof( cell.c_str()) );
+            v.push_back(atof(pch));
+            pch = strtok (NULL, ",");
             ++j;
         }
 
@@ -55,6 +56,8 @@ void Csv::read(char* input){
                 exit(1);
             }
         }
+
+        j = 0;
         first = false;
         ++I;
     }

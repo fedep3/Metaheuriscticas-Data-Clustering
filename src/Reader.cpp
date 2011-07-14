@@ -20,4 +20,10 @@ Reader::Reader(){ }
 /**
  * Destructor de la clase Reader.
  */
-Reader::~Reader(){ }
+Reader::~Reader(){
+
+    for(int i = 0; i < N; i++)
+        delete [] data[i];
+    free(data);
+
+}

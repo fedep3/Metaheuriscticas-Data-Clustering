@@ -154,7 +154,8 @@ DE::~DE(){
         free(centroid[i]);
     }
     free(centroid);
-    
+
+    delete [] Ks;
     delete [] of;
     delete [] zmx;
     delete [] zmn;

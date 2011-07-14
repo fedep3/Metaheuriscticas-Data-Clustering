@@ -447,7 +447,7 @@ void AntA::addMemory(int cell){
 
     mit++;
 
-    for(i = 0; i < MM; i++){
+    for(i = 0; i < msize; i++){
         if(memory[i] == cell){
             done = true;
             mcount[i]++;
@@ -470,14 +470,14 @@ void AntA::addMemory(int cell){
 
         int min = 20, mini = 0, aux;
 
-        for(i = 0; i < MM; i++){
+        for(i = 0; i < msize; i++){
             if( (aux = mcount[i]) < min){
                 min = aux;
                 mini = i;
             }
         }
 
-        for( i = mini; i < MM-1; i++)
+        for( i = mini; i < msize-1; i++)
             memory[i] = memory[i+1];
 
         msize--;

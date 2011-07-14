@@ -61,8 +61,15 @@ PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
         Vmax[i] = _zmx[i] * _vmx;
     }
     Zmax = sqrtf(Zmax);
-    zmx = _zmx;
-    zmn = _zmn;
+
+    zmx = new float[M];
+    zmn = new float[M];
+
+    for(i = 0; i < M; ++i)
+    {
+        zmx[i] = _zmx[i];
+        zmn[i] = _zmn[i];
+    }
 
     //Vmax = _vmx;
     metric = F_WEIGHTED;
@@ -154,8 +161,14 @@ PSO::PSO(float** _d, int _m, int _n, int _k, int _p,
         Vmax[i] = _zmx[i] * _vmx;
     }
     Zmax = sqrtf(Zmax);
-    zmx = _zmx;
-    zmn = _zmn;
+    zmx = new float[M];
+    zmn = new float[M];
+
+    for(i = 0; i < M; ++i)
+    {
+        zmx[i] = _zmx[i];
+        zmn[i] = _zmn[i];
+    }
 
     //Vmax = _vmx;
     metric = F_NON_WEIGHTED;
@@ -233,6 +246,8 @@ PSO::~PSO(){
     delete [] Vmax;
     delete [] of;
     delete [] Ks;
+    delete [] zmx;
+    delete [] zmn;
 }
 
 /**

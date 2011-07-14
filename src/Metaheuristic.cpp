@@ -725,4 +725,6 @@ void Metaheuristic::calcJe(){
 
     //Cáculo final.
     JeValue = (sum / K);
+
+    delete [] sums;
 }

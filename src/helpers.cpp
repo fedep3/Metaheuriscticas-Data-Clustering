@@ -765,8 +765,8 @@ Ejempos:\n\
 \n\
 - Bee\n\
 \n\
-    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a Bee --e 2 --eb 3 --ob \
-5 --m 2 --i 5 --k 5 --reps 4\n\
+    * ./mhs --t CSV --fi entrada.csv --fo salida --a Bee --e 9 --eb 10 --ob 9\
+ --m 10 --i 40 --k 3 --reps 10\n\
 \n\
 - DE\n\
 \n\
@@ -788,10 +788,10 @@ Ejempos:\n\
 MIN\n\
 \n\
 - PSO\n\
-    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a PSO --c1 1.5 --c2 1.5 \
---W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5\n\
+    * ./mhs --t CSV --fi entrada.csv --fo salida --a PSO --c1 1.5 --c2 1.5 \
+--W 3.0 --vmx 0.2 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5\n\
     * ./mhs --t PNG --fi entrada.png --fo salida.png --a PSO --c1 1.5 --c2 1.5 \
---W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5 --w1 \
+--W 3.0 --vmx 0.5 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5 --w1 \
 0.33 --w2 0.33 --w3 0.33\n\n\n");
 
 }
@@ -820,7 +820,7 @@ void initIt(int argc, char* argv[]){
     bool* optdeopso  = new bool[3];
     for(c = 0; c < 3; ++c) optdeopso[c] = false;
     bool noerror = true;
-    bool aux;
+    bool aux = false;
 
     while(true){
 
@@ -1200,12 +1200,15 @@ entre 0.0 y 1.0\n");
         }
     }
 
-
+    if(!noerror){
+        aux = true;
+        fprintf(stderr, "Error en un(os) parámetro(s).\n");
+    }
 
     for(c = 0; c < 4; c++)
         noerror = noerror && optgen[c];
 
-    if(!noerror)
+    if(!noerror && !aux)
         fprintf(stderr, "Debe definir todas las opciones generales.\n");
 
     if(algorithm == M_KMEANS){
@@ -1368,6 +1371,8 @@ definirlos.\n");
                                 _c1, _c2, _W,
                                 _mxv, _mnv, _vmx, F_NON_WEIGHTED, _reps);
                 }
+                delete [] _mxv;
+                delete [] _mnv;
                 break;
             case M_DE:
                 if(optde){
@@ -1437,6 +1442,8 @@ void runIt(){
     m->calcGFO();
 
     bestFO = m->bestFO;
+
+    m->calcJe();
     
     if(algorithm != M_KMEANS){
 
