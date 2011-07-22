@@ -9,7 +9,8 @@ Opciones permitidas:
 Ayuda:
   -? [ --help ]         Produce mensaje de ayuda.
 
-Requeridas genéricas:  --a arg               Algoritmo a ejecutar:
+Requeridas genéricas:
+  --a arg               Algoritmo a ejecutar:
                         Ant
                         Bee
                         DE
@@ -79,7 +80,7 @@ Ejempos:
 
 - Bee
 
-    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a Bee --e 2 --eb 3 --ob 5 --m 2 --i 5 --k 5 --reps 4
+    * ./mhs --t CSV --fi entrada.csv --fo salida --a Bee --e 9 --eb 10 --ob 9 --m 10 --i 40 --k 3 --reps 10
 
 - DE
 
@@ -95,7 +96,7 @@ Ejempos:
     * ./mhs --a Kmeans --k 2 --fi entrada.png --fo salida.png --t PNG --tf MIN
 
 - PSO
-    * ./mhs --t CSV --fi entrada.csv --fo salida.png --a PSO --c1 1.5 --c2 1.5 --W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5
-    * ./mhs --t PNG --fi entrada.png --fo salida.png --a PSO --c1 1.5 --c2 1.5 --W 3.0 --vmx 210.0 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5 --w1 0.33 --w2 0.33 --w3 0.33
+    * ./mhs --t CSV --fi entrada.csv --fo salida --a PSO --c1 1.5 --c2 1.5 --W 3.0 --vmx 0.2 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5
+    * ./mhs --t PNG --fi entrada.png --fo salida.png --a PSO --c1 1.5 --c2 1.5 --W 3.0 --vmx 0.5 --mn 0.0,0.0,0.0 --mx 255.0,255.0,255.0 --i 20 --k 5 --w1 0.33 --w2 0.33 --w3 0.33
 
 
