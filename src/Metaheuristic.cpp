@@ -680,7 +680,18 @@ void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, in
             return;
         }
 
-        if(of[i] == (*last)){
+        //Determina si la mejor solución es mejor o peor que la anterior.
+        switch(type){
+            case T_MAX:
+                //Maximización
+                update = of[i] <= (*last);
+                break;
+            default:
+                //Minimización.
+                update = of[i] >= (*last);
+        }
+
+        if(update){
             ++(*count);
         }
 
