@@ -258,6 +258,11 @@ float d_9 = -1.0;
  */
 float bestFO = 0.0;
 
+/**
+ * Función 1/DB(K) del algoritmo.
+ */
+float bestDB = 0.0;
+
 /***/
 
 /**
@@ -1443,6 +1448,8 @@ void runIt(){
 
     bestFO = m->bestFO;
 
+    bestDB = m->bestDB;
+
     m->calcJe();
     
     if(algorithm != M_KMEANS){
@@ -1477,6 +1484,8 @@ void runIt(){
 
     printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
     if(debug) d_9 = bestFO;
+
+    printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
 
     printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
     if(debug) d_6 = m->bestFO;
