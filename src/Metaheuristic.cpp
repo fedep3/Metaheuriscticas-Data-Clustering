@@ -640,7 +640,7 @@ int Metaheuristic::renamer(int* sol, float** cent, int* k, int* csize){
  *              solución en las últimas iteraciones.
  * @param type  Tipo de función objetivo.
  */
-void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, int type){
+void Metaheuristic::updateBetter(int i, float* best, int* count, int type){
         bool update;
         int j, l;
 
@@ -658,7 +658,6 @@ void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, in
         //Actualización de parámetros si es necesaria.
         if(update){
             *best  = of[i];
-            *last  = of[i];
             *count = 1;
 
             //Actualización de la mejor solución.
@@ -684,19 +683,16 @@ void Metaheuristic::updateBetter(int i, float* best, float* last, int* count, in
         switch(type){
             case T_MAX:
                 //Maximización
-                update = of[i] <= (*last);
+                update = of[i] <= (*best);
                 break;
             default:
                 //Minimización.
-                update = of[i] >= (*last);
+                update = of[i] >= (*best);
         }
 
         if(update){
             ++(*count);
         }
-
-        //Actualiza el último usado.
-        *last = of[i];
 }
 
 /**
