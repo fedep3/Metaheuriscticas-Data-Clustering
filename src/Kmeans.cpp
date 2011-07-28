@@ -75,15 +75,19 @@ void Kmeans::run(int type){
     // Inicializaciones.
 
     //Inicializaciones del mejor según el tipo de problema.
-    float best;  
-    switch(type){
-        case T_MAX:
-            //Maximización.
-            best = 0.0;
-            break;
-        default:
-            //Minimización.
-            best = numeric_limits<float>::infinity();
+    float best;
+    if(initialized){
+        switch(type){
+            case T_MAX:
+                //Maximización.
+                best = 0.0;
+                break;
+            default:
+                //Minimización.
+                best = numeric_limits<float>::infinity();
+        }
+    }else{
+        best = bestFO;
     }
     float last  = best;
     int count   = 0;
@@ -127,6 +131,8 @@ void Kmeans::initialize(){
     for(i = 0; i < K; ++i)
         for(j = 0; j < M; ++j)
             centroid[0][i][j] = data[i][j];
+
+    initialized = true;
 }
 
 /**
@@ -135,10 +141,28 @@ void Kmeans::initialize(){
  *
  * @param cent Centroides. 
  */
-void Kmeans::setCentroids(float** cent){
+void Kmeans::setCentroids(int* sol, float** cent, int type){
     int i, j;
 
-    for(i = 0; i < K; ++i)
-        for(j = 0; j < M; ++j)
-            centroid[0][i][j] = cent[i][j];
+    for(i = 0; i < K; ++i){
+        for(j = 0; j < M; ++j){
+            bestCentroids[i][j] = cent[i][j];
+            centroid[0][i][j]      = cent[i][j];
+        }
+    }
+
+    for(i = 0; i < N; ++i){
+        bestSolution[i] = sol[i];
+        solution[0][i]  = sol[i];
+    }
+
+    switch(type){
+        case T_MAX:
+            bestFO = foMax(0, K, metric);
+            break;
+        default:
+            bestFO = foMin(0, K, metric);
+    }
+
+    initialized = false;
 }

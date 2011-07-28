@@ -38,7 +38,7 @@ class Kmeans : public Metaheuristic{
          *
          * @param cent Centroides. 
          */
-        void setCentroids(float** cent);
+        void setCentroids(int* sol, float** cent, int type);
 
         /**
          * Inicializa los centroides de los clusters. No se
@@ -63,5 +63,10 @@ class Kmeans : public Metaheuristic{
          * Cantidad de repeticiones sin mejora.
          */
         int REPS;
+
+        /**
+         * Si fue inicializado con un arreglo de centroides.
+         */
+        bool initialized;
 };
 #endif

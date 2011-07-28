@@ -337,7 +337,7 @@ int improve(){
 
     Kmeans *KA = new Kmeans(m->data, m->M, m->N, m->K, M_DB, 3);
 
-    KA->setCentroids(m->bestCentroids);
+    KA->setCentroids(m->bestSolution, m->bestCentroids, _tf);
 
     KA->run(_tf);
 
