@@ -99,20 +99,10 @@ void Bee::initialize(){
     int i, j, l;
     int k;
 
-
     RandomArray rarr(N);
-    /*bool* done = new bool[N];
-    for(i = 0; i < N; ++i)
-        done[i] = false;*/
 
     for(i = 0; i < I ; ++i){
         for(j = 0; j < K; ++j){
-            //k = rand() % N;
-            
-            //while(done[k])
-            //    k = rand() % N;
-                
-            //done[k] = true;
             k = rarr.get();
 
             for(l = 0; l < M; ++l)
@@ -125,8 +115,6 @@ void Bee::initialize(){
 
         renamer(solution[i], centroid[i], &Ks[i], size);
     }
-
-    //delete [] done;
 }
 
 
@@ -165,7 +153,6 @@ void Bee::run(int type){
             //Minimización.
             best = numeric_limits<float>::infinity();
     }
-    float last  = best;
     int count   = 0;
 
     int top = -1;
@@ -192,7 +179,7 @@ void Bee::run(int type){
         // Actualización del mejor.
 
         //Actualización de parámetros si es necesaria.
-        updateBetter(top, &best, &last, &count, type);
+        updateBetter(top, &best, &count, type);
     }
 
 }

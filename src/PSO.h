@@ -12,6 +12,7 @@
  */
 #include <cstdio>
 #include <time.h>
+#include "RandomArray.h"
 #include "Metaheuristic.h"
 
 #ifndef _PSO_

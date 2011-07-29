@@ -89,7 +89,6 @@ void Kmeans::run(int type){
     }else{
         best = bestFO;
     }
-    float last  = best;
     int count   = 0;
 
     ////////////////////////////
@@ -116,7 +115,7 @@ void Kmeans::run(int type){
 
         ////////////////////////////
         // Actualización del mejor.
-        updateBetter(0, &best, &last, &count, type);
+        updateBetter(0, &best, &count, type);
     }
 
 }

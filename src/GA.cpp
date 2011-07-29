@@ -142,7 +142,6 @@ void GA::run(int type){
             //Minimización.
             best = numeric_limits<float>::infinity();
     }
-    float last  = best;
     int count   = 0;
 
     int p1 = 0;
@@ -167,8 +166,7 @@ void GA::run(int type){
             ////////////////////////////
             // Mutación.
             mut = ( (float)rand() )/( (float)RAND_MAX );
-            if(mut > MUT) continue;
-            else{
+            if(mut <= MUT){
                 mutation(type);
             }
 
@@ -179,7 +177,7 @@ void GA::run(int type){
         // Actualización del mejor.
 
         //Actualización de parámetros si es necesaria.
-        updateBetter(top, &best, &last, &count, type);
+        updateBetter(top, &best, &count, type);
     }
 
 }
@@ -369,22 +367,15 @@ void GA::initialize(){
     int i, j, l;
     int k;
 
-    bool* done = new bool[N];
-    for(i = 0; i < N; ++i)
-        done[i] = false;
+    RandomArray rarr(N);
 
     for(i = 0; i < I ; ++i){
         for(j = 0; j < K; ++j){
-            k = rand() % N;
-            
-            while(done[k])
-                k = rand() % N;
-                
-            done[k] = true;
+
+            k = rarr.get();
 
             for(l = 0; l < M; ++l)
                 centroid[i][j][l] = data[k][l];
-
         }
 
         for(j = 0; j < N; j++)
@@ -392,8 +383,6 @@ void GA::initialize(){
 
         renamer(solution[i], centroid[i], &Ks[i], size);
     }
-
-    delete [] done;
 }
 
 /**
@@ -418,7 +407,6 @@ void GA::crossover(int p1, int p2, int type){
     }
     int k1 = Kmax, k2 = Kmax;
     float of1, of2;
-    bool p1_p2;
 
     ////////////////
     // Cruce.
@@ -434,13 +422,13 @@ void GA::crossover(int p1, int p2, int type){
 
     for(i = index; i < greater; ++i){
         for(j = 0; j < M; ++j){
-            if(i < Ks[p1]){
-                centroidS1[i][j] = centroid[p1][i][j];
+            if(i < Ks[p2]){
+                centroidS1[i][j] = centroid[p2][i][j];
                 ++k1;
             }
 
-            if(i < Ks[p2]){
-                centroidS2[i][j] = centroid[p2][i][j];
+            if(i < Ks[p1]){
+                centroidS2[i][j] = centroid[p1][i][j];
                 ++k2;
             }
         }
@@ -459,7 +447,6 @@ void GA::crossover(int p1, int p2, int type){
 
     //Buscar repetidos y mutarlos.
 
-
     //Cálculo de la función objetivo.
     float pbest, sbest;
     int pbesti = 0, sbesti = 0;
@@ -468,7 +455,6 @@ void GA::crossover(int p1, int p2, int type){
             of1   = foMax(s1, centroidS1, k1, metric);
             of2   = foMax(s2, centroidS2, k2, metric);
 
-            p1_p2 = p1 > p2;
             pbest = -1.0;
             sbest = -1.0;
             break;
@@ -476,7 +462,6 @@ void GA::crossover(int p1, int p2, int type){
             of1   = foMin(s1, centroidS1, k1, metric);
             of2   = foMin(s2, centroidS2, k2, metric);
 
-            p1_p2 = p1 < p2;
             pbest = numeric_limits<float>::infinity();
             sbest = numeric_limits<float>::infinity();
     }
@@ -489,105 +474,149 @@ void GA::crossover(int p1, int p2, int type){
     temp[2] = of[p1];
     temp[3] = of[p2];
 
+    //Busca el primer mejor.
     for(i = 0; i < 4; ++i){
         switch(type){
             case T_MAX:
                 if(temp[i] > pbest){
-                    sbest = pbest;
-                    pbest = temp[i];
-                    sbesti = pbesti;
+                    pbest  = temp[i];
                     pbesti = i;
-                }else{
-                    if(temp[i] > sbest){
-                        sbest = i;
-                        sbesti = i;
-                    }
                 }
                 break;
             default:
                 if(temp[i] < pbest){
-                    sbest = pbest;
-                    pbest = temp[i];
-                    sbesti = pbesti;
+                    pbest  = temp[i];
                     pbesti = i;
-                }else{
-                    if(temp[i] < sbest){
-                        sbest = temp[i];
-                        sbesti = i;
-                    }
                 }
         }
     }
 
-    int p = 0;
-    int* t;
-    if(pbesti == 0 || pbesti == 1){
-        if(p1_p2){
-            t = solution[p2];
-            switch(pbesti){
-                case 0:
-                    solution[p2] = s1;
-                    s1 = t;
-                    Ks[p2] = k1;
-                    of[p2] = of1;
-                    break;
-                case 1:
-                    solution[p2] = s2;
-                    s2 = t;
-                    Ks[p2] = k2;
-                    of[p2] = of2;
-            }
-            p = 2;
-        }else{
-            t = solution[p1];
-            switch(pbesti){
-                case 0:
-                    solution[p1] = s1;
-                    s1 = t;
-                    Ks[p1] = k1;
-                    of[p1] = of1;
-                    break;
-                case 1:
-                    solution[p1] = s2;
-                    s2 = t;
-                    Ks[p1] = k2;
-                    of[p1] = of2;
-            }
-            p = 1;
+    //Coloca como indeseable al primer mejor.
+    switch(type){
+        case T_MAX:
+            temp[pbesti] = -1.0;
+            break;
+        default:
+            temp[pbesti] = numeric_limits<float>::infinity();
+    }
+
+    //Busca el segundo mejor.
+    for(i = 0; i < 4; ++i){
+        switch(type){
+            case T_MAX:
+                if(temp[i] > sbest){
+                    sbest  = temp[i];
+                    sbesti = i;
+                }
+                break;
+            default:
+                if(temp[i] < sbest){
+                    sbest  = temp[i];
+                    sbesti = i;
+                }
         }
     }
 
-    if(sbesti == 0 || sbesti == 1){
-        if(p1_p2 && p != 1){
-            t = solution[p2];
-            switch(sbesti){
-                case 0:
-                    solution[p2] = s1;
-                    s1 = t;
-                    Ks[p2] = k1;
-                    of[p2] = of1;
-                    break;
-                case 1:
-                    solution[p2] = s2;
-                    s2 = t;
-                    Ks[p2] = k2;
-                    of[p2] = of2;
-            }
-        }else if(!p1_p2 && p != 2){
-            t = solution[p1];
-            switch(sbesti){
-                case 0:
-                    solution[p1] = s1;
-                    s1 = t;
-                    Ks[p1] = k1;
-                    of[p1] = of1;
-                    break;
-                case 1:
-                    solution[p1] = s2;
-                    s2 = t;
-                    Ks[p1] = k2;
-                    of[p1] = of2;
-            }
+    //Asignación de nuevos miembros de la población.
+    int* s;
+    float** c;
+    if( ( (pbesti == 0) && (sbesti == 1) ) || ( (pbesti == 1) && (sbesti == 0) ) ){
+        //Hijo 1 por padre 1
+        c            = centroid[p1];
+        s            = solution[p1];
+        centroid[p1] = centroidS1;
+        solution[p1] = s1;
+        centroidS1   = c;
+        s1           = s;
+        Ks[p1]       = k1;
+        of[p1]       = pbest;
+
+        //Hijo 2 por padre 2
+        c            = centroid[p2];
+        s            = solution[p2];
+        centroid[p2] = centroidS2;
+        solution[p2] = s2;
+        centroidS2   = c;
+        s2           = s;
+        Ks[p2]       = k2;
+        of[p2]       = sbest;
+
+        switch(pbesti){
+            case 0:
+                of[p1] = pbest;
+                of[p2] = sbest;
+                break;
+            default:
+                of[p1] = sbest;
+                of[p2] = pbest;
+        }
+    }else if( ( (pbesti == 0) && (sbesti == 2) ) || ( (pbesti == 2) && (sbesti == 0) )){
+        //Hijo 1 por padre 2
+        c            = centroid[p2];
+        s            = solution[p2];
+        centroid[p2] = centroidS1;
+        solution[p2] = s1;
+        centroidS1   = c;
+        s1           = s;
+        Ks[p2]       = k1;
+
+        switch(pbesti){
+            case 0:
+                of[p2] = pbest;
+                break;
+            default:
+                of[p2] = sbest;
+        }
+    }else if( ( (pbesti == 0) && (sbesti == 3) ) || ( (pbesti == 3) && (sbesti == 0) )){
+        //Hijo 1 por padre 1
+        c            = centroid[p1];
+        s            = solution[p1];
+        centroid[p1] = centroidS1;
+        solution[p1] = s1;
+        centroidS1   = c;
+        s1           = s;
+        Ks[p1]       = k1;
+
+        switch(pbesti){
+            case 0:
+                of[p1] = pbest;
+                break;
+            default:
+                of[p1] = sbest;
+        }
+    }else if( ( (pbesti == 1) && (sbesti == 2) ) || ( (pbesti == 2) && (sbesti == 1) )){
+        //Hijo 2 por padre 2
+        c            = centroid[p2];
+        s            = solution[p2];
+        centroid[p2] = centroidS2;
+        solution[p2] = s2;
+        centroidS2   = c;
+        s2           = s;
+        Ks[p2]       = k2;
+
+        switch(pbesti){
+            case 1:
+                of[p2] = pbest;
+                break;
+            default:
+                of[p2] = sbest;
+        }
+    }else if( ( (pbesti == 1) && (sbesti == 3) ) || ( (pbesti == 3) && (sbesti == 1) ) ){
+        //Hijo 2 por padre 2
+        c            = centroid[p1];
+        s            = solution[p1];
+        centroid[p1] = centroidS2;
+        solution[p1] = s2;
+        centroidS2   = c;
+        s2           = s;
+        Ks[p1]       = k2;
+
+        switch(pbesti){
+            case 1:
+                of[p1] = pbest;
+                break;
+            default:
+                of[p1] = sbest;
         }
     }
 

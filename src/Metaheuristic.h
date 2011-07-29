@@ -361,7 +361,7 @@ class Metaheuristic{
          *              solución en las últimas iteraciones.
          * @param type  Tipo de función objetivo.
          */
-        void updateBetter(int i, float* best, float* last, int* count, int type);
+        void updateBetter(int i, float* best, int* count, int type);
 
         /**
          * Cantidad de clusters inicial.

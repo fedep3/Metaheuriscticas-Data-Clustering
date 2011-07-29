@@ -258,18 +258,12 @@ void PSO::initialize(){
     int i, j, l;
     int k;
 
-    bool* done = new bool[N];
-    for(i = 0; i < N; ++i)
-        done[i] = false;
+    RandomArray rarr(N);
 
     for(i = 0; i < P ; ++i){
         for(j = 0; j < K; ++j){
-            k = rand() % N;
-            
-            while(done[k])
-                k = rand() % N;
-                
-            done[k] = true;
+
+            k = rarr.get();
 
             for(l = 0; l < M; ++l)
                 centroid[i][j][l] = data[k][l];
@@ -282,8 +276,6 @@ void PSO::initialize(){
     }
 
     bestFO = numeric_limits<float>::infinity();
-
-    delete [] done;
 }
 
 /**
