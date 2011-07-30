@@ -1,114 +1,10 @@
 module Pruebas(
-    Results(..),
     Options(..),
-    runTestsAnova,
-    runTestsFinal,
-    runTestsAll
+    genPrograms
 ) where
 
 import qualified Data.List as DL
 import qualified System.Process as SP
-
--- | Ejecuta el programa y devuelve la salida del mismo.
-run :: Program          -- * Programa a ejecutar
-    -> IO String        -- * Salida de la ejecución del programa.
-run p = do
-    let (e:a) = words $ show p
-    SP.readProcess e a ""
-
--- | Resultado de cada prueba.
-data Results = Results { prog   :: String
-                       , file   :: String
-                       , stdout :: [(String, String)]
-                       }
-    deriving(Show)
-
--- | Corre las pruebas de acuerdo a una acción monádica generadora.
-runTests :: String         -- * Instrucciones de corrida.
-         -> IO Results     -- * Lista de resultados.
-runTests o = do
-    let o'     = (read o :: Options)
-    let p      = genPrograms o'
-    let (n, InputFile i _) = (\p -> (name p, inputFile p)) $ head p
-    let hAnova = (headerAnova . algorithm) $ head p
-    let lanova = (hAnova:(map (getAnova . algorithm) p))
-    lstdout   <- mapM run p
-    let lstdout' = zip lanova ("":(map filterStdout lstdout))
-    let l      = ((head lstdout') : (map helper $ tail lstdout'))
-    return (Results n i l)
-
--- | Filtra la salida para tener la última línea.
-filterStdout :: String -> String
-filterStdout = unlines . filter ((/=) '-' . head) . lines
-
-helper :: (String, String) -> (String, String)
-helper (xs, ys) = (s ++ "\t" ++ xs, ys)
-    where (l, e) = DL.foldl' (helperBinary ',') ([], "") ys
-          l'     = reverse (e:l)
-          s      = l' !! 6
-
-helperBinary :: Char -> ([String], String) -> Char -> ([String], String)
-helperBinary c (x, w) y =
-    if (c == y) then ((reverse w):x, [])
-                else (x,y:w)  
-
--- | Corre las pruebas ANOVA de acuerdo a las instrucciones dadas.
-runTestsAnova :: String -- * Intrucciones de corrida.
-              -> IO ()
-runTestsAnova o = do
-    r <- runTests o 
-    putStrLn $ unlines $ map fst $ stdout r
-
--- | Corre las pruebas de acuerdo a las instrucciones dadas.
-runTestsFinal :: String -- * Intrucciones de corrida.
-              -> IO ()
-runTestsFinal o = do
-    r <- runTests o
-    putStrLn $ unlines $ map snd $ stdout r
-
-runTestsAll :: String   -- * Instrucciones de corrida.
-            -> IO ()
-runTestsAll o = do
-    r <- runTests o
-    putStrLn $ show r
-
--- | Genera el header para generar la tabla ANOVA.
-headerAnova :: Algorithm -> String
-headerAnova (Kmeans _)       = ""
-headerAnova (GA _ _ _ _)     = "ofdb\ti\ttt\tpc\tpm"
-headerAnova (PSO _ _ _ _)    = "ofdb\ti\tc1\tc2\tw\tvmx"
-headerAnova (WPSO _ _ _ _ _) = "ofdb\ti\tc1\tc2\tw\tvmx\tw1\tw2\tw3"
-headerAnova (DE _ _ _)       = "ofdb\ti\tw1\tw2\tw3"
-headerAnova (SDE _ _ _ _ _)  = "ofdb\ti\tw1\tw2\tw3\tf\tpc"
-headerAnova (Ant _ _ _)      = "ofdb\ti\talpha"
-headerAnova (Bee _ _)        = "ofdb\ti\tm\te\teb\tob"
-
--- | Genera una línea apta para generar una tabla ANOVA.
-getAnova :: Algorithm   -- * Algoritmo.
-         -> String      -- * String con los valores relevantes.
-getAnova (Kmeans _) =
-    ""
-getAnova (GA _ (IGA i t) (Pc pc) (Pm pm)) =
-    (show i) ++ "\t" ++ (show t) ++ "\t" ++ (show pc) ++ "\t" ++
-    (show pm)
-getAnova (PSO _ (I i) (Velocity c1 c2 w) (VMax vmx)) =
-    (show i) ++ "\t" ++ (show c1) ++ "\t" ++ (show c2) ++ "\t" ++
-    (show w) ++ "\t" ++ (show vmx)
-getAnova (WPSO _ (I i) (Velocity c1 c2 w) (VMax vmx) (Weight w1 w2 w3)) =
-    (show i) ++ "\t" ++ (show c1) ++ "\t" ++ (show c2) ++ "\t" ++
-    (show w) ++ "\t" ++ (show vmx) ++ "\t" ++ (show w1) ++ "\t" ++
-    (show w2) ++ "\t" ++ (show w3)
-getAnova (DE _ (I i) (Weight w1 w2 w3)) =
-    (show i) ++ "\t" ++ (show w1) ++ "\t" ++ (show w2) ++ "\t" ++
-    (show w3)
-getAnova (SDE _ (I i) (Weight w1 w2 w3) (Scale s) (Pc pc)) =
-    (show i) ++ "\t" ++ (show w1) ++ "\t" ++ (show w2) ++ "\t" ++
-    (show w3) ++ "\t" ++ (show s) ++ "\t" ++ (show pc)
-getAnova (Ant _ (IAnt i) a) =
-    (show i) ++ "\t" ++ (show a)
-getAnova (Bee _ (IBee i m e eb ob)) =
-    (show i) ++ "\t" ++ (show m) ++ "\t" ++ (show e) ++ "\t" ++
-    (show eb) ++ "\t" ++ (show ob)
 
 -- | Tipo para representar una llamada al programa.
 data Program = Program { name       :: String
@@ -398,38 +294,32 @@ data AlgOpt = GAOpt (Repetitions,     -- * Repeticiones sin mejora.
     deriving(Show, Eq, Read)
 
 -- | Tipo de datos de los archivos.
-type Files = (String, InputFile, OFType, Int, Mn, Mx)
+type File = (String, InputFile, OFType, Int, Mn, Mx)
 
 -- | Opciones.
-type Options = ([Files], [(String, AlgOpt)])
+type Options = (File, (String, AlgOpt))
 
 -- | Dada una lista de opciones de algoritmos, genera varios algoritmos.
 genPrograms :: Options    -- * Opciones del los algoritmos.
-            -> [Program]  -- * Algoritmos.
-genPrograms (f@((_, InputFile n ft, _, _ , _, _):_), xs) = progs
-    where algopt = concatMap aux0 $ DL.foldl' (genAlgorithm) [] xs
-          aux0   = (\(s, xs) -> snd $ DL.foldl' (aux1 s) (0, []) xs )
+            -> [String]   -- * Algoritmos.
+genPrograms ((p, (InputFile n ft), ot, k, mn, mx), (alg, opts)) = progs
+    where algopt = zip names algos
+          algos  = genAlgorithm opts
+          l      = length algos
           n'     = filter (\x -> x /= '/' && x /= '.') n
           ext    = case ft of
-                     PNG  -> ".png"
-                     TIFF -> ".tiff"
-                     CSV  -> ".txt"
-          aux1   = (\x (i , y) z -> (i + 1, ((x ++ (show i) ++ "-" ++ n' ++ ext, z):y)))
-          progs  = [ (Program p fi (OutputFile fo) ot (K k) mn mx alg) |
-                     (p, fi, ot, k, mn, mx) <- f,
+                            PNG  -> ".png"
+                            TIFF -> ".tiff"
+                            CSV  -> ".txt"
+          cNames = (\(a, b, c) -> Just ( a ++ (show c) ++ "-" ++ b ++ ext, (a, b, c + 1)))
+          names  = take l $ DL.unfoldr cNames (alg, n', 0)
+          progs  = [ (show (Program p (InputFile n ft) (OutputFile fo) ot (K k) mn mx alg) ) |
                      (fo, alg) <- algopt
                    ]
 
--- | Operador binario de genAlgorithms.
-genAlgorithm :: [(String, [Algorithm])] -- * Lista de algoritmos.
-             -> (String, AlgOpt)        -- * Opciones de los algoritmos.
-             -> [(String, [Algorithm])] -- * Lista de algoritmos resultantes.
-genAlgorithm xs (s, a) = (x:xs)
-    where x = (s, genAlgorithm' a)
-
 -- | Genera una lista de Maybe Algorithm
-genAlgorithm' :: AlgOpt -> [Algorithm]
-genAlgorithm' (GAOpt (r, p, t, pc, pm)) =
+genAlgorithm :: AlgOpt -> [Algorithm]
+genAlgorithm (GAOpt (r, p, t, pc, pm)) =
     [ (GA r (IGA p' t') (Pc pc') (Pm pm')) |
       p'  <- listGen p,
       t'  <- listGen t,
@@ -437,7 +327,7 @@ genAlgorithm' (GAOpt (r, p, t, pc, pm)) =
       pm' <- listGen pm,
       p' > t'
     ]
-genAlgorithm' (PSOOpt (r, p, w, c1, c2, vmx)) =
+genAlgorithm (PSOOpt (r, p, w, c1, c2, vmx)) =
     [ (PSO r (I p') (Velocity c1' c2' w') (VMax vmx')) |
       p'   <- listGen p,
       w'   <- listGen w,
@@ -446,7 +336,7 @@ genAlgorithm' (PSOOpt (r, p, w, c1, c2, vmx)) =
       vmx' <- listGen vmx,
       ( ((c1' + c2') * 0.5) - 1.0 < w' )
     ]
-genAlgorithm' (WPSOOpt (r, p, w1, w2, w3, w, c1, c2, vmx)) =
+genAlgorithm (WPSOOpt (r, p, w1, w2, w3, w, c1, c2, vmx)) =
     [ (WPSO r (I p') (Velocity c1' c2' w') (VMax vmx') (Weight w1' w2' w3')) |
       p'   <- listGen p,
       w1'  <- listGen w1,
@@ -458,7 +348,7 @@ genAlgorithm' (WPSOOpt (r, p, w1, w2, w3, w, c1, c2, vmx)) =
       vmx' <- listGen vmx,
       ( ((c1' + c2') * 0.5) - 1.0 < w' ) && ( ((w1' + w2' + w3') - 1.0) < 0.1 )
     ]
-genAlgorithm' (DEOpt (r, p, w1, w2, w3)) =
+genAlgorithm (DEOpt (r, p, w1, w2, w3)) =
     [ (DE r (I p') (Weight w1' w2' w3')) |
       p'  <- listGen p,
       w1'  <- listGen w1,
@@ -466,7 +356,7 @@ genAlgorithm' (DEOpt (r, p, w1, w2, w3)) =
       w3'  <- listGen w3,
       ( ((w1' + w2' + w3') - 1.0) < 0.1 )
     ]
-genAlgorithm' (SDEOpt (r, p, w1, w2, w3, f, pc)) =
+genAlgorithm (SDEOpt (r, p, w1, w2, w3, f, pc)) =
     [ (SDE r (I p') (Weight w1' w2' w3') (Scale f') (Pc pc')) |
       p'   <- listGen p,
       w1'  <- listGen w1,
@@ -476,12 +366,12 @@ genAlgorithm' (SDEOpt (r, p, w1, w2, w3, f, pc)) =
       pc'  <- listGen pc,
       ( ((w1' + w2' + w3') - 1.0) < 0.1 )
     ]
-genAlgorithm' (AntOpt (r, p, a)) =
+genAlgorithm (AntOpt (r, p, a)) =
     [ (Ant r (IAnt p') a') | 
        p' <- listGen p,
        a' <- listGen a
     ]
-genAlgorithm' (BeeOpt (r, p, m, e, eb, ob)) =
+genAlgorithm (BeeOpt (r, p, m, e, eb, ob)) =
     [ (Bee r (IBee p' m' e' eb' ob')) |
       p'  <- listGen p,
       m'  <- listGen m,
