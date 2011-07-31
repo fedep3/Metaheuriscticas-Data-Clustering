@@ -194,65 +194,6 @@ float _w2 = 0.0;
  */
 float _w3 = 0.0;
 
-
-//////////////////////////////////////////////
-// Variables para debugging.
-
-/**
- * Variable para debug.
- */
-bool debug = false;
-
-/**
- * K inicial.
- */
-int d_0 = -1;
-
-/**
- * Tiempo del algoritmo elegido.
- */
-double d_1 = -1.0;
-
-/**
- * Tiempo del algoritmo Kmeans.
- */
-double d_2 = -1.0;
-
-/**
- * K final.
- */
-int d_3 = -1;
-
-/**
- * Evaluaciones de la función objetivo del algoritmo.
- */
-int d_4 = -1;
-
-/**
- * Evaluaciones de la función objetivo del Kmeans.
- */
-int d_5 = -1;
-
-/**
- * Función objetivo del híbrido.
- */
-float d_6 = -1.0;
-
-/**
- * Función objetivo 1/DB(K)
- */
-float d_7 = -1.0;
-
-/**
- * Error Je.
- */
-float d_8 = -1.0;
-
-/**
- * Función objetivo del algoritmo.
- */
-float d_9 = -1.0;
-
 /**
  * Función objetivo del algoritmo.
  */
@@ -360,63 +301,6 @@ int improve(){
 }
 
 /**
- * Imprime un CSV con los resultados.
- */
-void debugging(){
-    if(d_0 != -1)
-        printf("%d",d_0);
-    else
-        printf("\\emph{N.A.}");
-
-    if(d_1 != -1.0)
-        printf(",%.4f",d_1);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_2 != -1.0)
-        printf(",%.4f",d_2);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_3 != -1)
-        printf(",%d",d_3);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_4 != -1)
-        printf(",%d",d_4);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_5 != -1)
-        printf(",%d",d_5);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_9 != -1.0)
-        printf(",%.4f",d_9);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_6 != -1.0)
-        printf(",%.4f",d_6);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_7 != -1.0)
-        printf(",%.4f",d_7);
-    else
-        printf(",\\emph{N.A.}");
-
-    if(d_8 != -1.0)
-        printf(",%.4f",d_8);
-    else
-        printf(",\\emph{N.A.}");
-
-    printf("\n");
-}
-
-/**
  * Inicializa los handlers del programa.
  */
 void initHandlers(){
@@ -448,28 +332,22 @@ void restoreHandlers(){
         printf("-- Tiempo excedido...\n");
 
         printf("-- Cantidad de Clusters Final: %d\n", m->K);
-        if(debug) d_3 = m->K;
 
         printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
-        if(debug) d_4 = m->ofEval;
 
         printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
-        if(debug) d_9 = bestFO;
+
+        printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
 
         printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
-        if(debug) d_6 = m->bestFO;
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-        if(debug) d_7 = m->bestDB;
 
         printf("-- Valor del error Je: %.4f\n", m->JeValue);
-        if(debug) d_8 = m->JeValue;
-
-        if(debug) debugging();
 
         r->write(_output, m->bestSolution, m->K);
 
-        exit(1);
+        exit(0);
     }
 
     definitelyStopIt = true;
@@ -498,12 +376,6 @@ void longEnough(int sig){
         restoreHandlers();
 
         endTime();
-        if(debug){
-            if(d_1 == -1.0)
-                d_1 = runtime;
-            else
-                d_2 = runtime;
-        }
         
         printf("-- Tiempo excedido...\n");
 
@@ -513,27 +385,23 @@ void longEnough(int sig){
 
         m->calcGFO();
 
+        bestDB = m->bestDB;
+
         m->calcJe();
 
         printf("-- Cantidad de Clusters Final: %d\n", m->K);
-        if(debug) d_3 = m->K;
 
         printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
-        if(debug) d_4 = m->ofEval;
 
         printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
-        if(debug) d_9 = bestFO;
+
+        printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
 
         printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
-        if(debug) d_6 = m->bestFO;
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-        if(debug) d_7 = m->bestDB;
 
         printf("-- Valor del error Je: %.4f\n", m->JeValue);
-        if(debug) d_8 = m->JeValue;
-
-        if(debug) debugging();
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -554,18 +422,17 @@ void longEnough(int sig){
 void killIt(int sig){
     int i = 0;
     try{
-
-        printf("1\n");
         restoreHandlers();
 
         endTime();
-        if(debug) d_1 = runtime;
 
         m->reconstruct(_tf);
 
         m->calcGFO();
 
         bestFO = m->bestFO;
+
+        bestDB = m->bestDB;
 
         if(algorithm != M_KMEANS){
 
@@ -580,36 +447,28 @@ void killIt(int sig){
             m->calcJe();
 
             endTime();
-            if(debug) d_2 = runtime;
 
         }
 
         printf("-- Cantidad de Clusters Final: %d\n", m->K);
-        if(debug) d_3 = m->K;
 
         printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
-        if(debug) d_4 = m->ofEval;
 
         if(algorithm != M_KMEANS){
             printf("-- Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", i);
-            if(debug) d_5 = i;
         }
 
         printf("-- Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
 
         printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
-        if(debug) d_9 = bestFO;
+
+        printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
 
         printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
-        if(debug) d_6 = m->bestFO;
 
         printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-        if(debug) d_7 = m->bestDB;
 
         printf("-- Valor del error Je: %.4f\n", m->JeValue);
-        if(debug) d_8 = m->JeValue;
-
-        if(debug) debugging();
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -833,7 +692,6 @@ void initIt(int argc, char* argv[]){
         {
             /* Ayuda */
             {"help", no_argument, 0, '?'},
-            {"debug", no_argument, 0, 'd'},
 
             /* Requeridas genéricas */
             {"a",  required_argument, 0, 'A'},
@@ -1197,7 +1055,6 @@ entre 0.0 y 1.0\n");
 
                 break;
             case 'd':
-                debug = true;
                 break;
             default:
                 fprintf(stderr, "Opción inválida.\nUse ./mhs --help para ayuda.\n");
@@ -1435,7 +1292,6 @@ void runIt(){
     srand(time(NULL));
 
     printf("-- Cantidad de Clusters Inicial: %d\n", m->K);
-    if(debug) d_0 = m->K;
 
     initTime();
 
@@ -1444,7 +1300,6 @@ void runIt(){
     m->run(_tf);
 
     endTime();
-    if(debug) d_1 = runtime;
 
     restoreHandlers();
 
@@ -1471,38 +1326,28 @@ void runIt(){
         m->calcJe();
 
         endTime();
-        if(debug) d_2 = runtime;
 
     }
 
     printf("-- Cantidad de Clusters Final: %d\n", m->K);
-    if(debug) d_3 = m->K;
 
     printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
-    if(debug) d_4 = m->ofEval;
 
     if(algorithm != M_KMEANS){
         printf("-- Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", i);
-        if(debug) d_5 = i;
     }
 
     printf("-- Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
 
     printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
-    if(debug) d_9 = bestFO;
 
     printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
 
     printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
-    if(debug) d_6 = m->bestFO;
 
     printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-    if(debug) d_7 = m->bestDB;
 
     printf("-- Valor del error Je: %.4f\n", m->JeValue);
-    if(debug) d_8 = m->JeValue;
-
-    if(debug) debugging();
 
     r->write(_output, m->bestSolution, m->K);
 
