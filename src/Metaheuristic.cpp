@@ -658,7 +658,7 @@ void Metaheuristic::updateBetter(int i, float* best, int* count, int type){
         //Actualización de parámetros si es necesaria.
         if(update){
             *best  = of[i];
-            *count = 1;
+            *count = 0;
 
             //Actualización de la mejor solución.
             for(j = 0; j < N; ++j)
