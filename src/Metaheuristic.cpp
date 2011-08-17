@@ -120,9 +120,20 @@ float Metaheuristic::cosineDistance(float* v1, float* v2){
         sum += v1[k] * v2[k];
     }
 
-    if(sum == 0.0) return euclideanDistance(v1, v2);
+    if(sum == 0.0){
+        if(norm(v1, M) == norm(v2, M)){
+            return 0.0;
+        }else{
+            return 1.0;
+        }
+    }
 
-    return ( 1.0 - sum / ( norm(v1, M) * norm(v2, M) ) );
+    sum = sum / ( norm(v1, M) * norm(v2, M) );
+
+    if(sum > 1.0) return 0.0;
+    if(sum < 0.0) return 1.0;
+
+    return 1.0 - sum;
 }
 
 /**
@@ -708,9 +719,23 @@ void Metaheuristic::calcGFO(){
 }
 
 /**
+ * Métrica DB de la mejor solución.
+ */
+float Metaheuristic::calcDB(){
+    return ( DB(bestSolution, bestCentroids, K) );
+}
+
+/**
+ * Métrica CS de la mejor solución.
+ */
+float Metaheuristic::calcCS(){
+    return ( CS(bestSolution, bestCentroids, K) );
+}
+
+/**
  * Calcula el error.
  */
-void Metaheuristic::calcJe(){
+float Metaheuristic::calcJe(){
     int i;
     float sum   = 0.0;
     float* sums = new float[K];
@@ -730,8 +755,8 @@ void Metaheuristic::calcJe(){
     for(i = 0; i < K; ++i)
         sum = sum + ( sums[i] / ((float) size[i]) );
 
-    //Cáculo final.
-    JeValue = (sum / K);
-
     delete [] sums;
+
+    //Cálculo final.
+    return (sum / K);
 }

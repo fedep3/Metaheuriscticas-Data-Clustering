@@ -68,9 +68,19 @@ class Metaheuristic{
         virtual void calcGFO();
 
         /**
+         * Métrica DB de la mejor solución.
+         */
+        float calcDB();
+
+        /**
+         * Métrica CS de la mejor solución.
+         */
+        float calcCS();
+
+        /**
          * Calcula el error.
          */
-        void calcJe();
+        float calcJe();
 
         /**
          * Destructor de la clase Metaheuristic.

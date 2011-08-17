@@ -194,6 +194,28 @@ float _w2 = 0.0;
  */
 float _w3 = 0.0;
 
+///////////////////////////////////////////
+// Variables de resultados.
+
+//Estado actual (Algoritmo o Kmeans).
+bool isInHibrid;
+
+// Funciones objetivo.
+float foalg;
+float fohib;
+
+// Evaluaciones de las funciones objetivo.
+int evalalg;
+int evalhib;
+
+// Métricas de calidad del algoritmo.
+float algDB;
+float algJe;
+
+// Métricas de calidad del híbrido.
+float hibDB;
+float hibJe;
+
 /**
  * Función objetivo del algoritmo.
  */
@@ -333,17 +355,15 @@ void restoreHandlers(){
 
         printf("-- Cantidad de Clusters Final: %d\n", m->K);
 
-        printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
+        printf("** Algoritmo\n");
 
-        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
+        printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", evalalg);
 
-        printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
+        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", foalg);
 
-        printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
+        printf("-- Índice DB del algoritmo: %.4f\n", algDB);
 
-        printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-
-        printf("-- Valor del error Je: %.4f\n", m->JeValue);
+        printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -376,32 +396,31 @@ void longEnough(int sig){
         restoreHandlers();
 
         endTime();
-        
+
         printf("-- Tiempo excedido...\n");
 
-        m->reconstruct(_tf);
+        if(!isInHibrid){
+            m->reconstruct(_tf);
 
-        bestFO = m->bestFO;
+            evalalg = m->ofEval;
 
-        m->calcGFO();
+            foalg = m->bestFO;
 
-        bestDB = m->bestDB;
-
-        m->calcJe();
+            algDB = m->calcDB();
+            algJe = m->calcJe();
+        }
 
         printf("-- Cantidad de Clusters Final: %d\n", m->K);
 
-        printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
+        printf("** Algoritmo\n");
 
-        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
+        printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", evalalg);
 
-        printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
+        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", foalg);
 
-        printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
+        printf("-- Índice DB del algoritmo: %.4f\n", algDB);
 
-        printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-
-        printf("-- Valor del error Je: %.4f\n", m->JeValue);
+        printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -420,55 +439,72 @@ void longEnough(int sig){
  * @param sig Señal.
  */
 void killIt(int sig){
-    int i = 0;
     try{
         restoreHandlers();
 
-        endTime();
-
-        m->reconstruct(_tf);
-
-        m->calcGFO();
-
-        bestFO = m->bestFO;
-
-        bestDB = m->bestDB;
-
-        if(algorithm != M_KMEANS){
-
-            printf("-- Mejorando solución...\n");
-
-            initTime();
-
-            i = improve();
-            
-            m->calcGFO();
-
-            m->calcJe();
-
+        if(!isInHibrid){
             endTime();
 
+            m->reconstruct(_tf);
+
+            evalalg = m->ofEval;
+
+            foalg = m->bestFO;
+
+            algDB = m->calcDB();
+            algJe = m->calcJe();
+
+            if(algorithm != M_KMEANS){
+
+                printf("-- Mejorando solución...\n");
+
+                initTime();
+
+                isInHibrid = true;
+                evalhib = improve();
+
+                endTime();
+
+                fohib = m->bestFO;
+
+                hibDB = m->calcDB();
+                hibJe = m->calcJe();
+            }
+        }else{
+            endTime();
+
+            fohib = m->bestFO;
+
+            hibDB = m->calcDB();
+            hibJe = m->calcJe();
         }
 
         printf("-- Cantidad de Clusters Final: %d\n", m->K);
 
-        printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
+        printf("** Algoritmo\n");
+
+        printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", evalalg);
+
+        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", foalg);
+
+        printf("-- Índice DB del algoritmo: %.4f\n", algDB);
+
+        printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
         if(algorithm != M_KMEANS){
-            printf("-- Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", i);
+
+            printf("** Híbrido\n");
+
+            printf("-- Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", evalhib);
+
+            printf("-- Cantidad de evaluaciones de la función objetivo del híbrido: %d\n", (evalalg + evalhib));
+
+            printf("-- Valor de la función objetivo del híbrido: %.4f\n", fohib);
+
+            printf("-- Índice DB del híbrido: %.4f\n", hibDB);
+
+            printf("-- Error Je del híbrido: %.4f\n", hibJe);
         }
-
-        printf("-- Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
-
-        printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
-
-        printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
-
-        printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
-
-        printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-
-        printf("-- Valor del error Je: %.4f\n", m->JeValue);
 
         r->write(_output, m->bestSolution, m->K);
 
@@ -1281,8 +1317,6 @@ definirlos.\n");
  * Ejecuta la metaheurística elegida.
  */
 void runIt(){
-    int i = 0;
-
     srand(time(NULL));
 
     printf("-- Cantidad de Clusters Inicial: %d\n", m->K);
@@ -1291,6 +1325,7 @@ void runIt(){
 
     initHandlers();
 
+    isInHibrid = false;
     m->run(_tf);
 
     endTime();
@@ -1299,13 +1334,13 @@ void runIt(){
 
     m->reconstruct(_tf);
 
-    m->calcGFO();
+    evalalg = m->ofEval;
 
-    bestFO = m->bestFO;
+    foalg = m->bestFO;
 
-    bestDB = m->bestDB;
+    algDB = m->calcDB();
+    algJe = m->calcJe();
 
-    m->calcJe();
     
     if(algorithm != M_KMEANS){
 
@@ -1313,38 +1348,46 @@ void runIt(){
 
         initTime();
 
-        i = improve();
-        
-        m->calcGFO();
-
-        m->calcJe();
+        isInHibrid = true;
+        evalhib = improve();
 
         endTime();
+
+        fohib = m->bestFO;
+
+        hibDB = m->calcDB();
+        hibJe = m->calcJe();
 
     }
 
     printf("-- Cantidad de Clusters Final: %d\n", m->K);
 
-    printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", m->ofEval);
+    printf("** Algoritmo\n");
+
+    printf("-- Cantidad de evaluaciones de la función objetivo del algoritmo: %d\n", evalalg);
+
+    printf("-- Valor de la función objetivo del algoritmo: %.4f\n", foalg);
+
+    printf("-- Índice DB del algoritmo: %.4f\n", algDB);
+
+    printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
     if(algorithm != M_KMEANS){
-        printf("-- Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", i);
+
+        printf("** Híbrido\n");
+
+        printf("-- Cantidad de evaluaciones de la función objetivo del Kmeans: %d\n", evalhib);
+
+        printf("-- Cantidad de evaluaciones de la función objetivo del híbrido: %d\n", (evalalg + evalhib));
+
+        printf("-- Valor de la función objetivo del híbrido: %.4f\n", fohib);
+
+        printf("-- Índice DB del híbrido: %.4f\n", hibDB);
+
+        printf("-- Error Je del híbrido: %.4f\n", hibJe);
     }
 
-    printf("-- Cantidad de evaluaciones de la función objetivo total: %d\n", (m->ofEval + i));
-
-    printf("-- Valor de la función objetivo del algoritmo: %.4f\n", bestFO);
-
-    printf("-- Valor de la función objetivo 1/DB(K) del algoritmo: %.4f\n", bestDB);
-
-    printf("-- Valor de la función objetivo del híbrido: %.4f\n", m->bestFO);
-
-    printf("-- Valor de la función objetivo 1/DB(K): %.4f\n", m->bestDB);
-
-    printf("-- Valor del error Je: %.4f\n", m->JeValue);
-
     r->write(_output, m->bestSolution, m->K);
-
 }
 
 /**
