@@ -1204,6 +1204,12 @@ definirlos.\n");
         //i y k
         aux = aux && optindiv && optextra[0];
 
+        if(_I<4)
+        {
+            fprintf(stderr, "La cantidad de individuos debe ser mayor que 4.\n");
+            aux = false;
+        }
+
         if(!aux)
             fprintf(stderr, "Debe definir todas las opciones del DE.\n");
 

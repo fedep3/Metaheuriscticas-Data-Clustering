@@ -162,6 +162,7 @@ void GA::run(int type){
         if(cp > CP) continue;
         else{
             crossover(p1, p2, type);
+
             ////////////////////////////
             // Mutación.
             mut = ( (float)rand() )/( (float)RAND_MAX );
@@ -270,6 +271,7 @@ void GA::mutation(int type){
         default:
             of[i] = foMin(i, Ks[i], metric);
     }
+
 }
 
 /**
