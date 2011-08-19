@@ -609,8 +609,9 @@ Requeridas genéricas:\n\
 Opciones requeridas por varios algorimos:\n\
   --k arg               Número de clusters (Todos menos Ant).\n\
   --reps arg (=3)       Número de iteracion en el caso de Ant y DE, y canti-\n\
-                        dad de iteraciones que no se mejora en el caso de \n\
-                        Bee, GA, Kmeans y PSO. El valor por default es 3.\n\
+                        dad de iteraciones que no se mejora la solucion\n\
+                        actual en el caso de Bee, GA, Kmeans y PSO. El valor\n\
+                        por default es 3.\n\
   --tf arg (=MAX)       Si se desea maximizar o minimizar (MAX o MIN), el MAX\n\
                         está por defecto (Bee, GA y Kmeans).\n\
 \n\
@@ -644,7 +645,7 @@ Requeridos PSO:\n\
   --c1 arg              Constante de la componente cognitiva.\n\
   --c2 arg              Constante de la componente social.\n\
   --w arg               Peso inercial.\n\
-  --vmx arg             Velocidad máxima.\n\
+  --vmx arg             Escalar que acompaña al vector de velocidad máxima.\n\
 \n\
 Requeridos DE y PSO:\n\
   --mn arg              Vector de valores mínimos de cada atributo.\n\

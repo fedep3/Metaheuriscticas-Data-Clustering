@@ -148,17 +148,17 @@ float Metaheuristic::cosineDistance(float* v1, float* v2){
  *
  * @return Distancia euclideana entre los dos vectores dados.
  */
-float Metaheuristic::euclideanDistance(float* v1, float* v2, float q){
+float Metaheuristic::euclideanDistance(float* v1, float* v2){
     int k;
     float sum = 0.0;
     float t;
 
     for(k = 0; k < M; ++k){
         t = v1[k] - v2[k];
-        sum += powf(t, q);
+        sum += t*t;
     }
 
-    return ( powf(sum, (1.0/q)) );
+    return sqrt(sum);
 }
 
 /**
@@ -170,15 +170,15 @@ float Metaheuristic::euclideanDistance(float* v1, float* v2, float q){
  *
  * @return Norma del vector.
  */
-float Metaheuristic::norm(float* vec, int dim, float q){
+float Metaheuristic::norm(float* vec, int dim){
     int k;
     float sum = 0.0;
 
     for(k = 0; k < dim; ++k){
-        sum += powf(vec[k], q);
+        sum += vec[k]*vec[k];
     }
 
-    return ( powf(sum, (1.0/q)) );
+    return sqrt(sum);
 }
 
 /**
