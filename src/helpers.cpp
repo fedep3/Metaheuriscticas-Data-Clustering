@@ -697,6 +697,12 @@ MIN\n\
 
 }
 
+/**
+ * Lee los argumentos del programa e inicializa las estructuras.
+ *
+ * @param argc Cantidad de Argumentos.
+ * @param argv Argumentos.
+ */
 void initIt(int argc, char* argv[]){
 
     int c;

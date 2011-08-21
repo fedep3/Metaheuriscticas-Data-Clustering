@@ -13,12 +13,6 @@
 #ifndef _Ant_
 #define _Ant_
 
-#include <cstdio>
-#include <time.h>
-#include <vector>
-#include "RandomArray.h"
-#include "Metaheuristic.h"
-
 using namespace std;
 
 class Ant{

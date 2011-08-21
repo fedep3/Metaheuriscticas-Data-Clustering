@@ -78,7 +78,7 @@ GA::GA(float** _d, int _m, int _n, int _k, int _i,
 }
 
 /**
- * Destructor de la clase Kmeans.
+ * Destructor de la clase GA.
  */
 GA::~GA(){
     int i, j;
