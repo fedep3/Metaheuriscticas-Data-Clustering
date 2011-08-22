@@ -20,7 +20,16 @@
  * @param _n   Cantidad de datos.
  * @param _k   Cantidad de clusters (iniciales).
  * @param _i   Cantidad de individuos.
- * @param _t   Número de iteraciones.
+ * @param _it  Número de iteraciones.
+ * @param _w1  Peso de la distancia de los elementos
+ *             dentro de un cluster en la función
+ *             objetivo.
+ * @param _w2  Peso de la distancia entre clusters
+ *             en la función objetivo.
+ * @param _w3  Peso del error en la función objetivo.
+ *             en la función objetivo.
+ * @param _zmx Máximo valor de un atributo.
+ * @param _zmn Mínimo valor de un atributo.
  * @param _met Métrica.
  */
 DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
@@ -85,6 +94,15 @@ DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _w1,
  * @param _Cr  Probabilidad de cruce.
  * @param _F   Escalar por el cual se multiplica la diferencia, es un 
  *             parámetro.
+ * @param _w1  Peso de la distancia de los elementos
+ *             dentro de un cluster en la función
+ *             objetivo.
+ * @param _w2  Peso de la distancia entre clusters
+ *             en la función objetivo.
+ * @param _w3  Peso del error en la función objetivo.
+ *             en la función objetivo.
+ * @param _zmx Máximo valor de un atributo.
+ * @param _zmn Mínimo valor de un atributo.
  * @param _met Métrica.
  */
 DE::DE(float** _d, int _m, int _n, int _k, int _i, int _it, float _Cr, 
@@ -279,49 +297,6 @@ float DE::foMin(int* sol, float** cent, int k){
 
 
 /**
- * Cuenta el número de clusters diferentes a los que pertenece un
- * datos.
- * @param solution Arreglo con la solución.
- * @return Cantidad de clusters diferentes.
- */
-int DE::countClust(int *solution){
-    
-    int count[Kmax];
-    int result = 0;
-    int i;
-
-    for(i = 0; i < Kmax; i++)
-        count[i] = 0;
-    
-    for(i = 0 ; i < N ; i++)
-        count[solution[i]]++;
-        
-    for(i = 0; i < Kmax; i++)
-        if(count[i] > 0)
-            result++;
-            
-    return result;
-    
-}
-
-
-/**
- * Intercambio la posición f y s, del arreglo dado.
- *
- * @param array Arreglo a intercambiar.
- * @param f Primero posición.
- * @param s Segundo posición.
- */
-void DE::swap(int *array, int f, int s){
-
-    int aux = array[f];
-    array[f] = array[s];
-    array[s] = aux;
-
-}
-
-
-/**
  * Obtiene el mejor de la población.
  *
  * @param type Tipo de función objetivo.
@@ -384,7 +359,7 @@ void DE::initialize(){
 }
 
 /**
- * Reasigna los elementos a cada cluster en una partícula.
+ * Reasigna los elementos a cada cluster en un individuo.
  *
  * @param solution Solucion.
  * @param centroid Centroide.

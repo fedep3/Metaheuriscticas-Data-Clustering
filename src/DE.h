@@ -79,8 +79,7 @@ class DE : public Metaheuristic{
            float _F, float _w1, float _w2, float _w3, float *_zmx, float *_zmn);
 
         /**
-         * Inicializa la población. (Soluciones, centroides y
-         * tamanos de clusters.
+         * Inicializa los centroides de los clusters.
          */
         virtual void initialize();
 
@@ -105,29 +104,12 @@ class DE : public Metaheuristic{
     protected:
 
         /**
-         * Intercambio la posición f y s, del arreglo dado.
-         *
-         * @param array Arreglo a intercambiar.
-         * @param f Primero posición.
-         * @param s Segundo posición.
-         */
-        void swap(int *array, int f, int s);
-
-        /**
-         * Reasigna los elementos a cada cluster en una partícula.
+         * Reasigna los elementos a cada cluster en un individuo.
          *
          * @param solution Solucion.
          * @param centroid Centroide.
          */
         void assign(int *solution, float **centroid);
-
-        /**
-         * Cuenta el número de clusters diferentes a los que pertenece un
-         * datos.
-         * @param solution Arreglo con la solución.
-         * @return Cantidad de clusters diferentes.
-         */
-        int countClust(int *solution);
 
         /**
          * Obtiene el mejor de la población.

@@ -181,7 +181,7 @@ class Metaheuristic{
          * @return Distancia euclideana entre los dos vectores
          *         dados.
          */
-        float euclideanDistance(float* v1, float* v2, float q = 2.0);
+        float euclideanDistance(float* v1, float* v2);
 
         /**
          * Calcula la norma de un vector. Para calcular la norma
@@ -189,11 +189,10 @@ class Metaheuristic{
          *
          * @param vec Vector.
          * @param dim Dimensión del vector.
-         * @param q   Exponente de la norma.
          *
          * @return Norma del vector.
          */
-        float norm(float* vec, int dim, float q = 2.0);
+        float norm(float* vec, int dim);
 
         /**
          * Busca el mejor cluster para un objeto.

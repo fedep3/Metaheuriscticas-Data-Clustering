@@ -24,8 +24,6 @@
  * @param _d   Datos del problema.
  * @param _m   Dimensión de cada dato.
  * @param _n   Cantidad de datos.
-
- * @param _k   Cantidad de clusters (iniciales).
  * @param _nA  Cantidad de hormigas.
  * @param _it  Cantidad de iteraciones.
  * @param _met Métrica.
@@ -55,10 +53,8 @@ AntA::AntA(float** _d, int _m, int _n, int _nA, int _it, int _met)
  * @param _d      Datos del problema.
  * @param _m      Dimensión de cada dato.
  * @param _n      Cantidad de datos.
- * @param _k      Cantidad de clusters (iniciales).
  * @param _nA     Cantidad de hormigas.
  * @param _alpha2 Parametro usado para las probabilidades.
-
  * @param _it     Cantidad de iteraciones.
  * @param _met Métrica.
  */
@@ -96,13 +92,10 @@ AntA::~AntA(){
 }
 
 /**
- * Ejecuta la metaheurística con los datos dados. Además al final
- * de ella ejecuta un K-means, ya que la imagen que genera tiene
- * mucho ruido.
+ * Ejecuta la metaheurística con los datos dados
  *
  * @param type Si se utilizará una función objetivo de
  *             maximización o de minimización.
-
  */
 void AntA::run(int type){
 
@@ -125,11 +118,9 @@ void AntA::run(int type){
 
 /*
  * Va a buscar los pixeles que no estan siendo cargados y la hormiga va a inten-
- * tar agarrarlo.
+ * tar agarrar uno.
  *
-
  * @param Número de la hormiga.
-
  */
 void AntA::pickAnt(int ra){
 
@@ -159,9 +150,11 @@ void AntA::pickAnt(int ra){
 }
 
 /*
-
- * Se encarga de armar la solutción a partir de la células y las hormigas.
-
+ * Se encarga de armar la solutción a partir de la células y las 
+ * hormigas.
+ *
+ * @param type Si se utilizará una función objetivo de
+ *             maximización o de minimización.
  */
 void AntA::reconstruct(int type){
 
@@ -357,10 +350,10 @@ void AntA::reconstruct(int type){
  * Procedimiento que se encarga de soltar el pixel de una hormiga. Funciona
  * del siguiente modo:
  *
- * Si (memoria de la hormiga tiene por lo menos 1)
- *     entonces Revisa la memoria global y elige la mejor 
- *         célula donde dejar, en caso que no logre soltar el
- *         pixel intenta en una ceĺula aleatoria
+ * Si (memoria tiene por lo menos 1) entonces
+ *      Revisa la memoria y elige la mejor célula donde dejar,
+ *      en caso que no logre soltar el
+ *      pixel intenta en una ceĺula aleatoria.
  * sino Dejar el pixel en una célula aleatoria
  *
  * @param ra Número de la hormiga que quiere soltar el pixel.
@@ -436,7 +429,7 @@ void AntA::dropAnt(int ra){
 /*
  * Agrega a la memoria la celula dada, si ya existe simplemente 
  * cuenta que dejo una vez ahi. Cada cierto numero de iteraciones
- * vacia un elemento de la memoria.
+ * vacia un elemento de la memoria en la cual se ha dejado menos veces.
  *
  * @param cell Celula donde se solto el pixel.
  */
@@ -548,22 +541,6 @@ float AntA::f(int pixel, int cell){
     return sum;
     
 }
-
-/**
- * Intercambio la posición f y s, del arreglo dado.
- *
- * @param array Arreglo a intercambiar.
- * @param f Primero posición.
- * @param s Segundo posición.
- */
-inline void AntA::swap(int *array, int f, int s){
-
-    int aux = array[f];
-    array[f] = array[s];
-    array[s] = aux;
-
-}
-
 
 /**
 

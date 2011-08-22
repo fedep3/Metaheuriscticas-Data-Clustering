@@ -12,13 +12,10 @@
 #ifndef _AntA_
 #define _AntA_
 
-#include <cstdio>
 #include <cmath>
-#include <utility>
 #include <vector>
-#include <fstream>
+#include "RandomArray.h"
 #include "Metaheuristic.h"
-#include "Kmeans.h"
 #include "Ant.h"
 
 using namespace std;
@@ -36,10 +33,9 @@ class AntA : public Metaheuristic{
          * @param _d      Datos del problema.
          * @param _m      Dimensión de cada dato.
          * @param _n      Cantidad de datos.
-         * @param _k      Cantidad de clusters (iniciales).
          * @param _nAnt   Cantidad de hormigas.
          * @param _it     Cantidad de iteraciones.
-         * @param _met Métrica.
+         * @param _met    Métrica.
          */
         AntA(float** _d, int _m, int _n, int _nAnt, int _it, int _met);
 
@@ -49,11 +45,10 @@ class AntA : public Metaheuristic{
          * @param _d      Datos del problema.
          * @param _m      Dimensión de cada dato.
          * @param _n      Cantidad de datos.
-         * @param _k      Cantidad de clusters (iniciales).
          * @param _nA     Cantidad de hormigas.
          * @param _alpha2 Parametro usado para las probabilidades.
          * @param _it     Cantidad de iteraciones.
-         * @param _met Métrica.
+         * @param _met    Métrica.
          */
         AntA(float** _d, int _m, int _n, int _nA, float _alpha2, 
                                                         int _it, int _met);
@@ -71,9 +66,7 @@ class AntA : public Metaheuristic{
         virtual void initialize();
 
         /**
-         * Ejecuta la metaheurística con los datos dados. Además al final
-         * de ella ejecuta un K-means, ya que la imagen que genera tiene
-         * mucho ruido.
+         * Ejecuta la metaheurística con los datos dados. 
          *
          * @param type Si se utilizará una función objetivo de
          *             maximización o de minimización.
@@ -81,7 +74,11 @@ class AntA : public Metaheuristic{
         virtual void run(int type);
 
         /*
-         * Se encarga de armar la solutción a partir de la células y las hormigas.
+         * Se encarga de armar la solutción a partir de la células y las 
+         * hormigas.
+         *
+         * @param type Si se utilizará una función objetivo de
+         *             maximización o de minimización.
          */
         virtual void reconstruct(int type);
 
@@ -98,18 +95,9 @@ class AntA : public Metaheuristic{
 
     private:
         
-        /**
-         * Intercambio la posición f y s, del arreglo dado.
-         *
-         * @param array Arreglo a intercambiar.
-         * @param f Primero posición.
-         * @param s Segundo posición.
-         */
-        inline void swap(int *array, int f, int s);
-
         /*
          * Funciones que devuelve el promedio de distancia entre el pixel y los
-         * que se encuentra en la célula cell.
+         * que se encuentran en la célula cell.
          *
          * @param pixel Pixel que se quiere soltar.
          * @param cell Célula donde se quiere soltar.
@@ -133,21 +121,22 @@ class AntA : public Metaheuristic{
         float ppick(int pixel, int cell);
 
         /*
-         * Va a buscar los pixeles que no estan siendo cargados y la hormiga va a inten-
-         * tar agarrarlo.
+         * Va a buscar los pixeles que no estan siendo cargados y la hormiga va
+         * a intentar agarrar uno.
          *
          * @param Número de la hormiga.
          */
         void pickAnt(int ra);
         
+
         /*
          * Procedimiento que se encarga de soltar el pixel de una hormiga. Funciona
          * del siguiente modo:
          *
-         * Si (memoria de la hormiga tiene por lo menos 1)
-         *     entonces Revisa la memoria local de la hormiga y elige la mejor 
-         *         célula donde dejar, en caso que no logre soltar el
-         *         pixel intenta en una ceĺula aleatoria
+         * Si (memoria tiene por lo menos 1) entonces
+         *      Revisa la memoria y elige la mejor célula donde dejar,
+         *      en caso que no logre soltar el
+         *      pixel intenta en una ceĺula aleatoria.
          * sino Dejar el pixel en una célula aleatoria
          *
          * @param ra Número de la hormiga que quiere soltar el pixel.
@@ -157,7 +146,7 @@ class AntA : public Metaheuristic{
         /*
          * Agrega a la memoria la celula dada, si ya existe simplemente 
          * cuenta que dejo una vez ahi. Cada cierto numero de iteraciones
-         * vacia un elemento de la memoria.
+         * vacia un elemento de la memoria en la cual se ha dejado menos veces.
          *
          * @param cell Celula donde se solto el pixel.
          */
