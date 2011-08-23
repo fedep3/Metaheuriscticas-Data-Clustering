@@ -960,7 +960,7 @@ que 0.\n");
                 break;
             case 'N':
                 _f = atof(optarg);
-                if(_f < 0.0 || _f > 1.0){
+                if(_f < 0.0 ||_f > 1.1){
                     fprintf(stderr, "El parámetro de escalado f debe estar \
 entre 0.0 y 1.0\n");
                     fprintf(stderr, "%s no lo está.\n", optarg);
@@ -1202,7 +1202,7 @@ definirlos.\n");
             aux = aux && optdeopso[c];
 
         if(aux){
-            if((_w1 + _w2 + _w3) - 1.0 > 0.1){
+            if(abs((_w1 + _w2 + _w3) - 1.0) > 0.1){
                 fprintf(stderr, "La suma de los pesos debe ser 1.0.\n");
                 aux = false;
             }
@@ -1242,7 +1242,7 @@ definirlos.\n");
                 aux = aux && optdeopso[c];
 
             if(aux){
-                if((_w1 + _w2 + _w3) - 1.0 > 0.1){
+                if((_w1 + _w2 + _w3) - 1.0 > FERROR){
                     fprintf(stderr, "La suma de los pesos debe ser 1.0.\n");
                     aux = false;
                 }

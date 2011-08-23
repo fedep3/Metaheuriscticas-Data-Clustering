@@ -42,6 +42,8 @@
 #define M_ANT    5
 #define M_BEE    6
 
+#define FERROR 0.05
+
 #define MAXRUNTIME  300
 
 using namespace std;
