@@ -1,0 +1,2 @@
+SELECT AVG(ga_hib_fo), gap_i, gap_tt, gap_pc, gap_pm FROM genetico, geneticop WHERE ga_type = gap_id GROUP BY ga_type ORDER BY AVG(ga_hib_fo) DESC LIMIT 20;
+SELECT AVG(bee_hib_fo), beep_i, beep_m, beep_e, beep_eb, beep_ob FROM abeja, abejap WHERE bee_type = beep_id GROUP BY bee_type ORDER BY AVG(bee_hib_fo) DESC LIMIT 20;
