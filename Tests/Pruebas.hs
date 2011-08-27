@@ -48,8 +48,8 @@ instance Show Algorithm where
                                    (show v)  ++ (show vx)
     show (WPSO r i v vx w) = " --a PSO" ++
                                    (show r) ++
-                                   (show i) ++ (show w) ++
-                                   (show v) ++ (show vx)
+                                   (show i) ++ (show v) ++
+                                   (show vx) ++ (show w)
     show (DE r i w)        = " --a DE " ++ (show r) ++
                                    (show i) ++ (show w)
     show (SDE r i w s pc)  = " --a DE " ++ (show r) ++
