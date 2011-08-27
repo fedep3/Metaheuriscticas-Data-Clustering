@@ -1202,7 +1202,7 @@ definirlos.\n");
             aux = aux && optdeopso[c];
 
         if(aux){
-            if(abs((_w1 + _w2 + _w3) - 1.0) > 0.1){
+            if(abs((_w1 + _w2 + _w3) - 1.0) > 0.01){
                 fprintf(stderr, "La suma de los pesos debe ser 1.0.\n");
                 aux = false;
             }
@@ -1242,7 +1242,7 @@ definirlos.\n");
                 aux = aux && optdeopso[c];
 
             if(aux){
-                if((_w1 + _w2 + _w3) - 1.0 > FERROR){
+                if((_w1 + _w2 + _w3) - 1.0 > 0.01){
                     fprintf(stderr, "La suma de los pesos debe ser 1.0.\n");
                     aux = false;
                 }

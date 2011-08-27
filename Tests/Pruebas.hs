@@ -346,7 +346,7 @@ genAlgorithm (WPSOOpt (r, p, w1, w2, w3, w, c1, c2, vmx)) =
       c1'  <- listGen c1,
       c2'  <- listGen c2,
       vmx' <- listGen vmx,
-      ( ((c1' + c2') * 0.5) - 1.0 < w' ) && ( abs (((w1' + w2' + w3') - 1.0)) <= 0.1 ) && (0.0 <= vmx' && vmx' <= 1.0)
+      ( ((c1' + c2') * 0.5) - 1.0 < w' ) && ( abs (((w1' + w2' + w3') - 1.0)) <= 0.01 ) && (0.0 <= vmx' && vmx' <= 1.0)
     ]
 genAlgorithm (DEOpt (r, p, w1, w2, w3)) =
     [ (DE r (I p') (Weight w1' w2' w3')) |
@@ -354,7 +354,7 @@ genAlgorithm (DEOpt (r, p, w1, w2, w3)) =
       w1'  <- listGen w1,
       w2'  <- listGen w2,
       w3'  <- listGen w3,
-      ( abs (((w1' + w2' + w3') - 1.0)) <= 0.1 )
+      ( abs (((w1' + w2' + w3') - 1.0)) <= 0.01 )
     ]
 genAlgorithm (SDEOpt (r, p, w1, w2, w3, f, pc)) =
     [ (SDE r (I p') (Weight w1' w2' w3') (Scale f') (Pc pc')) |
@@ -364,7 +364,7 @@ genAlgorithm (SDEOpt (r, p, w1, w2, w3, f, pc)) =
       w3'  <- listGen w3,
       f'   <- listGen f,
       pc'  <- listGen pc,
-      ( abs (((w1' + w2' + w3') - 1.0)) <= 0.1 ) && (0.0 <= pc' && pc' <= 1.0) && (0.0 <= f' && f' <= 1.0)
+      ( abs (((w1' + w2' + w3') - 1.0)) <= 0.01 ) && (0.0 <= pc' && pc' <= 1.0) && (0.0 <= f' && f' <= 1.0)
     ]
 genAlgorithm (AntOpt (r, p, a)) =
     [ (Ant r (IAnt p') a') | 
