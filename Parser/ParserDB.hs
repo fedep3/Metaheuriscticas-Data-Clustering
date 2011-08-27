@@ -326,8 +326,8 @@ antDB = "CREATE TABLE hormiga (\
 
 -- | Comando para encontrar el ID de un conjunto de parámetros.
 selectParamAnt :: String
-selectParamAnt = "SELECT hormigap_id\
-                 \ FROM antp WHERE\
+selectParamAnt = "SELECT antp_id\
+                 \ FROM hormigap WHERE\
                  \ antp_i = ?"
 
 -- | Comando para insertar un conjunto de parámetros.
@@ -447,7 +447,7 @@ selectParamWPSO = "SELECT wpsop_id\
 -- | Comando para insertar un conjunto de parámetros.
 insertParamWPSO :: String
 insertParamWPSO = "INSERT INTO wpsop \
-                  \ (wpsop_i, wpsop_c1, wpsop_c2, wpsop_w, wpsop_vmx, wpso_w1, wpso_w2, wpso_w3)\
+                  \ (wpsop_i, wpsop_c1, wpsop_c2, wpsop_w, wpsop_vmx, wpsop_w1, wpsop_w2, wpsop_w3)\
                   \ VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
 -- | Comando para insertar los resultados.
@@ -560,7 +560,7 @@ generalParam dbh s i sv = do
                     (\_ -> return [])
     case res of
         []      -> do
-            catchSql (do {run dbh i sv; return ()}) (\_ -> return ())
+            catchSql (do {run dbh i sv; return ()}) (\e -> return ())
             res' <- catchSql (quickQuery dbh s sv)
                              (\_ -> return [])
             case res' of
