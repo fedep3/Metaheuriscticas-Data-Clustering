@@ -241,7 +241,7 @@ El pseudoc\'odigo es de la siguiente manera (hay m\'as interpretaciones posibles
 
 Donde pc es la probabilidad de cruce, pm la de mutaci\'on y rand(0,1)
 es una funci\'on que devuelve un n\'umero aleatorio entre 0 y 1. Y el resto
-se define como :
+se define como (basado en gran parte de \cite{GePo2010}) :
 
 \begin{itemize}
 
@@ -250,7 +250,7 @@ crean los cromosomas de la poblaci\'on.
 
 \item {\bf Selecci\'on:} Consiste en elegir los padres. 
 
-En \cite{GePo2010} comentan sus formas de implementar m\'as comunes:
+En comentan sus formas de implementar m\'as comunes:
 
 \begin{itemize}
 
@@ -267,7 +267,7 @@ son elegidos para ser padres.
 \item {\bf Cruce:}
 
 Consiste en replazar los genes de uno de los padres por los del otro. Se puede hacer
-de la siguiente manera continuando \cite{GePo2010}:
+de la siguiente manera:
 
 \begin{itemize}
 
@@ -298,22 +298,7 @@ De esta misma forma se puede extender para m\'as puntos.
 
 Consiste en modificar uno de los cromosomas bien sea de la poblaci\'on
 o uno de los hijos generados. Un caso bastante com\'un es el de usar una m\'ascara
-cuando los cromosomas son binarios\cite{GePo2010}.
-
-Por su lado en esa misma referencia se comenta que para clustering se pueden usar los siguientes:
-
-\begin{itemize}
-
-\item En el caso que se use la representaci\'on binaria, alternar los bits es un
-buen operador.
-
-\item Cuando la representaci\'on es de enteros de etiquedas, se puede cambiar
-el cluster al cual pertenece uno de los objetos.
-
-\item Remplazar uno de los centroides por uno de los objetos pertenecientes a ese
-cluster.
-
-\end{itemize}
+cuando los cromosomas son binarios.
 
 \end{itemize}
 
@@ -449,7 +434,7 @@ $x_i(t + 1) = x_i(t) + v_i(t + 1)$
         - Actualizar posición $x_i$.
 \end{lstlisting}
 
-\subsection{Evolución Diferencial (DE)}
+\subsection{Evolución Diferencial (DE)} \label{sect:metade}
 
 Es un algoritmo basado en poblaci\'on de
 optimizaci\'on global que hace uso de una representaci\'on de punto flotante

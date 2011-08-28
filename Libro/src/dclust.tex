@@ -27,6 +27,9 @@ la base para la clasificaci\'on de los patrones.
 \item {\bf Medici\'on de Distancia:} Es la m\'etrica con la cual se va a evaluar
 la disimilaridad entre los patrones. M\'as adelante se habl\'a en m\'as detalle.
 
+\item {\bf Centroide:} Es un patrón representante de los pertenecientes
+a un cluster.
+
 \end{itemize}
 
 Ahora se puede dar una definici\'on formal al problema:
@@ -67,7 +70,7 @@ donde PC es un partici\'on del conjunto C y $f$ es una funci\'on que
 cuantifica la calidad del particionamiento en base a la similaridad o disimilaridad
 de los patrones.
 
-\section{M\'etricas de semejanza entre patrones} \label{sect:mdist}
+\section{Medidas de similitud} \label{sect:mdist}
 
 Una parte fundamental del proceso de \emph{clustering} es el de saber cuan
 similares son dos patrones de la base de datos. Usualmente, se utilizan medidas
@@ -93,13 +96,13 @@ patrones al medir el coseno del ángulo que forman entre ellos:
 \end{center}
 \end{itemize}
 
-\subsection{Técnicas de Clustering}
+\section{Técnicas de Clustering}
 
     La mayor parte de los algoritmos de \emph{clustering} se basan en dos
 técnicas populares conocidas como  \emph{clustering jerárquico} y
 \emph{clustering particional} \cite{PSO_0}.
 
-\subsubsection{Clustering Jerárquico}
+\subsection{Clustering Jerárquico}
 
 Los algoritmos en esta categoría generan
 un árbol de cluster llamado también \emph{dendograma} al usar heurística para
@@ -132,7 +135,7 @@ pueden mover a otro cluster.
 falta de información acerca de la forma global y el tamaño de los clusters.
     \end{itemize}
 
-\subsubsection{Clustering Particional}
+\subsection{Clustering Particional} \label{sect:cpart}
 
     Estos algoritmos dividen el conjunto
 de datos en el número de clusters especificados. Tratan de minimizar o maximizar
@@ -188,7 +191,7 @@ ya que su complejidad es lineal al n\'umero de datos $O(N)$.
 \end{itemize}
 
 
-\section{Técnicas de Validación de Clusters} \label{sect:fobjetivo}
+\section{Técnicas de Validación de Clusters} \label{sect:tval}
 
 
     El principal objetivo de la validación de clusters es evaluar los resultados

@@ -67,15 +67,44 @@ Para medir la distancia entre dos patrones se va a usar la euclidiana que
 ya fue explicada en \ref{sect:mdist}. Se elegi\'o esta debido
 a su f\'acil implementaci\'on, buenos resultado y rapidez.
 
-La funci\'on objetivo principal es la DB, comentada en \ref{sect:fobjetivo}.
+La funci\'on objetivo principal es la DB, comentada en \ref{sect:tval}.
 Su baja complejidad algor\'itmitca en comparaci\'on con las dem\'as existentes y
 su eficacia en medir bien las dos cosas que se buscan en los cluster (distancia
 intracluster baja e intercluster alta) fueron los motivos para su elecci\'on. 
 
-El DE y PSO tienen la tercera comentada en \ref{sect:fobjetivo}.
+El DE y PSO usan la propuesta por \cite{OmEnSa2005}. En el contexto de 
+clustering de datos, una partícula o indivuduo representa
+al centroide de un cluster. La calidad
+de cada uno es medida usando:
 
-Para comparar que tan bueno es un algoritmo en comparacaci\'on a los otros, todos son evaluados al final con $1/DB(K)$, que 
-es la forma de maximizaci\'on de la m\'etrica DB, y la del error $J_e$.
+\[
+f(x_i,Z_i) = w_1 \overline{d}_{Max}(Z_i,x_i) + w_2 (z_{Max} - d_{Min}(x_i)) + w_3 J_{e,i}
+\]
+
+donde $z_{Max}$ es el máximo valor del conjunto de datos (en el contexto
+de imágenes digitales $z_{Max} = 2^s - 1$ para una imagen de $s$-bits);
+$Z_i$ es la matriz representando la asignación de patrones a los clusters
+de la partícula $i$. Las constantes $w_1$, $w_2$ y $w_3$ son definidas por el usuario
+usadas para determinar la contribución de cada uno de los sub-objetivos.
+También
+
+\[
+\overline{d}_{Max}(Z_i,x_i) = \max_{1 \leq k \leq K} \left[ \displaystyle\sum_{\forall z_p \in C_{i,k}} d(z_p,m_{i,k})/n_{i,k}\right]
+\]
+
+es la máxima distancia eucl\'idea promedio de las partículas en sus
+clusters asociados. Y
+
+\[
+\overline{d}_{Min}(x_i) = \min_{\forall k, l, k \neq l} \left[ d(m_{i,k},m_{i,l})\right]
+\]
+
+es la distancia eucl\'idea mínima entre un par de clusters.
+
+Por \'ultimo $J_e$ es la comentado en \ref{sect:tval}.
+
+Para comparar que tan bueno es un algoritmo en comparacaci\'on a los otros, todos son evaluados al final con $DB(K)$ 
+y la del error $J_e$.
 
 \section{Ajuste de par\'ametros}  \label{chap:ajustep}
 
@@ -96,7 +125,7 @@ uno y de esta forma crear otras pruebas mucho m\'as espec\'ificas.
 
 \section{K-means}  \label{chap:ikmeans}
 
-\'Este fue implementado tal cual como se explic\'o en \ref{sect:kmeans}. La
+\'Este fue implementado tal cual como se explic\'o en \ref{sect:cpart}. La
 inicializaci\'on es totalmente aleatoria. Y la condici\'on de paradas
 va a ser hasta que no se mejores un n\'umero de veces dado.
 
