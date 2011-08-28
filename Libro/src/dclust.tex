@@ -1,0 +1,280 @@
+% Marco Teorico.
+\chapter{Marco te'orico} \label{chap:dclust}
+
+\vspace{5 mm}
+
+\section{Data Clustering} \label{sect:dclust}
+
+\subsection{Definici\'on} \label{sect:dclustdef} \label{sect:dclustd}
+
+Siguiendo con \cite{SwAjAm2009} antes de dar un definici\'on matem\'atica al problema hay que hablar de 
+los siguientes t\'erminos que van a ser usados a trav\'es de la tesis:
+
+\begin{itemize}
+
+\item {\bf Patr\'on o vector caracter\'istico:} Representa las
+caracter\'isticas que poseen los objetos a los cuales se les har\'a el clustering.
+
+\item {\bf Caracter\'istica:} Es una componente de un patr\'on. \'Estas son
+la base para la clasificaci\'on de los patrones.
+
+\item {\bf Cluster:} Es un grupo de patrones similares.
+
+\item {\bf Hard clustering:} Cada patr\'on pertenece a un \'unico un cluster.
+
+\item {\bf Medici\'on de Distancia:} Es la m\'etrica con la cual se va a evaluar
+la disimilaridad entre los patrones. M\'as adelante se habl\'a en m\'as detalle.
+
+\end{itemize}
+
+Ahora se puede dar una definici\'on formal al problema:
+
+Sea $P = \{ P_1, P_2, \dots , P_N\}$ un conjunto de N patrones, 
+donde cada uno tiene M caracter\'isticas. Éstos pueden
+ser reprentados por una matriz $Z_{NxM}$. El vector de la fila $i$ caracteriza al 
+patr\'on $i$ del conjunto $P$ y cada elemento $Z_{i,j}$ en $Z_i$ su caracter\'istica $j$.
+Dada tal matriz Z$_{NxM}$ la idea es que un algoritmo de clustering intente hallar
+el particionamiento $C = \{ C_1, C_2, \dots , C_K \}$ tal que los patrones
+de un mismo cluster $C_i$ sean similares y entre clusteres diferentes
+sean disimilares:
+
+\begin{enumerate} \label{en:properties}
+
+\item Cada cluster debe tener por lo menos un patr\'on asignado:
+
+$\forall i | i \in \{1, 2, \dots, K\} : C_i \neq \emptyset$
+
+\item Dos clusters distintos no tienen ning\'un patr\'on en com\'un:
+
+$\forall i,j | i,j\in \{1, 2, \dots, K\} \land i \neq j:  C_i \cap C_j \neq \emptyset$
+
+\item Cada patr\'on debe estar asignado a un cluster:
+
+$\bigcup_{i=1}^{K} C_i = P$
+
+\end{enumerate}
+
+Dado que el conjunto de datos puede ser particionado de varias maneras
+consevando las propiedades de arriba, es necesaria una función objetico o en otras palabras
+una medida de que tan buena es la partici\'on. El problema se comvierte en hallar
+una partici\'on $C^*$  \'optima o lo m\'as cercano a ella en comparaci\'on a 
+las otras soluciones posible $C = \{ C^1, C^2, \dots, C^{T(N,K)} \}$ donde 
+$T(N,K) = { {1 \over K!} \times {\sum_{i=1}^{K} (-1)^i  \binom{K}{i} (K-i)^i} }$
+es el n\'umero de particiones posibles. \'Esto es lo mismo que optimizar $f(Z_{NxM}, PC)$,
+donde PC es un partici\'on del conjunto C y $f$ es una funci\'on que
+cuantifica la calidad del particionamiento en base a la similaridad o disimilaridad
+de los patrones.
+
+\section{M\'etricas de semejanza entre patrones} \label{sect:mdist}
+
+Una parte fundamental del proceso de \emph{clustering} es el de saber cuan
+similares son dos patrones de la base de datos. Usualmente, se utilizan medidas
+de distancia entre patrones. A continuación se presentan algunas medidas de
+distancia \cite{PSO_0}:
+\begin{itemize}
+    \item \textbf{Distancia euclideana}: es la distancia ``ordinaria'' entre dos
+puntos de un espacio euclídeo $M$-dimensional, siendo $M$ la dimensión de los
+datos de la base de datos:
+\begin{center}
+    $d(\overrightarrow{x_a}, \overrightarrow{x_b}) = \displaystyle\sqrt{\displaystyle\sum_{j = 1}^{M} (x_{a,j} - x_{b,j})^2} = \|\overrightarrow{x_a} - \overrightarrow{x_b}\|$
+\end{center}
+    \item \textbf{Métrica de Minkowsky}: la distancia euclideana es un caso
+especial de esta métrica cuando $\alpha = 2$:
+\begin{center}
+    $d^{\alpha}(\overrightarrow{x_a}, \overrightarrow{x_b}) = \left(\displaystyle\sum_{j = 1}^{M} (x_{a,j} - x_{b,j})^{\alpha}\right)^{1/\alpha} = \|\overrightarrow{x_a} - \overrightarrow{x_b}\|^{\alpha}$
+\end{center}
+    \item \textbf{Distancia Manhattan}: Cuando $\alpha = 1$. 
+    \item \textbf{Similitud del Coseno}: es una medida de similitud entre dos
+patrones al medir el coseno del ángulo que forman entre ellos:
+\begin{center}
+    $d(\overrightarrow{x_a}, \overrightarrow{x_b}) = \displaystyle\frac{\displaystyle\sum_{j = 1}^{M} x_{a, j} \cdot x_{b, j}}{\|\overrightarrow{x_a}\| \cdot \|\overrightarrow{x_b}\|}$
+\end{center}
+\end{itemize}
+
+\subsection{Técnicas de Clustering}
+
+    La mayor parte de los algoritmos de \emph{clustering} se basan en dos
+técnicas populares conocidas como  \emph{clustering jerárquico} y
+\emph{clustering particional} \cite{PSO_0}.
+
+\subsubsection{Clustering Jerárquico}
+
+Los algoritmos en esta categoría generan
+un árbol de cluster llamado también \emph{dendograma} al usar heurística para
+separar clusters (algoritmos de división) o técnicas de unión de clusters
+(algoritmos de aglomeración):
+    \begin{itemize}
+        \item \emph{Algoritmos de División}: inicialmente, estos algoritmos
+tienen un sólo cluster con todos los patrones asignados a él. A través del
+proceso de división, clusters grandes se subdividen en clusters más pequeños,
+donde lo ideal es que la distancia entre patrones de un mismo cluster sea
+mínima.
+        \item \emph{Algoritmos de Aglomeración}: estos algoritmos comienzan con
+$n$ clusters, siendo $n$ la cantidad de patrones, de modo que cada patrón esté
+en un cluster. A través del proceso de aglomeración, clusters similares son
+unidos en un nuevo cluster.
+    \end{itemize}
+    En general, las técnicas de \emph{clustering} jerárquico tienen las siguientes
+ventajas \cite{PSO_0}:
+    \begin{itemize}
+        \item El número de clusters no tiene que ser específicado \emph{a priori}.
+        \item Son idependientes a las condiciones iniciales.
+    \end{itemize}
+    Sin embargo, sus principales desventajas son \cite{PSO_0}:
+    \begin{itemize}
+        \item Son computacionalmente caros. Por lo tanto, no se adecúan a base
+de datos grandes \cite{DC_2}.
+        \item Son estáticos. Por ejemplo, patrones asignados a un cluster no se
+pueden mover a otro cluster.
+        \item A veces, no podrán separar clusters que se solapen debido a la
+falta de información acerca de la forma global y el tamaño de los clusters.
+    \end{itemize}
+
+\subsubsection{Clustering Particional}
+
+    Estos algoritmos dividen el conjunto
+de datos en el número de clusters especificados. Tratan de minimizar o maximizar
+algún criterio, así que pueden ser tratados como problemas de optimización,
+generalmente \emph{NP-hard} y combinatorios \cite{DC_3}.
+
+    Las ventajas de los algoritmos jerárquicos son las desventajas de los algoritmos
+particionales y \emph{viceversa} \cite{PSO_0}. Su principal ventaja es que no
+son tan caros computacionalmente como las técnicas de \emph{clustering}
+jerárquico. Por lo tanto, se adecúan a conjuntos de datos grandes \cite{PSO_0}.
+
+    El algoritmo de \emph{clustering} particional más usado es el
+\textbf{\emph{K-means}} \cite{DC_4}. 
+Fue dise\~na do para datos num\'ericos en donde cada cluster tiene un centro llamado
+media (mean). Este comienza con un n\'umero $K$ de clusters establecido. Se inicializan
+los centroides y se va a ir cambiando
+los objetos de un cluster a otro con cual su distancia al centroide sea menor,
+hasta que cierta condici\'on de parada se cumpla.\cite{GePo2010}
+
+La media, tambi\'en llamada centroide,  de un cluster $C_i$ (con $1 \leq i \leq K$)
+se define del siguiente modo:
+
+\[
+{1 \over |C_{i}|} \sum_{p \in C_{i}} p
+\]
+
+El pseudoc\'odigo es el siguiente:
+
+\begin{lstlisting}[float=h, caption=Algoritmo General K-means]
+    - Seleccionar K patrones. Estos seran los centroides iniciales.
+    Mientras no se cumpla el criterio de parada.
+        - Calcular las distancias de los patrones a cada uno de los centroides. Los patrones se asignan a la particion o grupo cuya distancia es minima.
+        - Actualizar los centroides con el valor medio de los patrones asignados a la particion.
+    FinMientras
+\end{lstlisting}
+
+La inicializaci\'on puede hacerser con un m\'etodo m\'as
+sofiticado como un algoritmo greedy.
+
+Sus propiedades m\'as importantes son las siguientes:
+
+\begin{itemize}
+
+\item Es bastante eficiente para hacer clustering de grandes conjuntos de datos,
+ya que su complejidad es lineal al n\'umero de datos $O(N)$.
+
+\item Tiende a quedarse en \'optimos locales.
+
+\item S\'olo sirve en datos num\'ericos.
+
+\item Su buen funcionamiento depende de la inicializaci\'on de los clusters.
+
+\end{itemize}
+
+
+\section{Técnicas de Validación de Clusters} \label{sect:fobjetivo}
+
+
+    El principal objetivo de la validación de clusters es evaluar los resultados
+del proceso de \emph{clustering} para encontrar la mejor partición del conjuntos
+de datos.
+
+    Dos criterios que han sido ampliamente considerados como suficientes al
+medir la calidad de la partición de los datos son:
+\begin{itemize}
+    \item \emph{Compactación}: los patrones dentro de un cluster deben ser
+similares entre sí y diferentes de los patrones de otros clusters. Mientras
+menos varianza exista entre las distancias de los elementos de un cluster, más
+compacto en el mismo.
+    \item \emph{Separación}: Los cluster deben estar bien diferenciados. No
+deberían existir clusters con centroides iguales o parecidos.
+\end{itemize}
+
+Para esta labor se utilizan los llamados \emph{índices de validez}.
+
+\begin{itemize}
+
+\item {\bf Davis-Bouldin:}
+Esta medida es una función de la proporción de la suma de la dispersión dentro 
+de los clusters y al separación entre clusters \cite{DC_5}. Utiliza los clusters y 
+sus medias. Primero se define la dispersión del $i$-ésimo cluster y la distancia  
+entre el $i$-ésimo cluster y el $j$-ésimo cluster respectivamente:
+%Dispersión intra-cluster.
+%INICIO
+\begin{center}
+$ S_{i,q} = \left( \frac{1}{N_i} \displaystyle\sum_{\overrightarrow{x} \in C_i} \|\overrightarrow{x} - \overrightarrow{m_i}\|_{2}^q\right)^{1/q}$
+\end{center}
+%END
+%Distancia inter-cluster.
+%INICIO
+\begin{center}
+$ d_{ij,t} = \left(\displaystyle\sum_{p=1}^{M} | m_{i,p} - m_{j,p} |^t \right)^{1/t} = \|\overrightarrow{m_i} - \overrightarrow{m_j}\|_t$
+\end{center}
+%END
+donde,
+\begin{itemize}
+    \item $\overrightarrow{m_i}$ es el centroide del $i$-ésimo cluster.
+    \item $q,t \geq 1$; $q$ es un entero y $q$ y $t$ pueden ser escogidos
+independientemente.
+    \item $N_i$ es el número de elementos en el $i$-ésimo cluster $C_i$.
+\end{itemize}
+
+    Entonces se define $R_{i,qt}$ como:
+%Multi-objetivo.
+%INICIO
+\begin{center}
+$ R_{i,qt} = \displaystyle\max_{j \in K, j \neq i}\left( \frac{S_{i,q} + S_{j,q}}{d_{ij,t}}\right)$
+\end{center}
+%END
+
+Finalmente, se define la medida DB como:
+%Medida DB.
+%INICIO
+\begin{center}
+$ DB(K) = \frac{1}{K} \displaystyle\sum_{i = 1}^K R_{i,qt}$
+\end{center}
+%END
+
+A menor DB(K), indica mejor partición.
+
+\item {\bf CS:} Chou et al \cite{SwAjAm2009} propone esta m\'etrica como forma
+de determinar la bondad de una partici\'on. Para su c\'alculo hace falta calcular los centroides
+de cada grupo y alguna medida de distancia entres vectores $Z_p$ y $Z_y$
+
+%Centroide por promedio.
+%INICIO
+\begin{center}
+$ CS(K) = \displaystyle\frac{\displaystyle\sum_{i=1}^K 
+                \left(\frac{1}{N_i}\displaystyle\sum_{\overrightarrow{x} \in C_i} \max_{\overrightarrow{y} \in C_i} \{ d(\overrightarrow{x}, \overrightarrow{y})\}\right)}{\displaystyle\sum_{i=1}^K \left(\displaystyle\min_{j \in K, j \neq i} \{ d(\overrightarrow{m_i}, \overrightarrow{m_j})\} \right)}$
+\end{center}
+%END
+
+La medida CS es más eficiente en abordar clusters de diferentes densidades y/o
+tamaños que las otras medidas de validez más populares \cite{DC_6}. El problema
+es la carga computacional que incrementa cuando aumenta $K$ y $n$.
+
+\item {\bf Cuantificación del Error}
+
+    La forma más general de medir la calidad de la partición es la cuantificación 
+del error. Se define como \cite{PSO_0}:
+\begin{center}
+$J_e = \displaystyle\frac{\displaystyle\sum_{k = 1}^K \left( \displaystyle\sum_{\overrightarrow{x} \in C_k} d(\overrightarrow{x}, \overrightarrow{m_k}) \right) / N_k}{K}$
+\end{center}
+
+A menor error $J_e$, mejor partición.
+
+\end{itemize}
