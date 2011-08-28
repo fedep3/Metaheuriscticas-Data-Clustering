@@ -1,0 +1,724 @@
+\chapter{Métodos de Optimización} \label{chap:mopt}
+
+El objetivo de la optimización es buscar valores para un conjunto de
+parámetros que maximicen o minimicen la función objetivo del problema de modo
+que se satisfagan las restricciones del mismo. Una solución factible es una
+elección de valores para el conjunto de parámetros que satisfacen todas las
+las restricciones del problema. Las soluciones factibles con mejores valores de
+función objetivo son llamadas soluciones óptimas.
+
+    Las técnicas de optimización son usadas diariamente para planificación
+industrial, administración de recursos, programación de horarios, toma de
+decisiones, agrupación no supervisada de datos, etc. Por lo tanto, las técnicas de
+optimización son ampliamente usadas en muchos campos como ingeniería, industria,
+medicina y negocios. La investigación en el campo de la optimización es bastante
+activa y nuevos métodos de optimización son desarrollados regularmente \cite{GO_1}.
+
+    La optimización abarca tanto problemas de maximización como de minimización.
+Cualquier problema de maximización puede ser convertido en un problema de
+minimización al tomar la inversa de la función objetivo del mismo y
+viceversa. En general, un problema de optimización puede ser definido como:
+
+    Sea $S$ el espacio de soluciones y $d$ la dimensión del mismo donde:
+\begin{itemize}
+    \item $f: S \rightarrow \mathbb{R}$ es la función objetivo de maximización
+del problema.
+    \item $S \subseteq \mathbb{R}^d$
+\end{itemize}
+    entonces se debe encontrar $x^* \in S$ tal que:
+\begin{itemize}
+    \item $f(x^*) \geq f(x), \forall x \in S$ si se desea una función maximizadora.
+    \item $f(x^*)^{-1} \leq f(x)^{-1}, \forall x \in S$, si se desea una función
+minimizadora.
+\end{itemize}
+
+    El valor de $f(x^*)$ (ó $f(x^*)^{-1}$) es llamado óptimo global. La
+optimización global es la tarea de encontrar la solución global óptima. En
+general, existen soluciones que son localmente óptimas pero no globalmente
+óptimas. Por lo tanto los problemas de optimización global son difíciles de
+resolver de manera exacta. En el contexto de problemas combinatorios, estos
+problemas son frecuentemente NP-hard \cite{GO_2}. Un buen algoritmo de
+optimización global encontrará $x^*$ sin importar el punto inicial $x_0 \in S$.
+
+    Algunos ejemplos de problemas de optimización global son \cite{GO_2}:
+\begin{itemize}
+    \item Problemas combinatorios: donde la función lineal o no-lineal es definida
+sobre un conjunto finito, pero bastante grande de soluciones, Por ejemplo,
+agrupación no supervisada de datos, programación de horarios, entre otros.
+    \item Problemas generales sin restricciones: donde se define una función
+no-lineal sobre un conjunto de valores reales sin restricciones.
+    \item Problemas generales con restricciones: donde se define una función
+no-lineal sobre un conjunto de valores reales con restricciones.
+\end{itemize}
+
+\subsection{Algoritmos Tradicionales de Optimización}
+
+    Los algoritmos de optimización tradicionales usan métodos exactos para
+encontrar la mejor solución. Si el problema tiene solución, entonces estos algoritmos
+son capaces de encontrar la solución óptima global.
+
+    Algunos de estos algoritmos son \cite{TA_1}:
+\begin{itemize}
+    \item \emph{Fuerza bruta}: comparan todas las soluciones del espacio de
+soluciones de modo que encontrar la solución global óptima esté garantizada. Sin
+embargo, a medida que crece el espacio de soluciones el costo de los algoritmos
+de fuerza bruta incrementa. Por lo tanto no son apropiados para la clase de
+problemas pertenecientes al grupo NP-hard.
+    \item Programación lineal: sirven para problemas donde una variable depende
+de una o más variables de manera lineal:
+\begin{center}
+    $f(X_1, X_2, \cdots, X_n) = a_1 \cdot X_1 + a_2 \cdot X_2 + \cdots + a_n \cdot X_n$
+\end{center}
+
+    En otras palabres, $f(X_1, X_2, \cdots, X_n)$ (función objetivo del algoritmo)
+puede ser expresada como una combinación lineal de las variables
+$X_1, X_2, \cdots, X_n$. 
+    \item Programación dinámica: funciona bajo el principio de encontrar una
+solución total, operando en un punto intermedio que está entre la ubicación actual
+y la ubicación final. El procedimiento es recursivo y cada punto intermedio es una
+función de los puntos ya visitados. Una vez alcanzada la meta, se puede reconstruir
+de manera inversa el camino óptimo generado por el algoritmo.
+\end{itemize}
+
+\subsection{Algoritmos Estocásticos}
+
+    Los algoritmos estocásticos son usados para hallar soluciones
+cercanas al óptimo global para problemas NP-hard en tiempo polinomial. Estos
+algoritmos logran su objetivo al asumir que las soluciones buenas están
+cercanas unas de otras en el espacio de búsqueda. Sin embargo, a diferencia de
+los algoritmos tradicionales, estos podrían no encontrar la solución óptima
+global \cite{PSO_0}.
+
+    Las ventajas de los algoritmos estocásticos tienen varias
+ventajas comparados con otros algoritmos \cite{SA_1}:
+\begin{itemize}
+    \item Son generalmente fáciles de implementar.
+    \item Pueden ser usados eficientemente en paralelo.
+    \item No requieren de la función de definición del problema para ser
+continuos.
+    \item Generalmente pueden encontrar la solución óptima o cercana a la
+óptima.
+    \item Sirven para problemas discretos y combinatorios.
+\end{itemize}
+
+    Algunos algoritmos estocásticos son \cite{PSO_0}:
+\begin{itemize}
+    \item Hill-Climbing: consiste en tomar una solución potencial aleatoria del
+problema $x_0$ y buscar en la vecindad $N_0$ de $x_0$ una nueva mejor solución
+al problema. Si se encentra un $x_1 \in N_0$ tal que $x_1$ es mejor que $x_0$,
+entonces $x_1$ es la nueva solución potencial y se repite el procedimiento que
+se hizo con $x_0$. Si no se encuentra una solución $x_1 \in N_0$ tal que
+$x_1$ es mejor que $x_0$, entonces $x_0$ es la mejor solución encontrada por el
+algoritmo \cite{TA_1}.
+    \item Simulated Annealing: consiste en tomar una solución aleatoria del
+problema $x_0$ y un valor pequeño $\epsilon$ para perturbar las soluciones.
+Si $x_0 + \epsilon$ es mejor que $x_0$, entonces la nueva mejor solución es 
+$x_0 + \epsilon$ y se repite el procedimiento. Sino, la solución $x_0$ será
+perturbada con una probabilidad que se va decrementando a medida que avanza la
+ejecución del algoritmo para seguir buscando \cite{SA_2}.
+    \item Búsqueda Tabú: consiste en una búsqueda heurística que mantiene una
+lista de memoria tabú de las soluciones previamente visitadas, de modo que se
+mejore el proceso de búsqueda. La lista tabú es usada como una guía de
+movimiento de una solución a la siguiente para evitar ciclos \cite{SA_5} y que 
+se quede atrapado en un óptimo local. Inicialmente, Tabú comienza su búsqueda
+con una solución elegida aleatoriamente. A partir de la solución actual se
+generan un conjunto de soluciones de prueba. La mejor solución de prueba se
+coloca como solución actual si no está en la lista tabú o, si está en la lista
+tabú, pero satisface el criterio de aspiración. Una solución satisface un
+criterio de aspiración si está en la lista tabú y es la mejor solución
+encontrada hasta el momento. Este proceso se repite hasta que el criterio de
+parada se satisfaga \cite{SA_3}\cite{SA_4}.
+\end{itemize}
+    
+\subsection{Algoritmos Evolutivos (EA)}
+    Los algoritmos evolutivos (\emph{EAs}) son métodos de búsqueda estocásticos de
+propósito general que simulan la selección natural y la evolución de los
+organismos biológicos. Los \emph{EAs} difieren de otros métodos de optimización,
+como Hill-Climbing y Simulated Annealing, en que los \emph{EAs} mantienen una
+población de soluciones potenciales a un problema y no sólo una solución.
+
+    En general, todos los EAs funcionan de la siguiente manera:
+\begin{itemize}
+    \item Se inicializa una población de individuos (soluciones potenciales al
+problema).
+    \item La calidad de cada solución está dada por la función de
+\emph{fitness}, que no es más que la función objetivo del algoritmo.
+    \item En cada iteración, se aplica un proceso de selección para formar a la
+población de la siguiente iteración. Este proceso está orientado a elegir
+individuos que tengan una buen valor de \emph{fitness}.
+    \item Los individuos son alterados a través de dos procesos: una
+transformación unaria (mutación) y una transformación de orden superior (cruce o
+crossover) \cite{PSO_0}.
+    \item Se espera que la mejor solución encontrada esté cerca del óptimo.
+\end{itemize}
+
+    Se llaman operadores evolutivos a las transformaciones unaria y de orden
+superior. Los operadores evolutivos más comunes son \cite{PSO_0}:
+\begin{itemize}
+    \item \textbf{Selección}: es un operador que elige a uno o más individuos para
+aplicarles los otros operadores evolutivos. Las estrategías varían desde elegir
+a los mejores individuos de la población hasta elegir a los mejores individuos
+de un conjunto elegido aleatoriamente.
+    \item \textbf{Mutación}: es un operador que modifica a un individuo a través
+de un pequeño cambio para generar un nuevo individuo. El objetivo principal de
+la mutación es introducir diversidad ``genética'' para evitar quedar atascado en
+un óptimo local.
+    \item \textbf{Recombinación o Cruce}: es un operador que combina a dos o más
+individuos para generar nuevos individuos. El principal objetivo del cruce es
+explorar nuevas áreas en el espacio de búsqueda.
+    
+\end{itemize}
+
+\begin{lstlisting}[float=h, caption=Algoritmo Evolutivo General]
+- Inicializar a cada individuo de la población.
+
+- Evaluar el %\emph{fitness}% de cada individuo de la población.
+
+- Mientras no se satisfaga el criterio de parada:
+
+    - Aplicar el proceso de %\textbf{selección}%.
+
+    - Alterar los individuos usando los operadores de %\textbf{cruce}% y
+    %\textbf{mutación}%.
+
+    - Evaluar el %\emph{fitness}% de cada individuo de la población.
+
+- FinMientras.
+
+\end{lstlisting}
+
+    Las cuatro técnicas evolutivas más relevantes son \cite{PSO_0}:
+\begin{itemize}
+    \item La \textbf{programación genética} que es usada para buscar el
+programa más eficiente para resolver un problema específico.
+    \item La \textbf{programación evolutiva} que es usada generalmente para
+optimizar funciones reales continuas. No utilizan el operador de recombinación.
+    \item Las \textbf{estrategias evolutivas} que son usadas para optimizar
+funciones reales continuas. Usa los operadores de selección, cruce y mutación.
+No solo optimiza a la población, sino también al proceso de optimización al
+evolucionar los parámetros de estrategia.
+    \item Los \textbf{algoritmos genéticos} que son generalmente usados para
+optimizar problemas combinatorios.
+\end{itemize}
+
+    Los algoritmos evolutivos pueden evitar quedar atrapados en un óptimo local
+al tener varias soluciones potenciales al mismo tiempo y pueden encontrar
+frecuentemente las soluciones óptimas globales. Sin embargo, existe cierto
+riesgo de que no converjan a la solución global óptima \cite{SA_4}.
+
+\subsection{Algoritmo Genético (GA)}
+
+Imita la evoluci\'on gen\'etica de las especias. Un aspecto importante es que
+explora varias soluciones a la vez, y no se enfoca en s\'olo una. A medida que
+se ejecuta, las soluciones, tambi\'en llamadas individuos o cromosomas, 
+toman parte en un proceso reporoductivo, donde interactuan, mezclan y producen
+hijos que retiene algunas caracter\'isticas de sus padres. \'Este proceso
+que conlleva a la creaci\'on de nuevas soluciones (hijos) esta basada en
+la selecci\'on, cruce y mutaci\'on\cite{DoGeGr2007}.
+
+Los cromosomas se pueden codificarse de bastantes modos, donde el m\'as 
+com\'un es mediante strings de n\'umeros binarios (100101110101). El modo en
+que se codifiquen tamb\'en depende del problela.
+
+
+El pseudoc\'odigo es de la siguiente manera (hay m\'as interpretaciones posibles):
+
+\begin{lstlisting}[float=h, caption=Algoritmo General Genetico]
+    - Inicialización.
+    Mientras no se cumpla el criterio de parada.
+        Si rand(0,1) <= pc
+            - Selección.
+            - Cruce.
+            Si rand(0,1) <= pm
+                - Mutación.
+            FinSi
+            Si los hijos tiene mejor función objetico que los papas.
+                - Colocarlos en la población y eliminar a los padres.
+            FinSi
+        FinSi
+    FinMientras
+\end{lstlisting}
+
+Donde pc es la probabilidad de cruce, pm la de mutaci\'on y rand(0,1)
+es una funci\'on que devuelve un n\'umero aleatorio entre 0 y 1. Y el resto
+se define como :
+
+\begin{itemize}
+
+\item {\bf Inicializaci\'on:} Los par\'ametros son fijados y se
+crean los cromosomas de la poblaci\'on.
+
+\item {\bf Selecci\'on:} Consiste en elegir los padres. 
+
+En \cite{GePo2010} comentan sus formas de implementar m\'as comunes:
+
+\begin{itemize}
+
+\item Tomar m\'as cuenta los individuos
+con mejor funci\'on objetvo. Para ello se puede usar el m\'etodo bastante conocido
+llamado roulette-wheel. 
+
+\item Selecci\'on por torneo, en
+donde un conjunto de cromosomas $\tau$ son elegidos y comparados, los mejores
+son elegidos para ser padres. 
+
+\end{itemize}
+
+\item {\bf Cruce:}
+
+Consiste en replazar los genes de uno de los padres por los del otro. Se puede hacer
+de la siguiente manera continuando \cite{GePo2010}:
+
+\begin{itemize}
+
+\item {\bf De un punto:} Si se tienen dos padres de longitud $X$, se va a tomar
+un punto entre $[1,X-1]$ y se generan dos hijos de la siguiente manera: el primero,
+de 0 al punto con los genes del primer padre y del punto a $X$, y el segundo es 
+lo contrario.
+
+Si se tienen los padres [1 3 2 4 6]  y [5 1 3 6 2] y el punto 
+de crude es el 2, entonces se generan los siguientes hijos:
+
+[1 3 3 6 2] y [5 1 2 4 6]
+
+\item {\bf De dos punto:} Ac\'a se eligen dos puntos distintos que cumplan con la 
+misma condici\'on como en el de un punto. Para explicar es mucho mas sencillo
+mediante un ejemplo:
+
+Si se tienen los padres [1 3 2 4 6]  y [5 1 3 6 2] y los puntos 
+de crude son el 2 y 4, entonces se generan los siguientes hijos:
+
+[1 3 3 6 6] y [5 1 2 6 2]
+
+De esta misma forma se puede extender para m\'as puntos.
+
+\end{itemize}
+
+\item {\bf Mutaci\'on:}
+
+Consiste en modificar uno de los cromosomas bien sea de la poblaci\'on
+o uno de los hijos generados. Un caso bastante com\'un es el de usar una m\'ascara
+cuando los cromosomas son binarios\cite{GePo2010}.
+
+Por su lado en esa misma referencia se comenta que para clustering se pueden usar los siguientes:
+
+\begin{itemize}
+
+\item En el caso que se use la representaci\'on binaria, alternar los bits es un
+buen operador.
+
+\item Cuando la representaci\'on es de enteros de etiquedas, se puede cambiar
+el cluster al cual pertenece uno de los objetos.
+
+\item Remplazar uno de los centroides por uno de los objetos pertenecientes a ese
+cluster.
+
+\end{itemize}
+
+\end{itemize}
+
+\subsection{Optimizador de Enjambre de partículas (PSO)}
+
+    Un optimizador de enjambre de partículas (\emph{PSO}: Particle Swarm Optimizer)
+es un algoritmo poblacional de optimización estocástico modelado a partir de la
+simulación del comportamiento social de las bandadas de aves \cite{PSO_1}
+\cite{PSO_2}.
+
+    En un sistema PSO, un enjambre (swarm) de individuos, llamados partículas, se
+mueven a través de un espacio de búsqueda. Cada partícula representa una
+solución candidata al problema de optimización. La posición de  cada partícula
+es influenciada por la mejor posición visitada por ella (su propia experiencia)
+y la posición de la mejor partícula en su vecindad (la experiencia conjunta de
+todas las partículas de su vecindad). Cuando la vecindad de una partícula es
+el enjambre completo, la mejor posición en su vecindad se refiere a la mejor
+partícula global y el algoritmo resultante es el \emph{gbest PSO} (Global Best
+PSO). Por otra parte, cuando se utilizan vecindades más pequeñas, el algoritmo
+generalmente se refiere al \emph{lbest PSO} (Local Best PSO) \cite{PSO_0}.
+
+    Las principales diferencias entre el \emph{PSO} y los \emph{EAs} son
+\cite{PSO_0}:
+\begin{itemize}
+    \item El \emph{PSO} se ve influenciado más en la experiencia social que la
+supervivencia del más apto, como ocurren el los \emph{EAs}.
+    \item En el \emph{PSO}, cada individuo se ve beneficiado de su historia. Esto
+no ocurre en los \emph{EAs}.
+\end{itemize}
+
+\subsubsection{Características de las partículas}
+
+    En el \emph{PSO}, cada partícula tiene una serie de características
+\cite{PSO_0}:
+\begin{itemize}
+    \item $x_i$: La posición actual de la partícula $i$. Dependiendo del
+problema, la posición de cada partícula tendrá una o más dimensiones.
+    \item $v_i$: La velocidad actual de la partícula $i$. La dimensión de la
+velocidad dependerá de la dimensión de la posición de la partícula.
+    \item $y_i$: La mejor posición de la partícula $i$. La elección de $y_i$, en
+la iteración $t + 1$ del algoritmo, es de la siguiente forma:
+\begin{center}
+    \[
+      y_i(t+1) =
+      \begin{cases}
+        y_i(t)   & \text{si } f(x_i(t+1)) \geq f(y_i(t)) \\
+        x_i(t+1) & \text{si } f(x_i(t+1)) < f(y_i(t))
+      \end{cases}
+    \]
+\end{center}
+donde $f$ es una función de $fitness$ y el problema de optimización es de
+minimización.
+    \item $\hat{y}_i$: La mejor posición de una partícula en la vecindad de la
+partícula $i$. La elección de $\hat{y}_i$ para la iteración $t + 1$ es similar a
+la de $y_i$:
+\begin{center}
+    $\hat{y}_i(t + 1) = \displaystyle\min_{j \in N_k} y_j(t)$
+\end{center}
+donde $N_k$ es el vecindaria $k$, la partícula $i$ pertenece a $N_k$ y el
+problema de optimización es de minimización.
+
+    Si sólo existe una vecindad y todas las partículas están en él
+(\emph{gbest PSO}), entonces se calcula la mejor posición de una partícula en el
+enjambre de partículas $\hat{y}$:
+\begin{center}
+    $\hat{y}(t + 1) = \displaystyle\min_{j = 1}^{P} y_j(t)$
+\end{center}
+donde $P$ es la cantidad total de partículas.
+\end{itemize}
+
+\subsubsection{Actualización de la Velocidad y la Posición}
+
+    Para cada dimensión $j \in {1, \cdots, M}$, donde $M$ es el número de
+dimensiones, la velocidad de la partícula $i$ en la iteración $t + 1$ del
+algoritmo es \cite{PSO_0}:
+\begin{center}
+$v_{i,j}(t + 1) = w \cdot v_{i,j}(t) + c_1 \cdot r_{1,j}(t) \cdot (y_{i,j}(t) - x_{i,j}(t)) + c_2 \cdot r_{2,j}(t) \cdot (\hat{y}_j(t) - x_{i,j}(t))$
+\end{center}
+donde,
+\begin{itemize}
+    \item $w$: es una constante que acompaña al \emph{peso inercial}, que sirve
+como memoria de velocidades previas: $v_{i,j}(t)$. Una alta inercia favorece la
+exploración y una baja inercia, la intensificación.
+    \item $c_1$: Es una \emph{constante de aceleración} que acompaña a la
+\emph{componente cognitiva} representa la experiencia de la mejor solución de
+la partícula: $y_{i,j} (t) - x_{i,j}(t)$. Es decir, cuanto se aleja de la mejor
+solución personal.
+    \item $c_2$: Es una \emph{constante de aceleración} que acompaña a la
+\emph{componente social}, que representa cuan alejada está la solución personal
+de la mejor obtenida por el enjambre: $\hat{y}_j(t)-x_{i,j}(t)$
+    \item $r_{1,j}(t)$ y $r_{2,j}(t)$: Son valores aleatorios que están en el
+intérvalo (0, 1).
+\end{itemize}
+
+    Según Van den Bergh\cite{PSO_3}, la relación entre el \emph{peso inercial} y
+las \emph{constantes de aceleración} debe satisfacer la siguiente ecuación de modo que
+se garantice convergencia:
+\begin{center}
+$\displaystyle\frac{c_1 + c_2}{2} - 1 < w$
+\end{center}
+sino el \emph{PSO} mostraría ser divergente o un comportamiento acíclico.
+
+    Así que la actualización de la posición para la partícula $i$ para la
+iteración $t + 1$ del algoritmo es de la siguiente forma \cite{PSO_0}:
+\begin{center}
+$x_i(t + 1) = x_i(t) + v_i(t + 1)$
+\end{center}
+
+\subsubsection{Algoritmo General}
+
+    Finalmente, el algoritmo general del \emph{PSO} es como sigue\cite{PSO_0}:
+\begin{lstlisting}[float=h, caption=Algoritmo General PSO]
+- Para cada partícula $i \in  \{1, \cdots, P\}$:
+    - Inicializar $x_i$.
+    //Puede ser inicializado con velocidad cero.
+    - Inicializar $v_i$.
+    - $y_i = x_i$.
+
+- Mientras no se cumpla la condición de parada:
+
+    - Para cada partícula $i \in \{1, \cdots, P\}$:
+        - Evaluar el %\emph{fitness}% de la partícula $i$, $f(x_i)$.
+        - Actualizar $y_i$.
+
+        - Si es %\emph{gbest PSO}%:
+            - Actualizar $\hat{y}$.
+        - Sino:
+            - Actualizar $\hat{y}_i$.
+
+        - Para cada dimensión $j \in \{1, \cdots, M\}$:
+            - Actualizar velocidad $v_{i,j}$.
+
+        - Actualizar posición $x_i$.
+\end{lstlisting}
+
+\subsection{Evolución Diferencial (DE)}
+
+Es un algoritmo basado en poblaci\'on de
+optimizaci\'on global que hace uso de una representaci\'on de punto flotante
+(codificaci\'on real), bastante parecido al gen\'etico. Se tienen los pasos de cruce 
+y selecci\'on, pero no mutaci\'on. Su funcionamiento seg\'un \cite{SwAjAm2008}
+es el siguiente:
+
+El $i$-\'esimo vector individual (cromosoma)
+de la poblaci\'on con tiempo (generaci\'on) $t$ tiene $d$ componentes
+dimensiones:
+
+%Ejemplo de vector.
+%INICIO
+\begin{center}
+$ \overrightarrow{Z_i}(t) = [ Z_{i,1}(t), Z_{i,2}, \cdots, Z_{i,d}(t) ] $
+\end{center}
+%END
+
+Para cada vector individual $\overrightarrow{Z_k}(t)$ que pertenece
+a la poblaci\'on actual, el DE aleatoriamente toma tres individuos
+$\overrightarrow{Z_i}(t)$, $\overrightarrow{Z_j}(t)$ y $\overrightarrow{Z_m}(t)$ de la misma generaci\'on (de modo que sean distintos $k$, 
+$i$, $j$ y $m$). Entonces calcula la diferencia entre $\overrightarrow{Z_i}(t)$ y $\overrightarrow{Z_j}(t)$, lo escala por un escalar $F$
+(usualmente $F \in [0, 1]$) y crea un hijo prueba $\overrightarrow{U_i}(t + 1)$ a\~nadiendo el resultado a $\overrightarrow{Z_m}(t)$. De modo
+que para la $n$-\'esima componente del vector:
+
+\[
+  U_{k,n}(t+1) =
+  \begin{cases}
+    Z_{m,n}(t) + F(Z_{i,n}(t) - Z_{j,n}(t))  & \text{si } rand_n(0,1) < Cr\\
+    Z_{k,n}(t)                               & \text{sino}
+  \end{cases}
+\]
+
+Donde $Cr \in [0, 1]$ es un escalar que es par\'ametro de el algoritmo,
+llamado la \emph{tasa de cruce}. Si el nuevo hijo tiene mejor valor
+con la funci\'on objetivo, entonces reemplaza al padre en la siguiente
+generaci\'on, sino, el padre entonces se queda en la misma:
+\[
+  \overrightarrow{Z_i}(t+1) =
+  \begin{cases}
+    \overrightarrow{U_i}(t+1) & \text{si } f(\overrightarrow{U_i}(t+1)) > f(\overrightarrow{Z_i}(t)) \\
+    \overrightarrow{Z_i}(t)   & \text{si } f(\overrightarrow{U_i}(t+1)) \leq f(\overrightarrow{Z_i}(t))
+  \end{cases}
+\]
+donde $f$ es la funci\'on objetivo a ser maximizada.
+
+\subsection{Algoritmo de Abeja (Bee)}
+
+    El algoritmo de Abeja (\emph{Bee}) es un algoritmo poblacional de
+optimización estocástico modelado a partir de la simulación del comportamiento
+social y habilidades de búsqueda de las colonias de abejas mieleras
+\cite{BEE_0}.
+
+\subsubsection{Abejas en la Naturaleza}
+
+    Una colonia de abejas mieleras pueden extenderse largas distancias
+de modo que se exploten grandes números de fuentes de comida al mismo
+tiempo. Este proceso comienza en una colonia con abejas exploradoras
+que son enviadas a los sitios de flores más prometedores. Los sitios
+prometedores son aquellos con grandes cantidades de néctar o polen
+que pueden ser recolectados con menos esfuerzo. Estos sitios tienden a ser
+visitados por más  abejas, mientras que los sitios con menor calidad tienden
+a ser menos visitados \cite{BEE_0}.
+
+    Durante la época de cosecha, una colonia continúa su exploración
+manteniendo un porcentaje de la población como abejas exploradoras.
+Cuando retornan a la colmena, esas abejas exploradoras depositan el
+polen o néctar y van al \emph{piso de la danza} a ejecutar una danza
+conocida como \emph{danza oscilante}. Esta danza misteriosa es esencial
+para la comunicación en la colonia y contiene tres piezas de información
+de cada uno de los sitios visitados \cite{BEE_0}: 
+\begin{itemize}
+    \item La dirección hacia donde está el sitio.
+    \item La distancia desde la colonia.
+    \item Su calidad (\emph{fitness}).
+\end{itemize}
+    Esta información, ayuda a la colonia a enviar sus abejas a los sitios de
+flores de manera más precisa, sin usar guías o mapas \cite{BEE_0}.
+
+    Después de la \emph{danza oscilante}, las abejas exploradoras van a los
+sitios que encontraron con abejas que estaban esperando dentro de la colmena.
+Más seguidoras son enviadas a los mejores sitios. Esto le permite a la colonia
+recolectar comida más rápido y eficientemente \cite{BEE_0}.
+
+    Mientras recolectan comida de un sitio, las abejas monitorean su nivel de
+comida. Esto es necesario para decidir cuando ocurrirá la siguiente
+\emph{danza oscilante}\cite{BEE_0}.
+
+\subsubsection{Abejas en el Algoritmo}
+
+    En el \emph{Bee}, cada abeja tiene una solución al problema de optimización
+(sitio de flores) y la función de \emph{fitness} (calidad del sitio) asociada a
+ella \cite{BEE_0}.
+
+    El algoritmo depende de los siguientes parámetros \cite{BEE_0}:
+\begin{itemize}
+    \item $m$: Cantidad de sitios de flores disponibles en cada iteración.
+Cada sitio de flores es una solución factible al problema de optimización y
+cada abeja tiene la dirección hacia un sitio de flores.
+    \item $e$: Cantidad de sitios de flores élite. Son los $e$ mejores sitios de
+flores encontrados por las abejas.
+    \item $eb$: Cantidad de abejas élite. Esta será la cantidad de abejas que
+serán enviadas a los mejores sitios de flores.
+    \item $ob$: Cantidad de abejas exploradoras. Estas abejas será asignadas a
+buscar nuevos sitios de flores (nuevas soluciones).
+    \item $N$: Cantidad de abejas de la colmena.
+\end{itemize}
+
+    El algoritmo entonces consiste en emular lo que ocurre en la naturaleza al
+eligir los $e$ mejores sitios de flores y asignar a cada abeja a un sitio
+dependiendo de su calidad. Luego, todas las abejas harían una búsqueda en
+vecindad para encontrar nuevas soluciones. El proceso se repite una y otra vez
+hasta que la condición de parada se cumpla \cite{BEE_0}.
+
+    Así que el algoritmo general de Abeja sería \cite{BEE_0}:
+\begin{lstlisting}[float=h, caption=Algoritmo General de Abeja]
+- Para cada abeja $i \in  \{1, \cdots, N\}$:
+    - Inicializar los sitios de flores de cada abeja.
+    - Evaluar función de %\emph{fitness}% de cada abeja.
+
+- Mientras no se cumpla la condición de parada:
+    - Seleccionar los mejores sitios. //%\color{darkgrey}\emph{Danza Oscilante}%
+    - Asignar $e$ abejas a los mejores sitios.
+    - Asignar $m - e$ abejas sitios aleatorios.
+
+    - Para cada abeja $i \in \{1, \cdots, N\}$:
+        - Hacer búsqueda en la vencindad del sitio asignado.
+        - Evaluar el %\emph{fitness}% de cada nuevo sitio.
+\end{lstlisting}
+
+\subsection{Algoritmo de Hormiga (Ant)}
+
+Hormiga es una metaheurística usada para resolver problemas combinatorios
+difíciles. \'Esta se inspira en los diversos comportamientos de las hormigas.
+Comunmente se basa en el rastro de feromona y el comportamiento de seguirlo 
+de éstas, usado en la búsqueda de comida. Una hormiga que se est\'a moviendo 
+suelta feromonas en el suelo, as\'i marcando un camino. \'Este químico, que 
+desaparece con el tiempo, el reforzado si otras hormigas usan ese mismo camino.
+Por lo tanto, las mejores v\'ias incrementan su nivel de feromonas con el tiempo, 
+y al contrario con los peores. Fue propuesto por Marco Dorigo en 1992, 
+y lo ha expandidos en sus trabajos posteriores.
+\cite{GePo2010} \cite{Le2007}
+
+Su funcionamiento como explica \cite{GePo2010} es el siguiente: primero, $m$ hormigas contruyen
+soluciones del problema, sesgada por la informaci\'on de las feromonas y posiblemente
+por las disponible por parte de las heur\'isticas. Una vez que las hormigas hallan completado
+sus soluciones, se pueden mejorar mediante una b\'usqueda local. Finalmente,
+antes de empezar con la siguiente iteraci\'on , los ratros de feromonas son
+actualizados para reflejar la experiencia de b\'usqueda de las hormigas:
+
+\begin{lstlisting}[float=h, caption=Algoritmo General Hormiga]
+    - Incialización.
+    Mientras no se cumpla el criterio de parada.
+        - Construcción de las soluciones.
+        - Aplicar búsqueda local.
+        - Actualizar feromonas.
+    FinMientras
+\end{lstlisting}
+
+\begin{itemize}
+
+\item {\bf Inicializaci\'on:} Los par\'ametros son establecidos y todas las variables 
+de feromonas son puestas en t$_{0}$, el cual es un par\'ametro del algoritmo.
+
+\item {\bf Construcci\'on de las soluciones:} Cada hormiga empieza con una soluci\'on vac\'ia
+$s_p = \emptyset $. En cada paso de las construcci\'on , una hormiga
+extiende su soluci\'on parcial actual $s_p$ eligiendo un posible componente $c_i^j \in N(s_p) \subseteq C$ 
+y agregandolo a \'esta. $N(s_p)$ es el conjunto de los
+componentes de soluci\'on que pueden ser agregados manteniendo su validez
+y es definido implicitamente por el proceso de construcci\'on de soliciones
+que las hormigas implementan. 
+
+La elecci\'on del componente de la soluci\'on que se quiere agregar es 
+hecha probabil\'isticamente en cada paso de la construcci\'on. La manera m\'as
+com\'un es la siguiente:
+
+\[
+p(c_i^j) = {\tau_{ij}^{\alpha}  \times [ \eta (c_i^j) ]^{\beta}}  \over { \sum_{c_i^l \in N(s_p)} \tau_{il}^{\alpha} \times [\eta (c_i^l)]^{\beta}] } 
+\]
+
+donde $\eta(.)$ es una funci\'on  que asigna a cada posible componente 
+de la soluci\'on $c_i^j \in N(s_p)$ un valor heur\'istico, que es usualmente
+llamada infomaci\'on heur\'istica. Los par\'ametos $\alpha$ y $\beta$ 
+determinan la relativa influencia de los rastros de feromonas e informaci\'on
+heur\'istica, por lo tanto influyendo significativamente en el comportamiento
+del algoritmo.
+
+
+\item {\bf Aplicar b\'usqueda local:} Una vez obtenidas las soluciones candidatos,
+estas puede ser mejoradas aplicando algoritmos de b\'usqueda local.
+
+\item {\bf Actualizaci\'on de las feromonas:}: tiene como objetivo
+hacer que los compentes de una buena soluci\'on, 
+sean m\'as deseables para las hormigas en las siguientes iteraciones. Hay esencialemente
+dos mecanismos para lograr este objetico. El primero es el dep\'osito de feromonas,
+el cual incrementa el nivel de feromonas de los coponentes de una soluci\'on
+que est\'an asociados con un conjunto selccionado $S_{upd}$ de buenas soluciones.
+El segundo es la evaporaci\'on del rastro de feromonas, el cual es un mecanismo
+que decrece a medida que el tiempo pasa el dep\'osito de feromonas. Desde el punto de
+vista pr\'actico, \'este es necesario para evitar la r\'apida convergencia del algoritmo
+en una regi\'on sub\'optima. Es comunmente implementada de la siguiente
+manera:
+
+\[
+\tau_{ij} = (1-\rho)\tau_{ij} + \sum_{s \in S_{upd} \land c_i^j \in s} g(s)
+\]
+
+donde $S_{upd}$ es el conjunto de soluciones usadas para depositar feromonas, 
+$\rho in (0,1]$ es un par\'ametro llamada constante de evaporaci\'on,
+$g(.):S \rightarrow  \Re^+$ es una funci\'on que determina la calidad
+de la soluci\'on.
+\end{itemize}
+
+Adem\'as en \cite{OuBa2007} exponen que actualmente los cient\'ificos est\'an 
+empezando a inspirarse en la manera que las hormigas crean sus cementerios: limpian sus nidos
+y crean pilas de cad\'averes. 
+Tambi\'en de la organizaci\'on de cr\'ias, donde son agrupadas
+de acuerdo a su tama\~no. El principio recae en la atracci\'on
+entre los objetos transportados. Los clusters pequeños de objetos
+similares van creaciendo atrayendo a las hormigas a despositar m\'as
+objetos de acuerdo con su tama\~no o tipo. Este feedback positivo
+conlleva a la formaci\'on de clusters homog\'enos.
+
+El pioner en este trabajo es Deneubourg et al., donde aplican el
+m\'etodo para tareas en rob\'otica. Este ha sido modificado por Lumer
+y Faita para extenderlo a an\'alisis num\'erico de datos.
+En estos algoritmos los datos son dispersados aleatoriamente
+en un grid de dos dimensiones. Cada hormiga se mueve aleatoriamente
+dentro de \'este agarrando y soltando estos datos. La decisi\'on
+de agarrar o soltar un dato es aleatoria,
+pero es influenciada por los datos en el vecindario, 
+causando que datos similares tengan m\'as probabilidad de
+estar juntos. La probabilidad de soltar un dato incrementa
+en zonas de mayor densiadad de datos similares, y decrementa
+cuando sucede el contrario.  En contraste
+la probabilidad de agarrar un dato incrementa en las zonas de
+menor densidad y decrementa en el opuesto.
+\'Esta est\'an dadas por:
+
+\[
+P_p(i) = {k_1 \over {k_1 + f(i)}}
+\]
+
+\[
+P_d(i) = 
+  \begin{cases}
+    2f(i) & \quad \text{si $f(i)<k_2$}\\
+    1     & \quad \text{si $f(i) < k_2s$}\\
+  \end{cases}
+\]
+
+\[
+f(i) =
+  \begin{cases}
+    {{1} \over {s^2}} \sum_{j \in R(r(i))} {{1 - {d(i,j)}} \over \alpha} & \quad \text{si $f > 0$}\\
+    0     & \quad \text{sino}
+  \end{cases} 
+\]
+
+Donde $r(i)$ es la posici\'on del dato $i$ dado en el grid y $f(i)$ es una medida
+del promedio de disimilaridad del dato $i$ con respecto a los otros $j$
+presentes en su vencindario $R$ con tama\~no $s \times s$. $\alpha$
+es la escala de disimilaridad y es clave en la ejecuci\'on del algoritmo:
+
+\[
+\alpha = {{1 \over {N(N-1)}} \sum_{i=1}^N \sum_{j=1}^N d(p_i,p_j)}
+\]
+
+El n\'umero de aplicaciones es bastante grande: resolver problemas
+desde data clustering, programaci\'on (scheduling), balanceo
+de l\'inea de equilibrio, TSP probabil\'istico, secuenciaci\'on de 
+ADN, etc. \cite{GePo2010}

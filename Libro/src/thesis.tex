@@ -81,14 +81,17 @@
 }
 
 \lstset{
-   language=Pascal,
-   gobble=2,
-   %frame=single,
-   %framerule=1pt,
-   showstringspaces=false,
-   basicstyle=\footnotesize\ttfamily,
+   language=C,
+   basicstyle=\footnotesize,
    keywordstyle=\textbf,
-   %backgroundcolor=\color{lightgrey},
+   showstringspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   mathescape=true,
+   escapechar={\%},
+   frame=bottomline,
+   morekeywords={Mientras, Si, Sino, Para, Fin, FinSi, FinPara, FinMientras},
+   commentstyle={\color{darkgrey}},
    literate={á}{{\'a}}1
             {é}{{\'e}}1
             {í}{{\'i}}1
@@ -96,6 +99,18 @@
             {ú}{{\'u}}1
             {ñ}{{\~n}}1
 }
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes}
+\usepackage{lmodern}
+\usepackage{amsfonts}
+\definecolor{darkgrey}{rgb}{0.4,0.4,0.4}
+\usepackage{caption}
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
+
 
 % Crea el glosario
 \makeglossaries
@@ -195,9 +210,11 @@
 % Incluye los archivos deseados - El contenido de
 % su proyecto de grado/pasantia larga.
 \input{intro.tex}
-\input{ssimilar.tex}
+\input{moptimizacion.tex}
+\input{dclust.tex}
 \input{herramienta.tex}
 \input{resultados.tex}
+\input{analisis.tex}
 \input{conclusiones.tex}
 
 % Crea el glosario 
