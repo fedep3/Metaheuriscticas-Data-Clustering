@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module ParserDB (
     connectDB,
     fillDB,
@@ -24,10 +25,11 @@ fillDB :: IConnection conn
        -> AlgType
        -> IO ()
 fillDB dbh fp t = do
-    s <- readFile fp
-    let a = parse t $ lines s
-    mapM_ (insertParam dbh) a
+    s               <- readFile fp
+    (s0, s1, s2, a) <- parse dbh t $ lines s
+    mapM_ (insertParam dbh s0 s1 s2) a
     commit dbh
+    disconnect dbh
 
 -- | Prepara la base de datos.
 prepDB :: IConnection conn
@@ -458,128 +460,62 @@ insertResultWPSO = "INSERT INTO wpso \
                    \ wpso_hib_eval, wpso_hib_fo, wpso_hib_db, wpso_hib_je, wpso_type)\
                    \ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
--- | Resultados Generales.
-data General = Ge { ci       :: Int
-                  , alg_time :: Double
-                  , hib_time :: Double
-                  , cf       :: Int
-                  , alg_eval :: Int
-                  , alg_fo   :: Double
-                  , alg_db   :: Double
-                  , alg_je   :: Double
-                  , km_eval  :: Int
-                  , hib_eval :: Int
-                  , hib_fo   :: Double
-                  , hib_db   :: Double
-                  , hib_je   :: Double
-                  }
-    deriving(Show, Eq)
-
--- | Parámetros.
-data DbType = GA   Int Int Double Double
-            | Bee  Int Int Int Int Int
-            | DE   Int Double Double Double
-            | SDE  Int Double Double Double Double Double
-            | Ant  Int
-            | PSO  Int Double Double Double Double
-            | WPSO Int Double Double Double Double Double Double Double
-    deriving(Show, Eq)
-
--- | Algoritmo.
-type Alg = (DbType, General)
-
 -- | Tipos de algoritmos.
 data AlgType = TGA | TBee | TDE | TSDE | TAnt | TPSO | TWPSO
     deriving(Show, Eq, Read)
 
--- | Inserta los parámetros y devuelve el ID. Depende del tipo de algoritmo.
+-- | Información necesaria para llenar la base de datos.
+type Statements = (Statement, Statement, Statement, [([SqlValue], [SqlValue])])
+
+-- | Hace todas las inserciones necesarias en la base de datos.
 insertParam :: IConnection conn
-             => conn
-             -> Alg
-             -> IO ()
-insertParam dbh ((GA i tt pc pm), g) = do
-    n <- generalParam dbh selectParamGA insertParamGA [toSql i, toSql tt, toSql pc, toSql pm]
+            => conn
+            -> Statement        -- ^ Selección parámetros.
+            -> Statement        -- ^ Inserción parámetros.
+            -> Statement        -- ^ Inserción general.
+            -> ([SqlValue], [SqlValue])
+            -> IO ()
+insertParam dbh s0 s1 s2 (l1, l2) = do
+    n <- generalParam dbh s0 s1 l1
     case n of
         (Just n') -> do
-            generalResult dbh insertResultGA g n'
+            generalResult dbh s2 l2 n'
         Nothing   -> do
-            putStrLn $ (show (GA i tt pc pm) ) ++ " | " ++ (show g)
-insertParam dbh ((Bee i m e eb ob), g) = do
-    n <- generalParam dbh selectParamBee insertParamBee [toSql i, toSql m, toSql e, toSql eb, toSql ob]
-    case n of
-        (Just n') -> do
-            generalResult dbh insertResultBee g n'
-        Nothing   -> do
-            putStrLn $ (show (Bee i m e eb ob) ) ++ " | " ++ (show g)
-insertParam dbh ((DE i w1 w2 w3), g) = do
-    n <- generalParam dbh selectParamDE insertParamDE [toSql i, toSql w1, toSql w2, toSql w3]
-    case n of
-        (Just n') -> do
-            generalResult dbh insertResultDE g n'
-        Nothing   -> do
-            putStrLn $ (show (DE i w1 w2 w3) ) ++ " | " ++ (show g)
-insertParam dbh ((SDE i w1 w2 w3 f pc), g) = do
-    n <- generalParam dbh selectParamSDE insertParamSDE [toSql i, toSql w1, toSql w2, toSql w3, toSql f, toSql pc]
-    case n of
-        (Just n') -> do
-            generalResult dbh insertResultSDE g n'
-        Nothing   -> do
-            putStrLn $ (show (SDE i w1 w2 w3 f pc) ) ++ " | " ++ (show g)
-insertParam dbh ((Ant i), g) = do
-    n <- generalParam dbh selectParamAnt insertParamAnt [toSql i]
-    case n of
-        (Just n') -> do
-            generalResult dbh insertResultAnt g n'
-        Nothing   -> do
-            putStrLn $ (show (Ant i) ) ++ " | " ++ (show g)
-insertParam dbh ((PSO i c1 c2 w vmx), g) = do
-    n <- generalParam dbh selectParamPSO insertParamPSO [toSql i, toSql c1, toSql c2, toSql w, toSql vmx]
-    case n of
-        (Just n') -> do
-            generalResult dbh insertResultPSO g n'
-        Nothing   -> do
-            putStrLn $ (show (PSO i c1 c2 w vmx) ) ++ " | " ++ (show g)
-insertParam dbh ((WPSO i c1 c2 w vmx w1 w2 w3), g) = do
-    n <- generalParam dbh selectParamWPSO insertParamWPSO [toSql i, toSql c1, toSql c2, toSql w, toSql vmx, toSql w1, toSql w2, toSql w3]
-    case n of
-        (Just n') -> do
-            generalResult dbh insertResultWPSO g n'
-        Nothing   -> do
-            putStrLn $ (show (WPSO i c1 c2 w vmx w1 w2 w3) ) ++ " | " ++ (show g)
-    
+            putStrLn $ (show l1) ++ " | " ++ (show l2)
 
 -- | Inserta los parámetros y devuelve el ID.
 generalParam :: IConnection conn
              => conn               -- ^ Conexión.
-             -> String             -- ^ Selección.
-             -> String             -- ^ Inserción.
+             -> Statement          -- ^ Selección.
+             -> Statement          -- ^ Inserción.
              -> [SqlValue]         -- ^ SqlValue.
              -> IO (Maybe Int)
-generalParam dbh s i sv = do
-    res <- catchSql (quickQuery dbh s sv)
-                    (\_ -> return [])
-    case res of
-        []      -> do
-            catchSql (do {run dbh i sv; return ()}) (\e -> return ())
-            res' <- catchSql (quickQuery dbh s sv)
-                             (\_ -> return [])
-            case res' of
-                []      -> do
+generalParam dbh stmts stmti sv = do
+    execute stmts sv
+    mRes <- catchSql (fetchRow stmts) (\_ -> return Nothing)
+    case mRes of
+        Nothing    -> do
+            execute stmti sv
+            execute stmts sv
+            mRes' <- catchSql (fetchRow stmts) (\_ -> return Nothing)
+            case mRes' of
+                Nothing      -> do
                     return Nothing
-                ([x]:_) -> do
+                (Just [x])   -> do
                     return $ Just (fromSql x)
-        ([x]:_) -> do
+        (Just [x]) -> do
             return $ Just (fromSql x)
 
 -- | Introduce los resultados generales en la base de datos.
 generalResult :: IConnection conn
               => conn                -- ^ Conexión.
-              -> String              -- ^ Inserción.
-              -> General             -- ^ Resultados generales.
+              -> Statement           -- ^ Inserción.
+              -> [SqlValue]          -- ^ Resultados generales.
               -> Int                 -- ^ Identificador.
               -> IO ()
-generalResult dbh ins (Ge a b c d e f g h i j k l m) id = do
-    run dbh ins [toSql a, toSql b, toSql c, toSql d, toSql e, toSql f, toSql g, toSql h, toSql i, toSql j, toSql k, toSql l, toSql m, toSql id]
+generalResult dbh stmti sv id = do
+    let sv' = sv ++ [toSql id]
+    execute stmti sv'
     return ()
     `catchSql`
     (\_ -> putStrLn "Error")
@@ -587,28 +523,69 @@ generalResult dbh ins (Ge a b c d e f g h i j k l m) id = do
 -- "Parser"
 
 -- | Parsea un documento.
-parse :: AlgType -> [String] -> [Alg]
-parse t = map (parseLine t)
+parse :: IConnection conn
+      => conn
+      -> AlgType
+      -> [String]
+      -> IO (Statement, Statement, Statement, [([SqlValue], [SqlValue])])
+parse dbh t str = do
+    let l = map (parseLine t) str
+    case t of
+        TGA -> do
+            stmt0 <- prepare dbh selectParamGA
+            stmt1 <- prepare dbh insertParamGA
+            stmt2 <- prepare dbh insertResultGA
+            return (stmt0, stmt1, stmt2, l)
+        TBee  -> do
+            stmt0 <- prepare dbh selectParamBee
+            stmt1 <- prepare dbh insertParamBee
+            stmt2 <- prepare dbh insertResultBee
+            return (stmt0, stmt1, stmt2, l)
+        TDE   -> do
+            stmt0 <- prepare dbh selectParamDE
+            stmt1 <- prepare dbh insertParamDE
+            stmt2 <- prepare dbh insertResultDE
+            return (stmt0, stmt1, stmt2, l)
+        TSDE  -> do
+            stmt0 <- prepare dbh selectParamSDE
+            stmt1 <- prepare dbh insertParamSDE
+            stmt2 <- prepare dbh insertResultSDE
+            return (stmt0, stmt1, stmt2, l)
+        TAnt  -> do
+            stmt0 <- prepare dbh selectParamAnt
+            stmt1 <- prepare dbh insertParamAnt
+            stmt2 <- prepare dbh insertResultAnt
+            return (stmt0, stmt1, stmt2, l)
+        TPSO  -> do
+            stmt0 <- prepare dbh selectParamPSO
+            stmt1 <- prepare dbh insertParamPSO
+            stmt2 <- prepare dbh insertResultPSO
+            return (stmt0, stmt1, stmt2, l)
+        TWPSO -> do
+            stmt0 <- prepare dbh selectParamWPSO
+            stmt1 <- prepare dbh insertParamWPSO
+            stmt2 <- prepare dbh insertResultWPSO
+            return (stmt0, stmt1, stmt2, l)
 
 -- | Parsea una línea.
-parseLine :: AlgType -> String -> Alg
+parseLine :: AlgType -> String -> ([SqlValue], [SqlValue])
 parseLine t l = (toDbType t f, toGeneral s)
     where (f, s) = toLists l
 
 -- | Información general de la base de datos.
-toGeneral :: [String] -> General
+toGeneral :: [String] -> [SqlValue]
 toGeneral (a:b:c:d:e:f:g:h:i:j:k:l:m:_) =
-    (Ge (read a :: Int) (read b :: Double) (read c :: Double) (read d :: Int) (read e :: Int) (read f :: Double) (read g :: Double) (read h :: Double)  (read i :: Int) (read j :: Int) (read k :: Double) (read l :: Double) (read m :: Double))
+    [toSql (read a :: Int), toSql (read b :: Double), toSql (read c :: Double), toSql (read d :: Int), toSql (read e :: Int), toSql (read f :: Double), toSql (read g :: Double), toSql (read h :: Double), toSql (read i :: Int), toSql (read j :: Int), toSql (read k :: Double), toSql (read l :: Double), toSql (read m :: Double)]
 
 -- | Tipo de la base de datos.
-toDbType :: AlgType -> [String] -> DbType
-toDbType TGA   (a:b:c:d:_)         = GA (read a :: Int) (read b :: Int) (read c :: Double) (read d :: Double)
-toDbType TBee  (a:b:c:d:e:_)       = Bee (read a :: Int) (read b :: Int) (read c :: Int) (read d :: Int) (read e :: Int)
-toDbType TDE   (a:b:c:d:_)         = DE (read a :: Int) (read b :: Double) (read c :: Double) (read d :: Double)
-toDbType TSDE  (a:b:c:d:e:f:_)     = SDE (read a :: Int) (read b :: Double) (read c :: Double) (read d :: Double) (read e :: Double) (read f :: Double)
-toDbType TAnt  (a:_)               = Ant (read a :: Int)
-toDbType TPSO  (a:b:c:d:e:_)       = PSO (read a :: Int) (read b :: Double) (read c :: Double) (read d :: Double) (read e :: Double)
-toDbType TWPSO (a:b:c:d:e:f:g:h:_) = WPSO (read a :: Int) (read b :: Double) (read c :: Double) (read d :: Double) (read e :: Double) (read f :: Double) (read g :: Double) (read h :: Double)
+toDbType :: AlgType -> [String] -> [SqlValue]
+toDbType TGA   (a:b:c:d:_)         = [toSql (read a :: Int), toSql (read b :: Int), toSql (read c :: Double), toSql (read d :: Double)]
+toDbType TBee  (a:b:c:d:e:_)       = [toSql (read a :: Int), toSql (read b :: Int), toSql (read c :: Int), toSql (read d :: Int), toSql (read e :: Int)]
+toDbType TDE   (a:b:c:d:_)         = [toSql (read a :: Int), toSql (read b :: Double), toSql (read c :: Double), toSql (read d :: Double)]
+toDbType TSDE  (a:b:c:d:e:f:_)     = [toSql (read a :: Int), toSql (read b :: Double), toSql (read c :: Double), toSql (read d :: Double), toSql (read e :: Double), toSql (read f :: Double)]
+toDbType TAnt  (a:_)               = [toSql (read a :: Int)]
+toDbType TPSO  (a:b:c:d:e:_)       = [toSql (read a :: Int), toSql (read b :: Double), toSql (read c :: Double), toSql (read d :: Double), toSql (read e :: Double)]
+toDbType TWPSO (a:b:c:d:e:f:g:h:_) = [toSql (read a :: Int), toSql (read b :: Double), toSql (read c :: Double), toSql (read d :: Double), toSql (read e :: Double), toSql (read f :: Double), toSql (read g :: Double), toSql (read h :: Double)]
 
 -- | Separa la salida de los programas.
 toLists :: String
