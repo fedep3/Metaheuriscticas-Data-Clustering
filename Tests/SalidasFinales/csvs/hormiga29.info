@@ -1,0 +1,8 @@
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant0-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 5 6.47 
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant1-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 10 6.47 
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant2-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 15 6.47 
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant3-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 20 6.47 
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant4-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 25 6.47 
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant5-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 30 6.47 
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant6-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 35 6.47 
+./../mhs -d  --fi ../csv/iris.data --t CSV  --fo Ant7-csvirisdata.txt  --tf MAX  --k 3  --mn 4.3,2.0,1.0,0.1,0.0  --mx 7.9,4.4,6.9,2.5,0.0  --a Ant  --reps 100000  --i 40 6.47 

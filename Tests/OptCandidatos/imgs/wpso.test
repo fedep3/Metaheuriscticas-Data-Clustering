@@ -82,7 +82,6 @@
            LG (0.9, 0.9, 0.1)))
 )
 ,
-,
 (("../mhs", (InputFile "../img/lenamini.png" PNG), Max, 9, (Mn [0.0, 0.0, 0.0]), (Mx [255.0, 255.0, 255.0]) ),
  ("WPSO", WPSOOpt (Reps 3,
            LG (35, 35, 1),

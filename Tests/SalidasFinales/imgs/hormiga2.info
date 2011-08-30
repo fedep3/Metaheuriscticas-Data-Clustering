@@ -1,0 +1,8 @@
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant0-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 5 8519.09 
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant1-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 10 8519.09 
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant2-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 15 8519.09 
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant3-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 20 8519.09 
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant4-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 25 8519.09 
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant5-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 30 8519.09 
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant6-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 35 8519.09 
+./../mhs -d  --fi ../img/lenamini.png --t PNG  --fo Ant7-imglenaminipng.png  --tf MAX  --k 9  --mn 0.0,0.0,0.0  --mx 255.0,255.0,255.0  --a Ant  --reps 10000000  --i 40 8519.09 
