@@ -125,11 +125,18 @@ void Kmeans::run(int type){
  * se tienen centroides.
  */
 void Kmeans::initialize(){
-    int i, j;
 
-    for(i = 0; i < K; ++i)
-        for(j = 0; j < M; ++j)
-            centroid[0][i][j] = data[i][j];
+    int j, l, k;
+
+    RandomArray rarr(N);
+
+    for(j = 0; j < K; ++j){
+
+        k = rarr.get();
+
+        for(l = 0; l < M; ++l)
+            centroid[0][j][l] = data[k][l];
+    }
 
     initialized = true;
 }
