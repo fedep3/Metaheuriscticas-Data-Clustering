@@ -17,6 +17,9 @@
  * @param size Tamaño del arreglo.
  */
 RandomArray::RandomArray(int size){
+
+    srand(time(NULL));
+
     int i;
 
     length = size;

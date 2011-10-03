@@ -383,7 +383,7 @@ class Metaheuristic{
         int metric;
 
         /**
-         * (Mejor) solución.
+         * Solución.
          */
         int** solution;
 

@@ -11,6 +11,7 @@
  */
 
 #include "Metaheuristic.h"
+#include "RandomArray.h"
 
 #ifndef _KMEANS_
 #define _KMEANS_
