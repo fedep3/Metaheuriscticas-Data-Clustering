@@ -1,62 +1,101 @@
 % Conclusiones
-\chapter{Conclusiones y recomendaciones} \label{chap:conclusiones}
+\chapter{Conclusiones} \label{chap:conclusiones}
 
-AQU\'I VAN LAS CONCLUSIONES Y RECOMENDACIONES.
-%Puedes quitar esto(es opcional)
-\vspace{5 mm}
-
-Como resultado de este proyecto se logr'o implementar una herramienta de
-l'inea de comando que pudiese crear series de tiempo a partir de trazas
-producidas por {\tt tcpdump} para estimar el par'ametro de Hurst y graficar sus
-resultados. La estimaci'on se hizo mediante el mecanismo de ventana deslizante,
-limitando el tama~no de datos para cada ventana de forma de probar si de esta
-forma, utilizando las t'ecnicas descritas en, se pod'ian obtener estimaciones del
-par'ametro de Hurst en tiempo real que permitieran detectar ataques de
-denegaci'on de servicio.
-
-Los resultados muestran que aunque la herramienta implementada logra
-crear una serie de tiempo que puede estimar el par'ametro de Hurst con un
-error acceptable y puede graficar sus resultados, su detecci'on de ataques
-de denegaci'on de servicio en tiempo real es mejorable. Si bien se logra
-detectar cambios dr'asticos, en algunos casos cerca de la regi'on del ataque,
-la cantidad de falsos positivos y errores hace su uso casi imposible. 
-
-Para seguir trabajando en la detecci'on de ataques de denegaci'on de servicio
-usando el par'ametro de Hurst se presentan las siguientes recomendaciones: 
+    En este capítulo, se presentan los hallazgos y contribuciones de este
+proyecto y se dan algunas recomendaciones para futuros trabajos:
+\begin{comment}
+    Se evaluó el desempeño de los algoritmos \emph{K-means}, \emph{GAH},
+\emph{NPSOH}, \emph{WPSOH}, \emph{NDEH}, \emph{SDEH}, \emph{BeeH}, \emph{AntH}.
+Estos ocho algoritmos fueron comparados mediante el índice de validez $DB$ y la
+cuantificación del error $J_e$ para determinar la calidad de sus soluciones
+finales. Además, se comparó el rendimiento de las metaheurísticas \emph{GAH} y
+\emph{BeeH} por medio de la cantidad de evaluaciones de su función de \emph{fitness}.
+Así que, en función del análisis hecho en el capítulo anterior (ver capítulo \ref{chap:analisis}),
+se puede concluir:
+\end{comment}
 
 \begin{itemize}
-\item Emplear alg'un mecanismo de muestreo de los valores de $n$ utilizados
-en la estimaci'on del par'ametro de Hurst en una ventana con todos los m'etodos
-para mejorar la precisi'on y posiblemente disminuir el tiempo necesario para
-una estimaci'on:
+    \item Se llevó a cabo un estudio comparativo entre los algoritmos \emph{K-means},
+          \emph{GAH}, \emph{NPSOH}, \emph{WPSOH}, \emph{NDEH}, \emph{SDEH},
+          \emph{BeeH} y \emph{AntH} donde \emph{BeeH} y \emph{GAH} resultaron
+          ser las mejores metaheurísticas.
 
-En la herramienta implementada, no se us'o ning'un mecanismo de muestreo en
-la estimaci'on del par'ametro de Hurst, implementando los m'etodos como fueron
-escritos en el cap'itulo \ref{chap:ssimilar}. Esto significa que se tomaron en
-cuenta todos los tama~nos $n$ viables para la creaci'on de las gr'aficas
-$\log - \log$. Parte de la lentitud de los m'etodos en dar un resultado est'a
-en tomar en cuenta todos los $n$ posibles.
-Por otro lado, de acuerdo con \cite{MAVARStefano} usando el m'etodo de varianza
-modificada de Allan, el tomar todos los $n$ acerc'andose a $N/3$ comienza a
-afectar seriamente la estimaci'on. Sin embargo, en el art'iculo no se presenta
-una forma determin'istica que describa hasta que punto se deber'ia tomar en
-cuenta los $n$ para una estimaci'on. 
-\item Encontrar alg'un m'etodo de utilizar la informaci'on obtenida en la 
-estimaci'on de una ventana de tal forma que los c'alculos hechos para la
-primera ventana aceleren la estimaci'on de la siguente ventana
-\cite{intelligentfuzzy}.
-\item Al poder estimar una ventana en menor tiempo tambi'en ser'ia recomendable
-aumentar el n'umero de datos utilizados para una estimaci'on. C'omo no se quiere
-aumentar el tiempo de traza real $w$ usado en una estimaci'on, esto implicar'ia
-usar un $c$ m'as peque~no \cite{hagiwara00highspeed}.
-\item En la estimaci'on de una ventana, si se logra encontrar una forma de
-dividir el c'alculo de tal forma de poder aplicar una paralelizaci'on, el uso
-de m'as de un hilo de ejecuci'on para estimaci'on de la ventana podr'ia ser
-probado \cite{hagiwara00highspeed}.
-\item En lugar de utilizar un 'unico tama~no de $s$ en el mecanismo de ventana
-deslizante, se podr'ia usar un valor flexible a los cambios de la red, de tal
-forma que si el par'ametro de Hurst cambia repentinamente entre dos ventanas, se
-acorte $s$ con tal de verificar si en realidad hay una sucesi'on de paquetes
-uniformemente espaciados que puedan ser parte un ataque de denegaci'on de
-servicio, minimizando la cantidad de falsos positivos \cite{intelligentfuzzy}.
+    \item Se encontró que \emph{GAH} necesita probabilidades de mutación altas
+          ($\geq 0.5$) para que sus soluciones finales sean de calidad.
+
+    \item Se recomienda usar \emph{GAH} cuando no se tenga conocimiento a priori
+          del número de clusters.
+
+    \item El índice de validez $DB$ es más eficaz para medir la calidad de una
+          partición que la cuantificación de error $J_e$. Esto se debe a que $J_e$
+          se ve afectado por la cardinalidad de los clusters.
+
+    \item Las soluciones finales de las metaheurísticas híbridas \emph{NPSOH},
+          \emph{WPSOH}, \emph{NDEH}, \emph{SDEH} son similares en calidad. Esto
+          puede deberse a que comparten procedimientos.
+
+    \item El \emph{AntH} fue la peor metaheurística implementada. Este comportamiento
+          se le atribuye a que no se logró realizar una implementación que
+          reprodujera los resultados del artículo \cite{OuBa2007}.
+
+    \item Las metaheurísticas híbridas arrojaron mejores resultados que sus
+          contrapartes no híbridas.
+          
 \end{itemize}
+
+\begin{comment}
+\begin{itemize}
+
+	\item El \emph{BeeH} y el \emph{GAH} resultaron ser las mejores metaheurísticas.
+    Sin embargo, el \emph{GAH} consiguió soluciones finales con una calidad parecida
+    a las del \emph{BeeH} utilizando menos evaluaciones de la función de
+    \emph{fitness}.
+
+	\item El \emph{GAH} es la única metaheurística que no requiere la cantidad
+    de clusters lo cual es una ventaja cuando no se conoce \emph{a priori}.
+
+	\item Tener una alta probabilidad de mutación ($\geq 0.5$) en el \emph{GAH}
+	genera mejores resultados, indicando que el problema de \emph{data clustering}
+    necesita grandes modificaciones en los vectores de centroides de sus
+    individuos para obtener buenas soluciones.
+
+    \item El índice de validez $DB$ es más eficaz para medir la calidad de una
+    partición que la cuantificación del error $J_e$. Esto se debe a que el error
+    $J_e$ sugería que la metaheurística \emph{AntH} era la mejor de todas las
+    metaheurísticas implementadas. Sin embargo, resultados como los mostrados en
+    las figuras \subref{fig:lennaant} y \subref{fig:trivialant}, donde se observa
+    mucho ruido, demuestran lo contrario.
+    
+
+	\item Las metaheurísticas \emph{NDEH}, \emph{SDEH}, \emph{NPSOH} y \emph{WPSOH}
+    comparten un procedimiento para mantener el número de clusters fijo y esto
+	podría estar afectando su desempeño, haciendo que sus soluciones sean similares
+    entre sí.
+
+	\item El \emph{AntH} fue la peor metaheurística implementada. Este comportamiento
+    puede tener su origen en que no se logró hacer una implementación que
+    reprodujera los resultados reportados en el artículo base \cite{OuBa2007}.
+    En este artículo, no habían suficientes detalles sobre la implementación
+    de la memoria de las hormigas y esto pudo haber llevado a una implementación
+    ineficiente de la metaheurística \emph{AntH}.
+\end{itemize}
+
+\end{comment}
+
+	A partir de los resultados y conclusiones de este proyecto de grado, se pueden
+dar las siguientes recomendaciones:
+
+	Primero, es posible que los resultados de las metaheurísticas sean sensibles
+a los conjuntos de datos a particionar. Es por esto que todas las metaheurísticas deberían ser probadas
+con otros conjuntos de datos, además de \textbf{Lenna} e \textbf{Iris}, de modo
+que se corrobore lo dicho en este proyecto de grado.
+
+	Segundo, buscar un nuevo enfoque para la memoria del \emph{AntH}, de modo que
+se puedan reproducir los resultados del artículo \cite{OuBa2007}. En este
+artículo, no habían suficientes detalles sobre la misma y la implementación
+realizada pudo haber afectado el desempeño de esta metaheurística.
+
+	Por último, el procedimiento para mantener los clusters fijos que comparten
+las metaheurísticas \emph{NDEH}, \emph{SDEH}, \emph{NPSOH} y \emph{WPSOH} pudo
+haber afectado su desempeño. Buscar un nuevo enfoque para este procedimiento,
+podría lograr una mejora en los resultados de estas metaheurísticas.
