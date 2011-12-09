@@ -1,0 +1,427 @@
+% Apendice
+\chapter{Metaheurísticas híbridas y no híbridas}
+\label{apendicec}
+
+	Se buscó determinar diferencias en la calidad de los resultados de cada
+una de las metaheurísticas hibridas (\emph{GAH}, \emph{NPSOH}, \emph{WPSOH},
+\emph{NDEH}, \emph{SDEH}, \emph{BeeH}, \emph{AntH}) con respecto a sus
+contrapartes no hibridadas (\emph{GA}, \emph{NPSO}, \emph{WPSO},
+\emph{NDE}, \emph{SDE}, \emph{Bee}, \emph{Ant}).
+
+	Los resultados analizados en esta sección fueron obtenidos a partir de la
+ejecución de las diferentes metaheurísticas con la imagen \textbf{Lenna}
+(figura \ref{fig:lenna}).
+
+	No se incluyó el análisis de los resultados para el archivo de datos númericos
+\textbf{Iris} (sección \ref{test:iris}), debido a que las conclusiones obtenidas
+a partir del mismo eran similares a las conclusiones obtenidas con \textbf{Lenna}.
+
+\section{Comparación del índice $DB$ y evaluaciones de la función de \emph{fitness}}
+
+	Si la media de los valores del índice $DB$ de cada metaheurística híbrida
+es estadísticamente diferente a la media de su contraparte no híbrida, entonces
+existe una diferencia en la calidad de sus soluciones finales. Tomando como
+premisa que a menores valores de índice $DB$, mejor calidad de partición,
+entonces la metaheurística con menor índice $DB$ promedio será la mejor.
+
+	En constraste, si son estadísticamente iguales, la diferencia puede yacer en
+el rendimiento de la metaheurística. Si la media de la cantidad de evaluaciones
+de la función de \emph{fitness} de cada metaheurística híbrida es estadísticamente
+diferente a la media de su contraparte no híbrida, entonces existe una diferencia
+en el rendimiento de las mismas. Tomando como premisa que mientras menos
+evaluaciones de la función de \emph{fitness}, más rápido es el algoritmo, entonces
+la metaheurística con menor cantidad de evaluaciones de la función de \emph{fitness}
+será la mejor.
+
+\section{\emph{GAH} vs. \emph{GA}}
+
+	Se buscó determinar una diferencia en la calidad de los resultados de las
+metaheurísticas \emph{GAH} (metaheurística híbrida con K-means) y
+\emph{GA} (metaheurística no híbrida).
+
+\subsection{Prueba de diferencia de medias para el índice $DB$}
+
+    Para determinar diferencias en las calidades de las soluciones finales de las
+metaheurísticas \emph{GAH} y \emph{GA}, se realizó una prueba de hipótesis de
+diferencia de medias del índice $DB$:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{GAH} - \bar{X}_{GA} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{GAH} - \bar{X}_{GA} \neq 0$
+\end{itemize}
+donde $\bar{X}_{GAH}$ y $\bar{X}_{GA}$ son las medias muestrales del índice
+$DB$ de las metaheurísticas \emph{GAH} y \emph{GA} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-gas_img}, ambas medias son
+estadísticamente iguales ($p-valor = 0.2913$). { \bf Esto significa que ambas
+metaheurísticas obtienen soluciones finales con similar calidad}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de Medias: Índice \emph{DB}}, label=c-gas_img]
+> t.test(db ~ name)
+
+	Welch Two Sample t-test
+
+data:  db by name 
+t = -1.0654, df = 55.552, p-value = 0.2913
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -0.025548237  0.007810306 
+sample estimates:
+   mean in group GAH mean in group GA
+           0.7852724        0.7941414 
+\end{lstlisting}
+
+
+\subsection{Cantidad de evaluaciones de la función de \emph{fitness}}
+
+	En la sección anterior, se demostró que ambas metaheurísticas obtienen
+soluciones finales con similar calidad. Si no existe una diferencia en
+rendimiento, entonces ambos algoritmos son iguales y cualquiera de ellos puede
+ser un buen candidato para competir con las demás metaheurísticas.
+
+	Como las metaheurísticas \emph{GAH} y \emph{GA} utilizan la misma función de
+\emph{fitness} y esta es la función más costosa durante la ejecución de las mismas,
+se buscó determinar una diferencia en la cantidad de evaluaciones de la función
+de \emph{fitness} de las metaheurísticas. Para esto se realizó una prueba de
+hipótesis de diferencia de medias:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{GAH} - \bar{X}_{GA} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{GAH} - \bar{X}_{GA} \neq 0$
+\end{itemize}
+donde $\bar{X}_{GAH}$ y $\bar{X}_{GA}$ son las medias muestrales de la cantidad
+de evaluaciones de la función de fitness de las metaheurísticas \emph{GAH} y
+\emph{GA} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-gas_img1}, ambas medias son
+estadísticamente iguales ($p-valor = 0.08436$). {\bf Esto significa que ambas
+metaheurísticas tienen un rendimiento similar}. Sin embargo, \emph{GAH} tiene
+más oportunidad de mejorar sus soluciones parciales al estar hibridado con el
+algoritmo \emph{K-means} que su contraparte no hibridada \emph{GA}. {\bf Por lo
+tanto, \emph{GAH} es una metaheurística más confiable}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de medias: Cantidad de Evaluaciones}, label=c-gas_img1]
+> t.test(eval ~ name)
+
+	Welch Two Sample t-test
+
+data:  eval by name 
+t = 1.7571, df = 55.986, p-value = 0.08436
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -0.65687 10.03618 
+sample estimates:
+   mean in group GAH mean in group GA
+            35.20690         30.51724 
+\end{lstlisting}
+
+\section{\emph{NPSOH} vs. \emph{NPSO}}
+
+	Se buscó determinar una diferencia en la calidad de los resultados de las
+metaheurísticas \emph{NPSOH} (metaheurística híbrida con K-means) y
+\emph{NPSO} (metaheurística no híbrida).
+
+\subsection{Prueba de diferencia de medias para el índice $DB$}
+
+    Para determinar diferencias en las calidades de las soluciones finales de las
+metaheurísticas \emph{NPSOH} y \emph{NPSO}, se realizó una prueba de hipótesis de
+diferencia de medias del índice $DB$:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{NPSOH} - \bar{X}_{NPSO} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{NPSOH} - \bar{X}_{NPSO} \neq 0$
+\end{itemize}
+donde $\bar{X}_{NPSOH}$ y $\bar{X}_{NPSO}$ son las medias muestrales del índice
+$DB$ de las metaheurísticas \emph{NPSOH} y \emph{NPSO} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-npsos_img}, ambas medias son
+estadísticamente diferentes con un nivel de significancia menor a 5\%
+($p-valor < 2.2 \cdot 10^{-16}$). { \bf Esto significa que la mejor metaheurística
+es \emph{NPSOH} ya que la media de los valores de su índice $DB$ es menor que la
+de \emph{NPSO}}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de Medias: Índice \emph{DB}}, label=c-npsos_img]
+> t.test(db ~ name)
+
+	Welch Two Sample t-test
+
+data:  db by name 
+t = -19.7045, df = 29.118, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -2.935532 -2.383535 
+sample estimates:
+   mean in group NPSOH mean in group NPSO
+             0.8296867          3.4892200
+\end{lstlisting}
+
+\section{\emph{WPSOH} vs. \emph{WPSO}}
+
+	Se buscó determinar una diferencia en la calidad de los resultados de las
+metaheurísticas \emph{WPSOH} (metaheurística híbrida con K-means) y
+\emph{WPSO} (metaheurística no híbrida).
+
+\subsection{Prueba de diferencia de medias para el índice $DB$}
+
+    Para determinar diferencias en las calidades de las soluciones finales de las
+metaheurísticas \emph{WPSOH} y \emph{WPSO}, se realizó una prueba de hipótesis de
+diferencia de medias del índice $DB$:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{WPSOH} - \bar{X}_{WPSO} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{WPSOH} - \bar{X}_{WPSO} \neq 0$
+\end{itemize}
+donde $\bar{X}_{WPSOH}$ y $\bar{X}_{WPSO}$ son las medias muestrales del índice
+$DB$ de las metaheurísticas \emph{WPSOH} y \emph{WPSO} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-wpsos_img}, ambas medias son
+estadísticamente diferentes con un nivel de significancia menor a 5\%
+($p-valor < 2.2 \cdot 10^{-16}$). { \bf Esto significa que la mejor metaheurística
+es \emph{WPSOH} ya que la media de los valores de su índice $DB$ es menor que la
+de \emph{WPSO}}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de Medias: Índice \emph{DB}}, label=c-wpsos_img]
+> t.test(db ~ name)
+
+	Welch Two Sample t-test
+
+data:  db by name 
+t = -24.1583, df = 29.241, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -2.92364 -2.46740 
+sample estimates:
+   mean in group WPSOH mean in group WPSO
+             0.8347833          3.5303033 
+
+\end{lstlisting}
+
+\section{\emph{NDEH} vs. \emph{NDE}}
+
+	Se buscó determinar una diferencia en la calidad de los resultados de las
+metaheurísticas \emph{NDEH} (metaheurística híbrida con K-means) y
+\emph{NDE} (metaheurística no híbrida).
+
+\subsection{Prueba de diferencia de medias para el índice $DB$}
+
+    Para determinar diferencias en las calidades de las soluciones finales de las
+metaheurísticas \emph{NDEH} y \emph{NDE}, se realizó una prueba de hipótesis de
+diferencia de medias del índice $DB$:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{NDEH} - \bar{X}_{NDE} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{NDEH} - \bar{X}_{NDE} \neq 0$
+\end{itemize}
+donde $\bar{X}_{NDEH}$ y $\bar{X}_{NDE}$ son las medias muestrales del índice
+$DB$ de las metaheurísticas \emph{NDEH} y \emph{NDE} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-ndes_img}, ambas medias son
+estadísticamente diferentes con un nivel de significancia menor a 5\%
+($p-valor= 1.443 \cdot 10^{-6}$). { \bf Esto significa que la mejor metaheurística
+es \emph{NDEH} ya que la media de los valores de su índice $DB$ es menor que la
+de \emph{NDE}}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de Medias: Índice \emph{DB}}, label=c-ndes_img]
+> t.test(db ~ name)
+
+	Welch Two Sample t-test
+
+data:  db by name 
+t = -5.6727, df = 39.277, p-value = 1.443e-06
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -0.11984078 -0.05685255 
+sample estimates:
+   mean in group NDEH mean in group NDE 
+            0.8255833         0.9139300
+\end{lstlisting}
+
+\section{\emph{SDEH} vs. \emph{SDE}}
+
+	Se buscó determinar una diferencia en la calidad de los resultados de las
+metaheurísticas \emph{SDEH} (metaheurística híbrida con K-means) y
+\emph{SDE} (metaheurística no híbrida).
+
+\subsection{Prueba de diferencia de medias para el índice $DB$}
+
+    Para determinar diferencias en las calidades de las soluciones finales de las
+metaheurísticas \emph{SDEH} y \emph{SDE}, se realizó una prueba de hipótesis de
+diferencia de medias del índice $DB$:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{SDEH} - \bar{X}_{SDE} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{SDEH} - \bar{X}_{SDE} \neq 0$
+\end{itemize}
+doSDE $\bar{X}_{SDEH}$ y $\bar{X}_{SDE}$ son las medias muestrales del índice
+$DB$ de las metaheurísticas \emph{SDEH} y \emph{SDE} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-sdes_img}, ambas medias son
+estadísticamente diferentes con un nivel de significancia menor a 5\%
+($p-valor = 1.058 \cdot 10^{-8}$). { \bf Esto significa que la mejor metaheurística
+es \emph{SDEH} ya que la media de los valores de su índice $DB$ es menor que la
+de \emph{SDE}}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de Medias: Índice \emph{DB}}, label=c-sdes_img]
+> t.test(db ~ name)
+
+	Welch Two Sample t-test
+
+data:  db by name 
+t = -6.6778, df = 57.443, p-value = 1.058e-08
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -0.1149125 -0.0619008 
+sample estimates:
+   mean in group SDEH mean in group SDE
+            0.8490733         0.9374800
+\end{lstlisting}
+
+\section{\emph{BeeH} vs. \emph{Bee}}
+
+	Se buscó determinar una diferencia en la calidad de los resultados de las
+metaheurísticas \emph{BeeH} (metaheurística híbrida con K-means) y
+\emph{Bee} (metaheurística no híbrida).
+
+\subsection{Prueba de diferencia de medias para el índice $DB$}
+
+    Para determinar diferencias en las calidades de las soluciones finales de las
+metaheurísticas \emph{BeeH} y \emph{Bee}, se realizó una prueba de hipótesis de
+diferencia de medias del índice $DB$:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{BeeH} - \bar{X}_{Bee} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{BeeH} - \bar{X}_{Bee} \neq 0$
+\end{itemize}
+doBee $\bar{X}_{BeeH}$ y $\bar{X}_{Bee}$ son las medias muestrales del índice
+$DB$ de las metaheurísticas \emph{BeeH} y \emph{Bee} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-bees_img}, ambas medias son
+estadísticamente iguales ($p-valor = 1$). { \bf Esto significa que ambas
+metaheurísticas obtienen soluciones finales con similar calidad}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de Medias: Índice \emph{DB}}, label=c-bees_img]
+> t.test(db ~ name)
+
+	Welch Two Sample t-test
+
+data:  db by name 
+t = 0, df = 58, p-value = 1
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -0.006853032  0.006853032 
+sample estimates:
+   mean in group BeeH mean in group Bee 
+               0.7664            0.7664
+\end{lstlisting}
+
+\subsection{Cantidad de evaluaciones de la función de \emph{fitness}}
+
+	En la sección anterior, se demostró que ambas metaheurísticas obtienen
+soluciones finales con similar calidad. Si no existe una diferencia en
+rendimiento, entonces ambos algoritmos son iguales y cualquiera de ellos puede
+ser un buen candidato para competir con las demás metaheurísticas.
+
+	Como las metaheurísticas \emph{BeeH} y \emph{Bee} utilizan la misma función de
+\emph{fitness} y esta es la función más costosa durante la ejecución de las mismas,
+se buscó determinar una diferencia en la cantidad de evaluaciones de la función
+de \emph{fitness} de las metaheurísticas. Para esto se realizó una prueba de
+hipótesis de diferencia de medias:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{BeeH} - \bar{X}_{Bee} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{BeeH} - \bar{X}_{Bee} \neq 0$
+\end{itemize}
+donde $\bar{X}_{BeeH}$ y $\bar{X}_{Bee}$ son las medias muestrales de la cantidad
+de evaluaciones de la función de fitness de las metaheurísticas \emph{BeeH} y
+\emph{Bee} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-bees_img1}, ambas medias son
+estadísticamente iguales ($p-valor = 0.8853$). {\bf Esto significa que ambas
+metaheurísticas tienen un rendimiento similar}. Sin embargo, \emph{BeeH} tiene
+más oportunidad de mejorar sus soluciones parciales al estar hibridado con el
+algoritmo \emph{K-means} que su contraparte no hibridada \emph{Bee}. {\bf Por lo
+tanto, \emph{BeeH} es una metaheurística más confiable}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de medias: Cantidad de Evaluaciones}, label=c-bees_img1]
+> t.test(eval ~ name)
+
+	Welch Two Sample t-test
+
+data:  eval by name 
+t = 0.1449, df = 58, p-value = 0.8853
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -51.26416  59.26416 
+sample estimates:
+   mean in group BeeH mean in group Bee 
+             342.3333          338.3333 
+\end{lstlisting}
+
+\section{\emph{AntH} vs. \emph{Ant}}
+
+	Se buscó determinar una diferencia en la calidad de los resultados de las
+metaheurísticas \emph{AntH} (metaheurística híbrida con K-means) y
+\emph{Ant} (metaheurística no híbrida).
+
+\subsection{Prueba de diferencia de medias para el índice $DB$}
+
+    Para determinar diferencias en las calidades de las soluciones finales de las
+metaheurísticas \emph{AntH} y \emph{Ant}, se realizó una prueba de hipótesis de
+diferencia de medias del índice $DB$:
+\begin{itemize}
+    \item \emph{Hipótesis nula}: $\bar{X}_{AntH} - \bar{X}_{Ant} = 0$
+    \item \emph{Hipótesis altenativa}: $\bar{X}_{AntH} - \bar{X}_{Ant} \neq 0$
+\end{itemize}
+doAnt $\bar{X}_{AntH}$ y $\bar{X}_{Ant}$ son las medias muestrales del índice
+$DB$ de las metaheurísticas \emph{AntH} y \emph{Ant} respectivamente.
+
+    Para esto se utilizó la prueba $t$ de \emph{Welch} \cite{AB_0} la cual fue
+elegida por no ser sensible a la varianza de los datos.
+
+	Como se puede observar en el Resultado \ref{c-ants_img}, ambas medias son
+estadísticamente diferentes con un nivel de significancia menor a 5\%
+($p-valor = 9.22 \cdot 10^{-5}$). { \bf Esto significa que la mejor metaheurística
+es \emph{AntH} ya que la media de los valores de su índice $DB$ es menor que la
+de \emph{Ant}}.
+
+\begin{lstlisting}[float=h!, caption={Diferencia de Medias: Índice \emph{DB}}, label=c-ants_img]
+> t.test(db ~ name)
+
+	Welch Two Sample t-test
+
+data:  db by name 
+t = -4.5349, df = 29, p-value = 9.22e-05
+alternative hypothesis: true difference in means is not equal to 0 
+95 percent confidence interval:
+ -7455055911 -2820701719 
+sample estimates:
+   mean in group AntH mean in group Ant
+         9.483033e-01      5.137879e+09 
+
+\end{lstlisting}
+
+\section{Conclusión}
+
+	Las metaheurísticas híbridas con el algoritmo \emph{K-means} son las que
+reportan mejor calidad en sus soluciones finales (\emph{GAH}, \emph{NPSOH},
+\emph{WPSOH}, \emph{NDEH}, \emph{SDEH}, \emph{BeeH}, \emph{AntH}) con respecto a
+sus contrapartes no híbridas (\emph{GA}, \emph{NPSO}, \emph{WPSO}, \emph{NDE},
+\emph{SDE}, \emph{Bee}, \emph{Ant}). Por lo tanto, las metaheurísticas híbridas
+fueron elegidas para hacer comparaciones de calidad y rendimiento entre ellas en
+el capítulo \ref{chap:analisis}.

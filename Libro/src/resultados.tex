@@ -1,44 +1,56 @@
 % Resultados
-\chapter{Implementaci\'on y Resultados} \label{chap:impresultados}
+\chapter{Implementación} \label{sect:impresultados}
 
-%Puedes quitar esto(es opcional)
-\vspace{5 mm}
+    En este proyecto de grado, se implementaron cinco metaheurísticas (los algoritmos
+\emph{genético}\cite{DoGeGr2007}, \emph{de abeja}\cite{BEE_0} y \emph{de hormiga}
+\cite{OuBa2007}, la \emph{evolución diferencial}\cite{SwAjAm2008} y el \emph{optimizador
+de enjambre de partículas}\cite{PSO_0}) y el algoritmo determinista \emph{K-means}
+\cite{GePo2010} para la resolución del problema de \emph{data clustering}.
+\begin{comment}y se
+realizó un estudio comparativo de sus desempeños. El objetivo principal es
+identificar las metaheurísticas que mejor resuelvan el problema de clustering de
+datos numéricos, es decir, que sus soluciones finales tengan la mejor calidad.
+\end{comment}
 
-\section{Lenguaje usado}  \label{sec:lusado}
+\section{Lenguaje usado} \label{sec:lusado}
+    Los algoritmos fueron implementados en C++. Se eligió este lenguaje debido
+a que compila a código de máquina, permite el eficiente manejo de
+recursos del sistema y es orientado a objetos lo cual facilita una buena
+abstracción de los problemas por medio del uso de clases. Además, cuenta con
+muchas utilerías implementadas, lo que ayudó al ahorro del tiempo de implementación
+del proyecto.
 
-El proyecto fue hecho usando C++. Se elegi\'o \'este debido 
-a su eficiencia, ya que compila a c\'odigo de m\'aquina y permite una buena
-abstraci\'on de los problemas con las clases. Adem\'as, su librer\'ia ya contiene bastantes
-cosas ya hechas, por lo que va a ahorrar tiempo de programaci\'on.
-
-El dise\~no de las clases es el siguiente:
+El diagrama de clases es el siguiente:
 
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.35]{figures/clases.eps}
-\caption{Dise\~no de clases}
+\caption{Diagrama de clases}
 \label{fig:jclases}
 \end{figure}
 
-Donde Metaheuristics es una clase abstracta, que posee las m\'etodos que seran
-usados por las diversas metaheur\'isticas hijas. En especial tienen dos 
-importantes: initialize y run. El primero se va a encargar de inicializar el algoritmo
-para que luego sea ejecutado. Por ejemplo en el gen\'etico inicializa aleatoriamente
-las soluciones. Y el run es en s\'i el que va a ejecutar el algoritmo haciendo 
-uso de los par\'ametros y variables ya inicilizadas.
+    \emph{Metaheuristics} es una clase abstracta, que posee algunos métodos
+generales compartidos por las metaheurísticas hijas. En especial, tiene dos
+métodos abstractos importantes:
+\begin{itemize}
+    \item \emph{initialize}: Inicializa las variables necesarias para que la
+metaheurística sea ejecutada.
+    \item \emph{run}: Ejecuta la metaheurística.
+\end{itemize}
 
-Por el otro lado Reader tambi\'en
-es una clase abstracta y es la que se encarga de definir lo m\'etodos que van a 
-tener sus descendientes a la hora de leer un archivo, que se implement\'o para 
-tres tipos: csv, png y tiff.
+Por otro lado, \emph{Reader} es también una clase abstracta, encargada de leer
+el archivo de entrada (formato \emph{PNG} y \emph{TIFF} para las imágenes y
+\emph{CSV} para archivos de datos numéricos) y escribir el archivo de salida.
 
-\section{M'aquina de prueba} \label{sect:testbed}
+\begin{comment}
 
-Todas las pruebas fueron realizadas con el computador cuyas caracter'isticas
-aparecen en el cuadro \ref{tb:testbed}. La herramienta {\tt mhs} fue
-compilada sobre esa m'aquina, exclusivamente con optimizaci'on gcc de nivel 3,
-que es el nivel m\'as alto que posee gcc y aplica todas las mejoras
-que este posee.
+\section{Máquina de pruebas} \label{sect:testbed}
+
+    Todas las pruebas fueron realizadas con un computador cuyas características
+aparecen en la tabla \ref{tb:testbed}. El programa implementado, de nombre
+{\bf mhs}, fue compilado con \emph{gcc} con optimización de nivel 3 en la
+máquina mencionada anteriormente. Se eligió ese nivel de optimización ya que
+aplica todas las mejoras del compilador \emph{gcc}.
 
 \begin{table}[htb]
 \footnotesize
@@ -49,11 +61,11 @@ CPU & Intel Core I5 650 \\
 \hline
 RAM & 6 GB \\
 \hline
-Distribuci'on & Ubuntu 11.04 x86\_64 bits \\
+Distribución & Ubuntu 11.04 x86\_64 bits \\
 \hline
 Kernel Linux & 2.6.38-8-generic \\
 \hline
-Versi'on gcc & 4.5.2 \\
+Versión gcc & 4.5.2 \\
 \hline
 \end{tabular}
 \caption{Computador usado para las pruebas}
@@ -61,229 +73,1055 @@ Versi'on gcc & 4.5.2 \\
 \end{center}
 \end{table}
 
-\section{M\'etricas usadas}  \label{chap:meusada}
+\end{comment}
 
-Para medir la distancia entre dos patrones se va a usar la euclidiana que
-ya fue explicada en \ref{sect:mdist}. Se elegi\'o esta debido
-a su f\'acil implementaci\'on, buenos resultado y rapidez.
+\section{Métricas usadas}  \label{sect:meusada}
 
-La funci\'on objetivo principal es la DB, comentada en \ref{sect:tval}.
-Su baja complejidad algor\'itmitca en comparaci\'on con las dem\'as existentes y
-su eficacia en medir bien las dos cosas que se buscan en los cluster (distancia
-intracluster baja e intercluster alta) fueron los motivos para su elecci\'on. 
+    Para medir la similitud entre los patrones de un conjunto de datos, se utilizó
+la distancia euclidiana (ver ecuación (\ref{mdist: euclidean})), explicada
+anteriormente. Fue elegida debido a su fácil implementación, buenos resultados y
+rapidez.
 
-El DE y PSO usan la propuesta por \cite{OmEnSa2005}. En el contexto de 
-clustering de datos, una partícula o indivuduo representa
-al centroide de un cluster. La calidad
-de cada uno es medida usando:
+    Se utilizaron el índice $DB$ y la cuantificación del error $J_e$ para evaluar la 
+calidad de las soluciones finales de cada algoritmo implementado para compararlos
+entre sí.
 
-\[
-f(x_i,Z_i) = w_1 \overline{d}_{Max}(Z_i,x_i) + w_2 (z_{Max} - d_{Min}(x_i)) + w_3 J_{e,i}
-\]
+\section{Representación de Individuos} \label{sect:repind}
 
-donde $z_{Max}$ es el máximo valor del conjunto de datos (en el contexto
-de imágenes digitales $z_{Max} = 2^s - 1$ para una imagen de $s$-bits);
-$Z_i$ es la matriz representando la asignación de patrones a los clusters
-de la partícula $i$. Las constantes $w_1$, $w_2$ y $w_3$ son definidas por el usuario
-usadas para determinar la contribución de cada uno de los sub-objetivos.
-También
+    Los algoritmos \emph{genético} y \emph{de abeja}, \emph{evolución diferencial} y
+\emph{optimizador de enjambre de partículas} tienen la misma representación para
+sus individuos. En la figura \ref{fig:individual}\cite{DoGeGr2007} se puede observar la representación
+del vector de centroides que tiene cada individuo.
 
-\[
-\overline{d}_{Max}(Z_i,x_i) = \max_{1 \leq k \leq K} \left[ \displaystyle\sum_{\forall z_p \in C_{i,k}} d(z_p,m_{i,k})/n_{i,k}\right]
-\]
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale=0.4]{figures/individual.png}
+    \caption{Individuos: Vector de centroides}
+    \label{fig:individual}
+\end{figure}
 
-es la máxima distancia eucl\'idea promedio de las partículas en sus
-clusters asociados. Y
+\begin{comment}
+\section{Formato de pruebas}  
+\label{sect:ajustep}
 
-\[
-\overline{d}_{Min}(x_i) = \min_{\forall k, l, k \neq l} \left[ d(m_{i,k},m_{i,l})\right]
-\]
-
-es la distancia eucl\'idea mínima entre un par de clusters.
-
-Por \'ultimo $J_e$ es la comentado en \ref{sect:tval}.
-
-Para comparar que tan bueno es un algoritmo en comparacaci\'on a los otros, todos son evaluados al final con $DB(K)$ 
-y la del error $J_e$.
-
-\section{Ajuste de par\'ametros}  \label{chap:ajustep}
-
-Para cada metaheut\'istica hay que ver la influencia que sus par\'ametros 
-poseen, buscar los m\'as adecuados y dar los resultados obtenidos.
-Para ellos los pruebas se har\'an en dos pasos:
+    Se buscó el conjunto de mejores valores para los parámetros de cada algoritmo
+implementado. Algunos de estos parámetros se mantuvieron fijos, decisión tomada
+a partir de pruebas experimentales o recomendaciones de artículos y libros. Para
+ello se realizaron dos conjuntos de pruebas y análisis:
 
 \begin{enumerate}
-
-\item Hacer pruebas con todas las metaheur\'isticas variando los par\'ametros 
-en todo su rango. Algunos par\'amtros como el n\'umero de iteraciones se mantiene
-en un valor fijo que proviene de hacer pruebas emp\'iricas.
-
-\item Con estos resultados, hacer un an\'alisis ANOVA para ver la influencia de cada
-uno y de esta forma crear otras pruebas mucho m\'as espec\'ificas.
-
+    \item \emph{Pruebas con análisis de varianza}(ver apéndice \ref{apendiceb}):
+            Para las pruebas, se recabó información de cada metaheurística de la
+        siguiente forma:
+        \begin{enumerate}
+            \item Se generaron valores para el conjunto de parámetros de cada
+        metaheurística, a partir de la permutación de rangos discretos válidos para cada
+        uno de los mismos (véanse las secciones \ref{sect:iga-rv}, \ref{sect:iwpso-rv},
+        \ref{sect:inpso-rv}, \ref{sect:inde-rv}, \ref{sect:isde-rv},
+        \ref{sect:ibee-rv} y \ref{sect:iant-rv}).
+            \item Se ejecutó cada metaheurística con cada uno de los conjunto de
+        valores generados anteriormente y se extrajo el valor de la función de
+        \emph{fitness} $f$ de cada solución final.
+        \end{enumerate}
+	\item \emph{Pruebas exhaustivas} (ver apéndice \ref{apendicea}):
+            Para las pruebas, se recabó información de cada metaheurística de la
+        siguiente forma:
+        \begin{enumerate}
+            \item Se generaron valores para el conjunto de parámetros de cada
+        metaheurística a partir de la permutación de rangos discretos válidos para cada
+        uno de los mismos (véanse las secciones  \ref{sect:agenetico}, \ref{sect:anpso},
+        \ref{sect:awpso}, \ref{sect:ande}, \ref{sect:asde}, \ref{sect:abee},
+        \ref{sect:aant}).
+            \item Se ejecutó cinco veces cada metaheurística con cada uno de los     
+        conjunto de valores generados anteriormente.
+            \item De los resultados obtenidos, se promediaron las cinco corridas de cada
+        metaheurística y se tomaron los veinte mejores conjunto de valores.
+            \item Cada metaheurística fue ejecutada nuevamente con cada uno de los veinte
+        mejores conjuntos de valores para ella. Fueron ejecutadas treinta veces para
+        cada conjunto de valores.
+        \end{enumerate}
 \end{enumerate}
+
+\subsection{Metaheurísticas híbridas}\label{exp:hibrido}
+
+    Adicionalmente a la implementación de las metaheurísticas, también se implementaron
+híbridos de éstas con el algoritmo determinista \emph{K-means}. En otras palabras,
+las soluciones finales de cada metaheurística eran mejoradas por el algoritmo
+\emph{K-means}.
+
+    Se realizaron las \emph{pruebas exhaustivas} descritas anteriormente (ver
+sección \ref{sect:ajustep}) tanto con las metaheurísticas híbridas como para las
+no híbridas para luego hacer un análisis comparativo de las mismas (ver apéndice
+\ref{apendicec}).
+
+    Se utilizaron las metaheurísticas híbridas para hacer los análisis comparativos
+del capítulo \ref{chap:analisis} ya que tuvieron mejor calidad de soluciones
+finales que sus contrapartes no híbridas (ver apendice \ref{apendicec}).
+
+\subsection{Archivos de prueba}\label{datatest}
+
+    Las pruebas mencionadas anteriormente (ver sección \ref{sect:ajustep}) se
+realizaron para los conjuntos de datos mostrados a continuación:
+\begin{itemize}
+
+\item {\bf Lenna:}\label{test:lenna}
+
+Es una imagen muy usada por los investigadores en el área de imágenes. 
+\textbf{El número óptimo de clusters está en el rango $[5,10]$\cite{OuBa2007}.}
+Se usó una versión de resolución 128x128.
+
+\begin{figure}[htb]
+\centering
+\includegraphics{figures/lenamini.png}
+\caption{Lenna}
+\label{fig:lenna}
+\end{figure}
+
+\item {\bf Iris:}\label{test:iris}
+
+Es un conjunto bastante conocido de datos que
+consiste en tres diferentes especies de la planta iris: \emph{Iris setosa},
+\emph{Iris virginica} e \emph{Iris versicolour}. Para cada una de las especies,
+hay 50 muestras con cuatro atributos de tipo real: longitud del sépalo, ancho
+del sépalo, longitud de pétalos y ancho de pétalos. \textbf{La partición óptima
+es de 3 clusters con 50 objetos cada uno, de los cuales cada cluster representa a
+una de las especies \cite{SwAjAm2008}.}
+
+
+\item {\bf Imagen sintética:}
+
+Es una imagen creada con la finalidad de ver gráficamente el buen funcionamiento
+de las metaheurísticas implementadas. \textbf{Al ser una imagen simple, un buen
+algoritmo debería encontrar la partición óptima (7 clusters: 6 figuras bien
+diferenciadas y el fondo) sin ninguna dificultad.}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[scale=0.3]{figures/trivial.png}
+\caption{Imagen sintética}
+\label{fig:Trivial}
+\end{figure}
+
+\end{itemize}
+
+\subsection{Formato de las tablas de resultados}
+
+    A continuación, se presentan los significados de las abreviaturas de las
+cabeceras de las tablas de resultados:
+\begin{itemize}
+    \item \textbf{FO}: Valor de la función de \emph{fitness} $1/DB$ para la
+solución final.
+    \item \textbf{DB}: Valor del índice \emph{DB} para la solución final.
+    \item \textbf{$J_e$}: Valor de la cuantificación del error para la solución
+final.
+	\item \textbf{E}:Cantidad de evaluaciones de la función de \emph{fitness}.
+\end{itemize}
+
+\end{comment}
 
 \section{K-means}  \label{chap:ikmeans}
 
-\'Este fue implementado tal cual como se explic\'o en \ref{sect:cpart}. La
-inicializaci\'on es totalmente aleatoria. Y la condici\'on de paradas
-va a ser hasta que no se mejores un n\'umero de veces dado.
+    Este método directo fue implementado siguiendo el pseudo-código \ref{Kmeans}
+mencionado en la sección \ref{sect:cpart}, agregándole las siguientes
+características:
+\begin{itemize}
+    \item La solución inicial es generada aleatoriamente.
+    \item El algoritmo se detiene cuando no se mejora la solución en un número
+dado de iteraciones.
+	\item Si existe algún cluster vacío, lo elimina. Esto implica que el
+algoritmo \emph{K-means} implementado puede reducir el número de clusters.
+\end{itemize}
+    El \emph{K-means}, al ser un método directo, tiene un comportamiento
+determinista.
 
-\section{Bee}  \label{chap:ibee}
+\begin{comment}
 
-\section{Gen\'etico}  \label{chap:igenetico}
+\subsection{Resultados obtenidos para \textbf{Lenna}}
 
-Se leyeron todas las posbibles formas propuestas por \cite{HrCaFr2009} y se decidi\'o
-lo siguiente:
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del
+algoritmo \emph{K-means}:
+
+\input{tables/pmpKMEANSimg.tex}
+
+\subsection{Resultados obtenidos para \textbf{Iris}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del
+algoritmo \emph{K-means}:
+
+\input{tables/pmpKMEANScsv.tex}
+
+\end{comment}
+
+\section{Algoritmo Genético (\emph{GA})}  \label{sect:igenetico}
+
+    A partir de las distintas implementaciones de algoritmo genético propuestos
+en \cite{HrCaFr2009} y siguiendo el pseudo-código \ref{GA}, mencionado
+anteriormente, se implementó un \emph{GA} con las si\-guien\-tes características:
+\begin{itemize}
+    \item El \emph{cromosoma} está representado por el vector de centroides
+de cada individuo (ver sección \ref{sect:repind}). Esto permite que las operaciones 
+evolutivas tengan más impacto sobre las soluciones de los mismos. Luego las soluciones 
+son actualizadas a partir de los cambios hechos en los vectores de centroide como se
+muestra en el pseudo-código \ref{rebuildGA}.
+\begin{lstlisting}[float=h!, caption={Actualización de Soluciones}, label=rebuildGA]
+- Para cada $i \in [1, N]$:
+    - Si $d(\overrightarrow{z}_i, \overrightarrow{m}_k)$ es mínima,
+      donde $k \in [1, K]$:
+        - Introducir el patrón $\overrightarrow{z}_i$ en cluster $C_k$.
+      Fin.
+  Fin.
+\end{lstlisting}
+
+    \item La \emph{selección} se realiza a través de un torneo de tamaño $tt$.
+Se eligen aleatoriamente $tt$ individuos de la población, de los cuales se escogen
+a los dos con mejor valor de función de \emph{fitness}. Estos serán los candidatos
+para \emph{cruce}. Este tipo de selección permite tener poblaciones más heterogéneas
+ya que elige aleatoriamente a los individuos para el \emph{cruce}.
+
+    \item El \emph{cruce} es el de un punto, explicado en la sección \ref{gen: point}.
+De los cuatro individuos (2 padres y 2 hijos), sólo los que tengan mejor función
+de \emph{fitness} se incorporarán a la población.
+
+    \item La \emph{mutación} no es exclusiva de los hijos generados, sino de
+cualquier miembro de la población, elegido aleatoriamente. Se implementaron tres
+posibles tipos con la misma probabilidad de o\-cu\-rren\-cia:
+    \begin{itemize}
+        \item \textbf{Creación de un cluster}: se crea un nuevo centroide con un
+patrón aleatorio del conjunto de datos.
+        \item \textbf{Eliminación de un cluster}: se elige un centroide de manera
+aleatoria y se elimina. Los elementos de este cluster son reasignados a los
+demás clusters.
+        \item \textbf{Cambio de un centroide}: consiste en reemplazar un centroide elegido aleatoriamente, con un patrón aleatorio del conjunto de datos.
+    \end{itemize}
+    Estas mutaciones permiten introducir diversidad cromosómica a la población
+del algoritmo.
+    \item El algortimo se detiene cuando no se mejora la solución en un
+número dado de iteraciones.
+\end{itemize}
+
+    Entre las ventajas del algoritmo, destacan:
+\begin{itemize}
+    \item La cantidad total de clusters $K$, no tiene que ser conocida de
+antemano. Basta con suministrarle una cantidad de clusters máximo.
+    \item Es fácil de implementar, ya que es un algoritmo sencillo.
+    \item Es fácil de entonar, ya que no tiene muchos parámetros.
+\end{itemize}
+
+\begin{comment}
+\subsection{Parámetros variables}\label{sect:iga-pv}
+
+    A continuación, se describen los parámetros variables del algoritmo:
+\begin{itemize}
+    \item $I$: representa a la cantidad total de individuos de la población,
+donde $I \geq 2$.
+    \item $tt$: representa el tamaño del torneo, donde $tt \geq 2$ y $tt \leq I$.
+    \item $pc$: representa la probabilidad de cruce de los individuos y
+está acotado en el rango $[0, 1]$.
+    \item $pm$: representa la probabilidad de mutación de los individuos y
+está acotado en el rango $[0, 1]$.
+\end{itemize}
+
+\subsubsection{Resultados obtenidos para \textbf{Lenna}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del algoritmo genético híbrido con
+\emph{K-means} (\emph{GAH}) para la imagen \textbf{Lenna} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpGAimg.tex}
+
+\newpage
+
+\subsubsection{Resultados obtenidos para \textbf{Iris}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del algoritmo genético híbrido con
+\emph{K-means} (\emph{GAH}) para el archivo de datos \textbf{Iris} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpGAcsv.tex}
+
+\subsubsection{Influencia de los parámetros}
+
+Teniendo en cuenta que el \emph{rango probado} es el conjunto de valores utilizado
+para las pruebas y el \emph{rango efectivo} es el conjunto valores del parámetros
+para los 20 mejores resultados del algoritmo \emph{GAH} (tablas \ref{tb:tablegahibimg}
+y \ref{tb:tablegahibcsv}), se encontró lo siguiente:
+
+\begin{itemize}
+    \item Para la imagen \textbf{Lenna}:
+        \begin{itemize}
+            \item Parámetro $I$:
+                Como el \emph{rango probado} ($[5, 40]$) es
+                igual al \emph{rango efectivo} ($[5, 40]$) no importa que valor tome el
+                parámetro $I$, el \emph{GAH} puede dar una buena solución
+                final. Por lo tanto, este parámetro no influye
+                considerablemente en la bondad de la solución final.
+            \item Parámetro $tt$:
+                Como el \emph{rango probado}($[4, 40]$) es
+                mayor al \emph{rango efectivo} ($[4, 24]$), es relevante el valor que se
+                le asigne al parámetro $tt$. \textbf{Por lo tanto, este
+                parámetro influye en la bondad de la solución final.}
+            \item Parámetro $pc$:
+                Como el \emph{rango probado}($[0.0; 1.0]$) es
+                practicamente igual al \emph{rango efectivo} (sólo faltan el $0.4$ y $0.9$), 
+                no importa que valor tome el
+                parámetro $pc$, el \emph{GAH} puede dar una buena solución
+                final. Por lo tanto, este parámetro no influye
+                considerablemente en la bondad de la solución final.
+            \item Parámetro $pm$:
+                Como el \emph{rango probado}($[0.1; 1.0]$ ) es
+                mayor al \emph{rango efectivo} ($[0.5; 1.0]$ ), es relevante el valor que se
+                le asigne al parámetro $pm$. \textbf{Por lo tanto, este
+                parámetro influye en la bondad de la solución final.}
+        \end{itemize}
+	\item Para el archivo numérico \textbf{Iris}:
+        \begin{itemize}
+            \item Parámetro $I$:
+                Como el \emph{rango probado}($[5, 40]$) es
+                mayor al \emph{rango efectivo} ($[25, 40]$), es relevante el valor que se
+                le asigne al parámetro $I$. \textbf{Por lo tanto, este
+                parámetro influye en la bondad de la solución final.}
+			\item Para los parámetros $tt$, $pc$ y $pm$ se observa un comportamiento
+				similar al encontrado para la imagen \textbf{Lenna}.
+        \end{itemize}
+\end{itemize}
+\end{comment}
+
+\section{Optimizador de Enjambre de Partículas (\emph{PSO})}  \label{sect:ipso}
+
+    Se implementó el algoritmo \emph{gbest PSO}(pseudo-código \ref{PSO}), basado en la tesis doctoral de
+Mahamed G. H. Omran \cite{PSO_0} con las siguientes características:
+\begin{itemize}
+    \item La población inicial tiene soluciones generadas aleatoriamente.
+    \item El algoritmo se detiene cuando no se mejora la solución en un
+número dado de iteraciones.
+	\item El número de clusters no es variable. Para esto se implementó un
+procedimiento que llena clusters vacíos al cambiar su centroide, descrito en
+el pseudo-código \ref{sect: ipso-asig}.
+\begin{lstlisting}[float=h!, caption={Asignación de nuevo centroide}, label={sect: ipso-asig}]
+- Aplicar el proceso de asignación, explicado en el pseudo-código %\ref{rebuildGA}%.
+- Para cada $i \in [1, K]$:
+    - Si el cluster $C_i$ está vacío o tiene un sólo elemento:
+        - Tomar el patrón $\overrightarrow{z} \in C_k$ que esté más alejado de su centroide $\overrightarrow{m}_k$,
+          donde $k \in [1, K]$
+        - Asignar al centroide $\overrightarrow{m}_i$ el patrón $\overrightarrow{z}$.
+        - Aplicar el proceso de asignación, explicado en el pseudo-código %\ref{rebuildGA}%.
+        - Reiniciar $i$,
+      Fin.
+  Fin.
+\end{lstlisting}
+\end{itemize}
+
+    Se usaron dos funciones de \emph{fitness} diferentes. Ambas funciones
+pertenecen a un problema de optimización de minimización. Por lo tanto, a menor
+valor, mejor solución.
+    
+\subsection{Función de \emph{fitness} con pesos (\emph{WPSO})}\label{sect:iwpso}
+
+    El \emph{WPSO} tiene la siguiente función de \emph{fitness} \cite{PSO_0}:
+\begin{equation}\label{pso: wpso}
+    f(x_i) = w_1 \cdot \overline{d}_{Max}(x_i) + w_2 \cdot (Z_{Max} - d_{Min}(x_i)) + w_3 \cdot J_e
+\end{equation}
+donde,
+\begin{itemize}
+    \item $Z_{Max}$ es la distancia máxima entre el patrón con valores de
+atributos máximos y el patrón con valores de atributos mínimos.
+    \item $\overline{d}_{Max}(x_i)$ es la distancia máxima promedio de la
+distancia entre un patrón y el centroide del cluster al que pertenece. Mientras
+más pequeña sea esta distancia, los clusters son más densos:
+\begin{equation}\label{pso: dmax}
+    \overline{d}_{Max}(x_i) = \displaystyle\max_{k \in [1,K]} \left[\displaystyle\sum_{\forall \overrightarrow{z} \in C_{i,k}} \displaystyle\frac{d(\overrightarrow{z}, \overrightarrow{m}_{i,k})}{N_{i,k}}\right]
+\end{equation}
+donde $z$ es un patrón del conjunto de datos.
+    \item $\overline{d}_{Min}(x_i)$ es la distancia mínima entre los centroides
+de cada clusters. Mientras más grande sea esta distancia, mejor diferenciados
+estarán los clusters:
+\begin{equation}\label{pso: dmin}
+    d_{Min}(x_i) = \displaystyle\min_{k \in [1,K]} d(\overrightarrow{m}_{i,k}, \overrightarrow{m}_{i,l}); \forall k,l \in \{1, \cdots, K\},k \neq l
+\end{equation}
+    \item $J_e$ es la cuantificación del error (\ref{cluster: je}).
+    \item $w_1$ es el peso de la distancia \emph{intra-cluster}. El sub-objetivo
+del algoritmo es hacer que esta distancia sea mínima.
+    \item $w_2$ es el peso de la distancia \emph{inter-cluster}. El sub-objetivo
+del algoritmo es hacer que esta distancia sea máxima.
+    \item $w_3$ es el peso de la cuantificación del error. El sub-objetivo del
+algoritmo es hacer que el error sea mínimo.
+\end{itemize}
+
+    La principal ventaja de esta función de \emph{fitness} es la de poder
+controlar los diferentes sub-objetivos de clustering de manera independiente a
+través de los valores de los pesos.
+\begin{comment}
+\subsection{Parámetros variables}\label{sect:iwpso-pv}
+
+    A continuación, se describen los parámetros variables del algoritmo:
+\begin{itemize}
+    \item $I$: representa a la cantidad total de partículas del enjambre,
+donde $I \geq 2$.
+    \item $w_1$, $w_2$ y $w_3$: son los pesos de la función de \emph{fitness}
+(\ref{pso: wpso}), deben ser positivos y su suma debe ser igual a 1.
+    \item $W$, $c_1$ y $c_2$: representan al peso inercial, factor de aprendizaje
+colectivo y factor de aprendizaje social, respectivamente, descritos en la
+sección \ref{sect:metapso-vel}. $W$ debe estar acotado en el rango $[0, 2]$ y
+$c_1$ y $c_2$ deben satisfacer la inecuación (\ref{pso: convergece}).
+    \item $vmx$: es un escalar, acotado en el rango $[0, 1]$, que multiplica al
+vector $Z_{max}$ con el fin de regular la velocidad máxima de la partícula,
+donde $vmx \cdot Z_{max}$ es el valor máximo de la velocidad $v(t)$ (véase la
+ecuación (\ref{pso: vi})).
+\end{itemize}
+
+\subsubsection{Resultados obtenidos para \textbf{Lenna}}
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{WPSO} híbrido con
+\emph{K-means} (\emph{WPSOH}) para la imagen \textbf{Lenna} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpWPSOimg.tex}
+
+\subsubsection{Resultados obtenidos para \textbf{Iris}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{WPSO} híbrido con
+\emph{K-means} (\emph{WPSOH}) para el archivo de datos \textbf{Iris} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpWPSOcsv.tex}
+
+\subsubsection{Influencia de los parámetros}
+
+Teniendo en cuenta que el \emph{rango probado} es el conjunto de valores utilizado
+para las pruebas y el \emph{rango efectivo} es el conjunto valores del parámetros
+para los 20 mejores resultados del algoritmo \emph{WPSOH} (tablas \ref{tb:tablewpsohibimg}
+y \ref{tb:tablewpsohibcsv}), se encontró lo siguiente:
+
+\begin{itemize}
+	\item Para la imagen \textbf{Lenna}:
+	\begin{itemize}
+		\item No se puede encontrar una relación entre los valores de los
+			parámetros y el valor de la función de \emph{fitness}. Se
+			puede observar que para cada parámetro el \emph{rango efectivo}
+			es similar \emph{rango probado}. Esto indica que el valor que tome cada
+			uno de los parámetros del algoritmo parece no tener una gran influencia en la
+			solución final.
+	\end{itemize}
+	\item Para el archivo numérico \textbf{Iris}:
+	\begin{itemize}
+		\item Se puede observar que los parámetros $I$, $w_1$, $w_2$, $w_3$ y
+			$W$ pueden ser fijados en $10$, $0.8$, $0.2$, $0.0$ y $0.8$,
+			respectivamente. Los demás parámetros se comportan de manera similar 
+			a como lo hacen para la imagen {\bf Lenna}.
+	\end{itemize}
+\end{itemize}
+
+\end{comment}
+
+\subsection{Función de \emph{fitness} sin pesos (\emph{NPSO})}\label{sect:inpso}
+    El \emph{NPSO} tiene la siguiente función de \emph{fitness} \cite{PSO_0}:
+\begin{equation}\label{pso: npso}
+    f(x_i) = \displaystyle \frac{\displaystyle\frac{\overline{d}_{Max}(x_i)}{2 \cdot Z_{Max}} + \frac{J_e}{2 \cdot Z_{Max}}}{\displaystyle\frac{d_{Min}(x_i)}{Z_{Max}}}
+\end{equation}
+
+    Los términos $\overline{d}_{Max}(x_i)$ y $J_e$ están normalizados de modo que
+pertenezcan al intervalo $[0, \frac{1}{2}]$, mientras el término $d_{Min}(x_i)$
+está normalizado para pertenecer al intervalo $(0, 1]$. Así que esta función de
+\emph{fitness} está acotada en el intervalo $[0, 1]$.
+
+    La ventaja principal de esta función de \emph{fitness} es que prescinde de
+los pesos de la función (\ref{pso: wpso}), de modo que se facilita la
+entonación del algoritmo.
+
+\begin{comment}
+\subsection{Parámetros variables}\label{sect:inpso-pv}
+
+    Los parámetros variables son los mismos descritos en la sección \ref{sect:iwpso-pv},
+exceptuando los pesos $w_1$, $w_2$ y $w_3$.
+
+\subsubsection{Resultados obtenidos para \textbf{Lenna}}
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{NPSO} híbrido con
+\emph{K-means} (\emph{NPSOH}) para la imagen \textbf{Lenna} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpPSOimg.tex}
+
+\subsubsection{Resultados obtenidos para \textbf{Iris}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{NPSO} híbrido con
+\emph{K-means} (\emph{NPSOH}) para el archivo de datos \textbf{Iris} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpPSOcsv.tex}
+
+\subsubsection{Influencia de los parámetros}
+
+Teniendo en cuenta que el \emph{rango probado} es el conjunto de valores utilizado
+para las pruebas y el \emph{rango efectivo} es el conjunto valores del parámetros
+para los 20 mejores resultados del algoritmo \emph{NPSOH} (tablas \ref{tb:tablepsohibimg}
+y \ref{tb:tablepsohibcsv}), se encontró lo siguiente:
+
+\begin{itemize}
+	\item Para la imagen \textbf{Lenna}:
+	\begin{itemize}
+		\item No se puede encontrar una relación entre los valores de los
+			parámetros y el valor de la función de \emph{fitness}. Se
+			puede observar que para cada parámetro el \emph{rango efectivo}
+			es similar \emph{rango probado}. Esto indica que el valor que tome cada
+			uno de los parámetros del algoritmo parece no tener una gran influencia en la
+			solución final.
+	\end{itemize}
+	\item Para el archivo numérico \textbf{Iris}:
+	\begin{itemize}
+		\item Se puede observar que los parámetros $I$ y $W$ pueden ser fijados
+			en $25$ y $1.1$, respectivamente. Los demás parámetros se comportan de manera similar 
+			a como lo hacen para la imagen {\bf Lenna}.
+	\end{itemize}
+\end{itemize}
+
+\end{comment}
+
+\section{Evolución Diferencial (\emph{DE})}  \label{sect:ide}
+
+    Esta metaheurística fue implementada siguiendo el pseudo-código \ref{DE}, 
+mencionado anteriormente en la sección \ref{sect:metade}, con la
+función objetivo del \emph{WPSO} (\ref{sect:iwpso}) y
+el procedimiento que mantiene la cantidad de clusters fijo \ref{sect: ipso-asig}. Sin embargo, tiene
+varias diferencias basadas en los trabajos \cite{SwAjAm2008} y \cite{OmEnSa2005}.
+A continuación, se presentan las modificaciones:
+
+\begin{itemize}
+    \item El hijo generado a partir del \emph{cruce} será diferente al padre en
+al menos un atributo.
+    \item El algoritmo se detiene al alcanzar el máximo número de iteraciones
+$maxit$.
+\end{itemize}
+
+\subsection{Parámetros variables}\label{sect:isde-pv} \label{sect:inde-pv}
+
+    A continuación, se describen los parámetros variables del algoritmo:
+\begin{itemize}
+    \item $I$: representa a la cantidad total de individuos.
+    \item $w_1$, $w_2$ y $w_3$: son los pesos de la función de \emph{fitness}
+(\ref{pso: wpso}), deben ser positivos y su suma debe ser igual a 1.
+    \item $\gamma$: factor de escalado de la diferencia.
+    \item $Cr$: representa la probabilidad de cruce  de los individuos.
+\end{itemize}
+
+    Los parámetros $\gamma$ y $Cr$ pueden ser provistos por el usuario (\emph{SDE})
+o calculados automáticamente durante la ejecución de la metaheurística
+(\emph{NDE}).
+
+    En el caso del \emph{NDE}, los parámetros son calculados de la siguiente
+forma\cite{SwAjAm2008}: 
 
 \begin{itemize}
 
-\item Los cromosomas van a ser los centroides de los clusters, de un tama\~no de $K$
-dado. Esto permite que las operaciones que se hagan sobre los individuos tengan
-un efecto mas fuerte sobre el cluster y trabajen de manera mas global: sobre cluster y
-no con objetos.
+\item $\gamma$: En cada iteración del algoritmo, se calcula un nuevo valor para
+$\gamma$ de la siguiente forma:
+\begin{equation}\label{de: gamma}
+    0.5 \cdot ( 1 + rand(0,1) )
+\end{equation}
+donde $rand(0,1)$ es un número aleatorio en el intervalo $[0, 1]$. La media de los
+valores generados será 0.75, permitiendo variaciones estocásticas en los vectores
+hijo generados. Esto ayuda a mantener diversidad en la población.
 
-\item La mutaci\'on no es exclusiva de los hijos como se propuso en el marco te\'orico,
-sino que es a cualquier miembro de la poblaci\'on. Son tres posibles: dividir un cluster
-en dos, creando uno nuevo, unir dos cluster, y cambiar un elemento de un cluster a otro.
-De esta forma hay una buena variedad y buenos cambios que pueden lograr obtener buenos
-resultados.
-
-\item La selecci\'on es por torneo, donde al comienzo del algoritmo se especifica 
-el tama\~no de \'esta.
-
-\item La condici\'on de parada es un n\'umero dado de veces que no se mejore lo 
-que se tiene.
-
-\item El resto del algoritmo sigue tal cual como ya se explic\'o.
-
+\item $Cr$: Se establece una probabilidad de cruce máxima $Cr_{max}$ y una probabilidad
+de cruce mínima $Cr_{min}$. En cada iteración del algoritmo, la variable $Cr$ se
+decrementará linealmente dentro del rango $[Cr_{min}, Cr_{max}]$. A medida que
+el valor de $Cr$ disminuye, heredarán más atributos del padre. La variación del
+parámetro $Cr$ está dado por:
+\begin{equation}\label{de: cr}
+    Cr_i = (Cr_{max}-Cr_{min}) \cdot \displaystyle\frac{maxit - i}{maxit} + Cr_{min}
+\end{equation}
+donde $Cr_i$ es la probabilidad de cruce $Cr$ en la iteración $i$ y $maxit$ es el
+número máximo de iteraciones del algoritmo. En la implementación del \emph{NDEH},
+se tomaron $Cr_{max} = 1$ y $Cr_{min} = 0.5$
 \end{itemize}
 
-\section{DE}  \label{chap:ide}
+\begin{comment}
 
-Se bas\'o en los trabajos hecho por \cite{SwAjAm2008} y \cite{OmEnSa2005}, especialmente
-de \'este \'ultimo.
+\subsubsection{Resultados obtenidos para \textbf{Lenna} (\emph{SDE})}
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{SDE} híbrido con
+\emph{K-means} (\emph{SDEH}) para la imagen \textbf{Lenna} (ver sección
+\ref{exp:hibrido}):
 
-Se requiere un $K$ de antemano y los individuos van a ser arreglos de $K$ centroides.
-El algoritmo funciona tal cual como se explic\'o en \ref{sect:metade}. Una de las diferencias es
-el cruce, donde adicionalemente se tiene
-un punto entre $[1,M|$ donde es 100\% de probabilidad de cruce. La condici\'on
-de parada es un n\'umero de iteraciones dado. Con respecto
-a los par\'ametros $F$ y $Cr$, pueden ser establecidos o funcionar como se propone
-en el primer art\'iculo, con ciertas modificaciones:
+\input{tables/pmpSDEimg.tex}
+
+\subsubsection{Resultados obtenidos para \textbf{Iris} (\emph{SDE})}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{SDE} híbrido con
+\emph{K-means} (\emph{SDEH}) para el archivo de datos \textbf{Iris} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpSDEcsv.tex}
+
+\subsubsection{Resultados obtenidos para \textbf{Lenna} (\emph{NDE})}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{NDE} híbrido con
+\emph{K-means} (\emph{NDEH}) para la imagen \textbf{Lenna} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpDEimg.tex}
+
+\subsubsection{Resultados obtenidos para \textbf{Iris} (\emph{NDE})}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{NDE} híbrido con
+\emph{K-means} (\emph{NDEH}) para el archivo de datos \textbf{Iris} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpDEcsv.tex}
+
+\subsubsection{Influencia de los parámetros}
+
+Teniendo en cuenta que el \emph{rango probado} es el conjunto de valores utilizado
+para las pruebas y el \emph{rango efectivo} es el conjunto valores del parámetros
+para los 20 mejores resultados del algoritmo \emph{NDEH} (tablas \ref{tb:tabledehibimg}
+y \ref{tb:tabledehibcsv}), se encontró lo siguiente:
 
 \begin{itemize}
-
-\item {\bf $F$:} En cada iteraci\'on se calcula un nuevo $F$, con la siguiente expresi\'on:
-$0.5 \times (1 + rand(0,1))$, donde $rand(0,1)$ es un n\'umero aletorio entre $[0,1]$.
-Es claro que la media va a ser 0.75. \'Esto permite variaciones estoc\'asticas en el vector diferencia, y
-por lo tando ayuda a mantener diversa la poblaci\'on a medida que la b\'usqueda progresa.
-
-\item {\bf $Cr$:} Se establece un $Cr_{max}$ y $Cr_{min}$. La idea es que el $Cr$ vaya
-decrementando linealmente desde el primero hasta el segundo. Al comienzo
-se desea que explorar el espacio de b\'usqueda y al final se enfoquarse y mejorar las soluciones
-que ya se llevan. Es f\'acil ver a medida que el $Cr$ disminuye, los hijos heradan m\'as
-del padre. Se tomaron $Cr_{max} = 1.0$ y $Cr_{min} = 0.5$. La variaci\'on esta expresada por:
-
-\[
-(Cr_{max}-Cr_{min}) \times {{maxit - it} \over maxit} + Cr_{min}
-\]
-
-donde $maxit$ es el n\'umero de iteraciones tope dado al algoritmo e $it$ es la iteraci\'on actual.
-
+    \item Para la imagen {\bf Lenna}:
+		\begin{itemize}
+		    \item Para los parámetros $I$, $w_1$ y $w_3$ el \emph{rango efectivo}
+				  es similar \emph{rango probado}. Esto
+		          puede indicar que no influyen considerablemente en la calidad
+		          de las soluciones finales.
+		    \item Parámetro $w_2$:
+		          Como el \emph{rango probado}($[0.1; 1.0]$) es
+		          mayor al \emph{rango efectivo} ($[0.0;0.6]$), es relevante el valor que se
+		          le asigne al parámetro $w_2$. \textbf{Por lo tanto, este
+		          parámetro influye en la bondad de la solución final.}
+		\end{itemize}
+    \item Para el archivo numérico {\bf Iris}:
+		\begin{itemize}
+		    \item A diferencia de los resultados para \emph{Lenna}, ningún
+		    parámetro parece influir considerablemente en la calidad de las
+		    soluciones finales.
+		\end{itemize}
 \end{itemize}
 
-\section{PSO}  \label{chap:ipso}
+Por otro lado, teniendo en cuenta que el \emph{rango probado} es el conjunto de valores utilizado
+para las pruebas y el \emph{rango efectivo} es el conjunto valores del parámetros
+para los 20 mejores resultados del algoritmo \emph{SDEH} (tablas \ref{tb:tablesdehibimg}
+y \ref{tb:tablesdehibcsv}), se encontró lo siguiente:
 
-\section{Hormiga}  \label{chap:ihormiga}
+\begin{itemize}
+    \item Para la imagen {\bf Lenna}:
+		\begin{itemize}
+		    \item Para los parámetros $I$, $w_1$ y $w_3$ el \emph{rango efectivo}
+				  es similar \emph{rango probado}. Esto
+				  puede indicar que no influyen considerablemente en la calidad
+				  de las soluciones finales.
+		    \item Para los parámetros $\gamma$ y $Cr$  el \emph{rango efectivo} 
+		          posee una gran cantidad de valores del \emph{rango probado}.
+		          Esto puede indicar que no influyen considerablemente en la
+		          calidad de las soluciones finales.
+		    \item Parámetro $w_2$:
+		          Como el \emph{rango probado}($[0.1; 1.0]$) es
+		          mayor al \emph{rango efectivo} ($[0.0;0.8]$), es relevante el valor que se
+		          le asigne al parámetro $w_2$. \textbf{Por lo tanto, este
+		          parámetro influye en la bondad de la solución final.}
+	    \end{itemize}
+    
+    \item Para el archivo numérico {\bf Iris}:
+		\begin{itemize}
+			\item Se puede observar que los parámetros $I$, $w_1$, $w_2$ y $w_3$
+			  	  pueden ser fijados en  $15$, $0.5$, $0.1$ y $0.4$,
+				  respectivamente. 
+		    \item Parámetro $\gamma$:
+		          Como el \emph{rango probado}($[0.5; 1.0]$) es
+		          mayor al \emph{rango efectivo} ($[0.5;0.8]$), es relevante el valor que se
+		          le asigne al parámetro $\gamma$. Además, mientras más alto
+		          sea su valor, mejor es el valor de la función de \emph{fitness}.
+		           \textbf{Por lo tanto, este
+		          parámetro influye en la bondad de la solución final.}
+		    \item Parámetro $Cr$:
+		    	  Tiene un comportamiento similar al obtenido con \textbf{Lenna}.
+		\end{itemize}
+\end{itemize}
 
-Como se mencion\'o en \ref{sect:metaant} hay varias visiones de esta metaheur\'istica.
-La primera es la que se basa en la b\'usqueda de comida por parte de las hormigas.
-\'Esta es inviable para hacer clustering porque no se puede representar 
-una soluci\'on mediante un grafo. Por ello es usada la otra perspectiva basada en c\'omo
-las hormigas arman sus cementerios u organizan de las c\'rias. 
+\end{comment}
 
-En \'esta las hormigas se van a mover en un grid de dos dimensiones. Si 
-el tama\~no es muy peque\~no van a hacer muchos movimientos en vista que
-no van a conseguir espacios vacios donde soltar el objeto que cargan. En cambio,
-si es muy grande se haran movimientos innecesarios cuando la hormiga no lleva nada.
-No hay una gu\'ia te\'orica del tama\~no adecuado. Por ello la implemetaci\'on que
-se hizo fue basada de \cite{OuBa2007}, donde se propone usar un arreglo 
-de $N/4$ c\'elulas en el cual las hormigas se pueden mover libremente.
-Una de las ventajas es lo f\'acil de identificar los clusters a diferencia
-de un grid donde no existe un modo establecido para lograrlo.
+\begin{comment}
+	A partir de los resultados de los 20 mejores conjuntos de valores
+(tablas \ref{tb:tabledeimgfull} y \ref{tb:tabledecsvfull}) para los parámetros del
+\emph{NDE}, se encontró lo siguiente:
+    \begin{itemize}
+        \item Para la imagen {\bf Lenna}:
+        \begin{itemize}
+            \item En los resultados (tabla \ref{tb:tabledeimgfull}), los parámetros
+                  $I$, $w_1$ y $w_3$ poseen una gran cantidad de valores en los
+                  rangos probados (sección \ref{sect:ande}). Esto
+                  puede indicar que no influyen considerablemente en la calidad
+                  de las soluciones finales.
+            \item El parámetro $w_2$ está en el rango $[0.0;0.6]$ para los resultados
+                  (tabla \ref{tb:tabledeimgfull}), el cual es de menor
+                  cardinalidad que el rango (sección \ref{sect:ande}) de valores
+                  probados. Por lo tanto, valores menores a $0.6$ para $w_2$
+                  podrían conducir a buenas soluciones. Así que su valor influye
+                  en la bondad de la solución final.
+        \end{itemize}
+        
+        \item Para el archivo numérico {\bf Iris}:
+        \begin{itemize}
+            \item A diferencia de los resultados para \emph{Lenna}, ningún
+            parámetro parece influir considerablemente en la calidad de las
+            soluciones finales (tabla \ref{tb:tabledecsvfull}).
+        \end{itemize}
 
-Al comienzo los $N$ patrones son colocados
-en las c\'elulas de forma aleatoria. Luego se tienen $na$ hormigas que van a tomar
-un pixel de forma aleatoria. Posterior comienza un ciclo donde se selecciona una hormiga
-aleatoriamente. Si la hormiga no carga ning\'un pixel, est\'a busca un pixel
-que no este siendo cargado por otra hormiga y probabilisticamente decide si agarrarlo o dejarlo.
-En el caso contrario, busca una c\'elula donde soltar su pixel e igual que antes
-probabil\'isticamente decide si soltarlo o quedarselo. Las hormigas van a poseer
-una memoria global donde se guarda donde se han soltado los p\'ixeles.
-De tal forma primero revisa en estos recuerdos e intenta dejarlo con el que tenga 
-mayor probabilidad de hacerlo, sino simplemente trata en una c\'elula
-aleatoria. Cada 100 iteraciones se va a eliminar de
-el menos usado y de esta forma se va variando la memoria, y se mantienen los que
-esten ayudando m\'as/. Otro aspecto es que cada cierto n\'umero de veces que
-se intenta modificar la memoria, se le elimina el elemento que ha sido dejado en menos c\'elulas,
-de esta forma se aumenta la diversidad y los mejores se mantienen.
+    \end{itemize}
 
-Se tiene
+	Por otro lado, de los resultados de los 20 mejores conjuntos de valores
+(tablas \ref{tb:tablesdeimgfull} y \ref{tb:tablesdecsvfull}) para los parámetros del
+\emph{SDE}, se encontró lo siguiente:
+    \begin{itemize}
+        \item Para la imagen {\bf Lenna}:
+        \begin{itemize}
+            \item De manera similar al \emph{NDE}, los parámetros
+                  $I$, $w_1$ y $w_3$ no parecen tener una gran influencia en la
+                  calidad de las soluciones finales (tabla \ref{tb:tablesdeimgfull}).
+            \item Los parámetros $\gamma$ y $Cr$ poseen una gran cantidad de
+                  valores en los rangos probados (sección \ref{sect:asde}).
+                  Esto puede indicar que no influyen considerablemente en la
+                  calidad de las soluciones finales (tabla \ref{tb:tablesdeimgfull}).
+            \item El parámetro $w_2$ está en el rango $[0.0;0.8]$ para los resultados
+                  (tabla \ref{tb:tablesdeimgfull}), el cual es de menor
+                  cardinalidad que el rango de valores probados (sección \ref{sect:asde}).
+                  Por lo tanto, valores menores a $0.8$ para $w_2$
+                  podrían conducir a buenas soluciones. Así que su valor influye
+                  en la bondad de la solución final.
+        \end{itemize}
+        
+        \item Para el archivo numérico {\bf Iris}:
+        \begin{itemize}
+            \item Se puede observar que los parámetros $I$, $w_1$, $w_2$ y $w_3$
+                  en $15$, $0.5$, $0.1$ y $0.4$, respectivamente (tabla \ref{tb:tablesdecsvfull}).
+            \item En los resultados (tabla \ref{tb:tablesdecsvfull}), $\gamma$
+                  se encuentra en el rango $[0.5;0.8]$. Además, mientras más alto
+                  sea su valor, mejor es el valor de la función de \emph{fitness}.
+                  Esto indica que este parámetro tiene una considerable
+                  influencia en la función de \emph{fitness} para \textbf{Iris}.
+            \item El parámetro $Cr$ tiene un comportamiento similar al obtenido
+                  con \textbf{Lenna}.
+        \end{itemize}
+    \end{itemize}
+\end{comment}
 
-\[
-f(p_i,c_k) = {1 \over n_k} \sum_{p_j \in c_k} {\alpha^2 \over {\alpha^2 + d(p_i,p_j)^2}}
-\]
+\section{Algoritmo de Abeja (\emph{Bee})}  \label{sect:ibee}
 
-donde $d_(p_i,p_j)$ es una funci\'on de disimilaridad
-entres dos patrones y $\alpha$ es el promedio de todas
-las diferencias entre los patrones:
+    Esta metaheurística fue implementada siguiendo el pseudo-código \ref{Bee}
+mencionado anteriormente en la sección \ref{sect:metabee}, agregándole las siguientes
+características:
+\begin{itemize}
+    \item La población inicial de abejas tienen soluciones generadas
+aleatoriamente.
+    \item El algoritmo se detiene cuando no se mejora la solución en un número
+dado de iteraciones.
+    \item La selección de los mejores sitios se hace a partir del valor de
+la función de \emph{fitness}.
+    \item La búsqueda en vecindad es realizada como se puede observar en 
+el pseudo-código \ref{neighbor}.
+\begin{lstlisting}[float=h!, caption={Búsqueda en vecindad}, label=neighbor]
+- Se elige un elemento del conjunto de datos de manera aleatoria.
+- Se reemplaza el elemento elegido por el centroide del cluster al que
+  pertenece.
+- Se generan las nuevas soluciones con el pseudo-código %\ref{rebuildGA}%.
+\end{lstlisting}
+\end{itemize}
 
-\[
-\alpha = {1 \over {N*(N-1)}} \sum_{j=1}^N \sum_{i=j+1}^N {2 \times d(p_i,p_j)}
-\]
+\begin{comment}
+\subsection{Parámetros variables}\label{sect:ibee-pv}
 
-La probabilidad de agarrar un pixel es:
+    A continuación, se describen los parámetros variables del algoritmo:
+\begin{itemize}
+    \item $I$: Representa a la cantidad total de abejas del enjambre,
+donde $I \geq 2$.
+    \item $m$: Representa los sitios de flores totales, donde $m < I$.
+    \item $e$: Representa los sitios de flores élite, donde $e < m$.
+    \item $eb$ y $ob$: Representan la cantidad de abejas élite y la cantidad de
+abejas exploradoras, respectivamente, donde $eb + ob \leq I$.
+\end{itemize}
 
-\[
-p_{pick}(p_i,c_k) = 
+\subsubsection{Resultados obtenidos para \textbf{Lenna}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{Bee} híbrido con
+\emph{K-means} (\emph{BeeH}) para la imagen \textbf{Lenna} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpBEEimg.tex}
+
+\subsubsection{Resultados obtenidos para \textbf{Iris}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{Bee} híbrido con
+\emph{K-means} (\emph{BeeH}) para el archivo de datos \textbf{Iris} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpBEEcsv.tex}
+
+\subsubsection{Influencia de los parámetros}
+
+Teniendo en cuenta que el \emph{rango probado} es el conjunto de valores utilizado
+para las pruebas y el \emph{rango efectivo} es el conjunto valores del parámetros
+para los 20 mejores resultados del algoritmo \emph{BeeH} (tablas \ref{tb:tabledehibimg}
+y \ref{tb:tabledehibcsv}), se encontró lo siguiente:
+
+\begin{itemize}
+        \item Para la imagen {\bf Lenna}:
+	        \begin{itemize}
+		        \item Parámetro $I$:
+		            Como el \emph{rango probado} ($[5, 40]$) es
+		            mayor al \emph{rango efectivo} ($[25, 40]$) , es relevante el valor que se
+		            le asigne al parámetro $I$. \textbf{Por lo tanto, este
+		            parámetro influye en la bondad de la solución final.}
+		            considerablemente en la bondad de la solución final.
+		        \item Parámetro $m$:
+		        	Es mayor o igual a 7,
+					aunque la mayor parte de los datos se encuentra en el rango $[11, 15]$.
+					De tal forma el \emph{rango probado} ($[5, 15]$) es
+		            mayor al \emph{rango efectivo}, generando que sea relevante el valor que se
+		            le asigne al parámetro $m$. \textbf{Por lo tanto, este
+		            parámetro influye en la bondad de la solución final.}
+		        \item Parámetro $e$:
+		            Como el \emph{rango probado}($[1,15]$) es
+		            mayor al \emph{rango efectivo} ($[1,5]$), es relevante el valor que se
+		            le asigne al parámetro $e$. \textbf{Por lo tanto, este
+		            parámetro influye en la bondad de la solución final.}
+		        \item Parámetro $eb$:
+					Está en el rango $[10, 15]$, con ciertas excepciones.
+					De tal forma el \emph{rango probado} ($[5, 15]$) es
+		            mayor al \emph{rango efectivo}, generando que sea relevante el valor que se
+		            le asigne al parámetro $eb$. Lo cual indica que con
+					una cantidad de abejas élite menor a 10, la solución final tiende a desmejorar.
+					\textbf{Por lo tanto, este parámetro influye en la bondad de la solución final.} 
+		        \item Parámetro $ob$:
+		            Como el \emph{rango probado}($[1,15]$) es
+		            practicamente igual al \emph{rango efectivo} (sólo faltan el $3$, $10$, $11$ y $14$), 
+		            no importa que valor tome el
+		            parámetro $pc$, el \emph{BeeH} puede dar una buena solución
+		            final. Por lo tanto, este parámetro no influye
+		            considerablemente en la bondad de la solución final.
+            \end{itemize}
+        \item Para el archivo numérico {\bf Iris}:
+		    \begin{itemize}
+		        \item Los parámetros $I$, $m$, $e$ y $ob$ conservan el mismo comportamiento
+					  que para la imagen \textbf{Lenna}. Sin embargo, el parámetro $eb$ no parece
+					  mostrar el mismo patrón mostrado para las corridas de la imagen. Por lo tanto,
+				  	  es posible que el valor de $eb$ no tenga tanta influencia en la bondad de la
+					  solución final para el archivo numérico \textbf{Iris}.
+		    \end{itemize}
+\end{itemize}
+
+\end{comment}
+
+\begin{comment}
+	A partir de los resultados de los 20 mejores conjuntos de valores
+(tablas \ref{tb:tablebeeimgfull} y \ref{tb:tablebeecsvfull}) para los parámetros del
+\emph{Bee}, se encontró lo siguiente:
+
+    \begin{itemize}
+        \item Para la imagen {\bf Lenna}:
+        \begin{itemize}
+			\item El parámetro $I$ está en el rango $[25, 40]$ para los resultados (tabla \ref{tb:tablebeeimgfull}).
+Este rango es de menor cardinalidad que el rango de valores probados
+(sección \ref{sect:abee}). Esto indica que tamaños de población menores a $25$
+pueden conducir a malas soluciones finales. En conclusión, su valor influye en
+la bondad de la solución final.
+            \item En los resultados (tabla \ref{tb:tablebeeimgfull}), el parámetro $m$ es mayor o igual a 7,
+aunque la mayor parte de los datos se encuentra en el rango $[11, 15]$. Este rango es de menor
+cardinalidad que el rango (sección \ref{sect:abee}) de valores probados lo cual
+indica que cantidad de sitios de flores menores que $7$ pueden conducir a mala soluciones
+finales. Al igual que el parámetro $I$, su valor influye en la bondad de la
+solución final.
+            \item El parámetro $e$ está en el rango $[1,5]$ para los resultados (tabla \ref{tb:tablebeeimgfull}), el cual
+posee una cardinalidad menor al rango (sección \ref{sect:abee}) de valores probados.
+Esto podría indicar que cantidad de sitios élite mayores a 5 pueden llevar a
+malas soluciones finales. Además, este parámetro conserva una relación de dependencia
+con el parámetro $m$ cuyo valor influye en la bondad de la solución final. Por
+lo que tiene una influencia notable. Así que el valor del parámetro $e$
+también influye en la bondad de la solución final.
+            \item El parámetro $eb$ está en el rango $[10, 15]$, con ciertas
+excepciones (tabla \ref{tb:tablebeeimgfull}). Este rango es de menor cardinalidad
+que el rango (sección \ref{sect:abee}) de valores probados lo cual indica que con
+una cantidad de abejas élite menor a 10, la solución final tiende a desmejorar.
+            \item En los resultados (tabla \ref{tb:tablebeeimgfull}), el parámetro
+\emph{ob} está en un rango parecido al rango de pruebas (sección \ref{sect:abee}),
+usado para probar su influencia en la función de \emph{fitness}. Esto significa que,
+ no importa que valor se use de este rango para este parámetro, el \emph{Bee}
+puede dar una buena solución final, dependiendo del valor de sus otros parámetros.
+En conclusión, su valor no influye considerablemente en la bondad solución final.
+        \end{itemize}
+        
+        \item Para el archivo numérico {\bf Iris}:
+        \begin{itemize}
+            \item Los parámetros $I$, $m$, $e$ y $ob$ conservan el mismo comportamiento
+que para la imagen \textbf{Lenna}. Sin embargo, el parámetro $eb$ no parece
+mostrar el mismo patrón mostrado para las corridas de la imagen. Por lo tanto,
+es posible que el valor de $eb$ no tenga tanta influencia en la bondad de la
+solución final para el archivo numérico \textbf{Iris} (tabla \ref{tb:tablebeecsvfull}).
+        \end{itemize}
+
+    \end{itemize}
+\end{comment}
+
+\section{Algoritmo de Hormiga (\emph{Ant})}  \label{sect:ihormiga}
+
+    El algoritmo implementado fue el algoritmo de \emph{clustering} de 
+hormigas (\emph{Ant Clustering Algorithm (ACA)}) mencionado anteriormente en la
+sección \ref{sect:metaant} con algunas modificaciones propuestas en \cite{OuBa2007}.
+El pseudo-código \ref{Ant} muestra el algoritmo implementado.
+
+\subsection{Definición}
+
+    En esta versión del algoritmo, las hormigas pueden elegir libremente entre
+\emph{células} de un arreglo de $N/4$ \emph{células}, donde cada una de éstas
+representa un posible cluster. El trabajo de cada hormiga es el de recoger un
+elemento de alguna \emph{célula} o soltar el elemento que cargan en alguna de
+ellas. Esta sustitución de \emph{grid} por \emph{células}, evita el problema de establecer
+un tamaño para el \emph{grid} y los problemas que esto conlleva: Si el tamaño
+del \emph{grid} es muy pequeño, las hormigas harán muchos movimientos ya que no
+habrá muchos espacios donde soltar los elementos que cargan. Por otra parte, si
+el \emph{grid} es muy grande las hormigas harán más movimientos para encontrar y
+recoger elementos. Además, el uso de \emph{células} facilita la identificación
+de clusters. En contraste, en un \emph{grid} los bordes de los clusters podrían
+no estar bien definidos.
+
+\subsection{Operaciones con elementos}
+
+    A continuación se describen las operaciones que puede realizar una hormiga
+con un elemento del conjunto de datos:
+\begin{itemize}
+    \item \textbf{Memoria}: Todas las hormigas comparten una memoria global, en
+la cual registran dónde colocan los elementos que sueltan. Después de cierta
+cantidad de iteraciones, se extrae de la memoria el elemento donde se han soltado
+menos elementos. La ac\-tua\-li\-za\-ción de la memoria se realiza como se
+muestra en el pseudo-código \ref{memory}.
+\begin{lstlisting}[float=h!, caption={Actualización de la Memoria}, label=memory]
+Sea $c_k$ la célula $k$ donde se soltó el elemento.
+
+- Si $c_k$ existe en la memoria:
+    - Se aumenta en uno la cantidad de elementos soltado en $c_k$.
+  Sino:
+    - Si la memoria tiene espacios vacíos:
+        - Se agrega $c_k$ en la memoria.
+        - Se aumenta en uno la cantidad de elementos soltado en $c_k$.
+      Fin.
+  Fin.
+\end{lstlisting}
+    \item \textbf{Recoger}: Una hormiga elige aleatoriamente un elemento que
+no esté siendo cargado por otra hormiga y, si se satisface la probabilidad
+$p_{pick}$, lo recoge:
+\begin{equation}\label{ant: pick}
+p_{pick}(z_i,c_k) = 
 \begin{cases}
 1 & \text{si } |c_k| = 1 \\
 q & \text{si } |c_k| = 2 \\
-\cos( {\pi \over 2} f(p_i, c_k) )^2  & \text {sino}
+\cos( {\pi \over 2} f(z_i, c_k) )^2  & \text {cualquier otro caso}
 \end{cases}
-\]
+\end{equation}
+donde, 
+    \begin{itemize}
+        \item $q$: el valor usado es 0.7, recomendado en \cite{OuBa2007}.
+        \item $c_k$: es la \emph{célula} $k$.
+        \item $z_i$: es el patrón $i$ del conjunto de datos.
+        \item $f(\cdot, \cdot)$ es una medida de similitud que se hace mayor a
+medida que un elemento se parece a los elementos de una \emph{célula}:
+            \begin{equation}\label{ant: f}
+              f(z_i,c_k) = {1 \over n_k} \sum_{z_j \in c_k} {\alpha^2 \over {\alpha^2 + d(z_i,p_j)^2}}
+            \end{equation}
+        \item $\alpha$  es el promedio de todas las diferencias entre los patrones:
+            \begin{equation}\label{ant: alpha}
+                \alpha = {1 \over {N(N-1)}} \sum_{j=1}^N \sum_{i=j+1}^N {2 \times d(p_i,p_j)}
+            \end{equation}
+    \end{itemize}
+    \item \textbf{Soltar}: Toda hormiga que desee soltar un elemento en una
+\emph{célula}, debe satisfacer la probabilidad $p_{drop}$:
+        \begin{equation}\label{ant: drop}
+            p_{drop}(z_i,c_k) = 1 - \cos( {\pi \over 2} f(z_i, c_k) )^2
+        \end{equation}
+\end{itemize}
 
-Y la de soltarlo es:
+\subsection{Reconstrucción}
 
-\[
-p_{drop}(p_i,c_k) = 1 - \cos( {\pi \over 2} f(p_i, c_k) )^2 
-\]
+    Para reconstruir la solución se realiza lo siguiente:
+\begin{enumerate}
+    \item Para cada elemento que no haya sido soltado, se busca la mejor
+célula para él.
+    \item Se transforman el contenido final de las células al vector solución
+usado por las demás metaheurísticas.
+    \item Se unen los clusters muy parecidos o que sólo tengan un elemento.
+\end{enumerate}
 
-El $q$ usado es el recomendado (0.7). Un psudoc\'odigo es
-el siguiente:
+\begin{comment}
 
-\begin{lstlisting}[mathescape, language=Pascal]
-  Inicialización.
-  Hacer maxit veces
-    Se toma una hormiga rn aleatoriamente
-	Si rn tiene un pixel
-	  Si la memoria no esta vacía
-	    Buscar soltarlo en alguno de la memoria
-		Sino lo dejo
-		  Tratar de dejarlo en una célula aleatoria
-	  Sino
-	    Tratar de dejarlo en una célula aleatoria
-	Sino
-	  Tomar un pixel que no cargue ninguna hormiga de forma aleatoria
-	  Tratar de tomarlo
-  Reconstruir solución
+\subsection{Parámetro variable}\label{sect:iant-pv}
+
+    A continuación, se describe el parámetro variable del algoritmo:
+\begin{itemize}
+    \item $I$: representa a la cantidad total de hormigas, donde $I \geq 2$.
+\end{itemize}
+
+\subsubsection{Resultados obtenidos para \textbf{Lenna}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{Ant} híbrido con
+\emph{K-means} (\emph{AntH}) para la imagen \textbf{Lenna} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpANTimg.tex}
+
+\subsubsection{Resultados obtenidos para \textbf{Iris}}
+
+    A continuación, se presenta una tabla resumen de 30 ejecuciones del mejor
+conjunto de valores para los parámetros del \emph{Ant} híbrido con
+\emph{K-means} (\emph{AntH}) para el archivo de datos \textbf{Iris} (ver sección
+\ref{exp:hibrido}):
+
+\input{tables/pmpANTcsv.tex}
+
+\subsubsection{Influencia de los parámetros}
+
+    Como es sólo un parámetro, se probó en todo su rango de valores. Sin embargo,
+no se pudo ver una diferencia notable entre los resultados que llevara a concluir
+la influencia de cierto rango de valores en el mismo (sección \ref{sect:aant}).
+
+\end{comment}
+
+\begin{lstlisting}[float=!h, caption=Algoritmo de Hormiga, label=Ant]
+- Cada hormiga toma un elemento del conjunto de datos.
+- El resto, se coloca en una célula aleatoria.
+- Para $i \in [1, maxit]$:
+    - Se elige una hormiga $a$ de manera aleatoria.
+    - Si la hormiga $a$ carga un elemento:
+        - Si la memoria no está vacía:
+            - Se elige la célula $c$ con mayor $f(a, c)$, (%\ref{ant: drop}%).
+            - Si se satisface la probabilidad (%\ref{ant: drop}%) para $c$:
+                - Suelta el elemento en la célula $c$.
+                - Actualizar $c$ en la memoria con pseudo-código %\ref{memory}%.
+              Sino:
+                - Elige una célula $c'$ aleatoria.
+                - Si satisface la probabilidad (%\ref{ant: drop}%) para $c'$:
+                    - Suelta el elemento la célula $c'$.
+                    - Actualizar $c'$ en la memoria con pseudo-código %\ref{memory}%.
+                  Fin.
+              Fin.
+            //Quita un elemento de la memoria después de J iteraciones.
+            - Si j == J:
+                - Borrar elemento con menos probabilidad de la memoria.
+                - j = 0.
+              Sino:
+                - j = j + 1.
+              Fin.
+      Sino:
+        - Si satisface la probabilidad (%\ref{ant: pick}%):
+            - Recoge un elemento que ninguna otra hormiga esté cargando.
+          Fin.
+      Fin.
+  Fin.
+- Reconstruir solución.
 \end{lstlisting}
-
-El \'unico detalle que falta explicar es la parte de reconstruir la soluci\'on.
-Primero lo que se hace es colocar en una c\'elula los pixeles
-que no han soltado las hormigas. Luego se pasa de las c\'elulas al 
-arreglo de soluci\'on usado por todas las metaheur\'isticas. Finalmente
-se unen los clusters muy parecidos o que s\'olo tengan un elemento.
-
-
