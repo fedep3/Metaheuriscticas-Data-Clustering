@@ -25,35 +25,22 @@ void ImageReader::generateColors(float **colors, int k){
     int base = 2;
     int i, j, l;
 
-    //M = 1
-//    float c = 0.0;
-//    float d = 255.0/( (float) k );
+    while(true){
+        i = base * base * base;
+        if(k <= i) break;
+        ++base;
+    }
 
-//    switch(M){
-//        case 3:
-            while(true){
-                i = base * base * base;
-                if(k <= i) break;
-                ++base;
+    for(i = 0; i < base && count < k; ++i){
+        for(j = 0; j < base && count < k; ++j){
+            for(l = 0; l < base && count < k; ++l){
+                colors[count][0] = 255.0 * ( ( (float) i )/ ( (float) base) );
+                colors[count][1] = 255.0 * ( ( (float) j )/ ( (float) base) );
+                colors[count][2] = 255.0 * ( ( (float) l )/ ( (float) base) );
+                ++count;
             }
-
-            for(i = 0; i < base && count < k; ++i){
-                for(j = 0; j < base && count < k; ++j){
-                    for(l = 0; l < base && count < k; ++l){
-                        colors[count][0] = 255.0 * ( ( (float) i )/ ( (float) base) );
-                        colors[count][1] = 255.0 * ( ( (float) j )/ ( (float) base) );
-                        colors[count][2] = 255.0 * ( ( (float) l )/ ( (float) base) );
-                        ++count;
-                    }
-                }
-            }
-//            break;
-//        default:
-//            while(count < k && c <= 255.0){
-//                c = c+d;
-//                colors[count][0] = c;
-//            }
-//    }
+        }
+    }
 }
 
 /**
