@@ -972,7 +972,7 @@ entre 0.0 y 1.0\n");
                 break;  
             case 'O':
                 _pm = atof(optarg);
-                if(_pm < 0.0 || _pm > 1.0){
+                if(_pm < 0.0 || _pm > 1.1){
                     fprintf(stderr, "El porcentaje de mutación debe estar entre\
  0.0 y 1.0.\n");
                     fprintf(stderr, "%s no lo está.\n", optarg);
@@ -995,7 +995,7 @@ entre 0.0 y 1.0\n");
                 break;
             case 'Q':
                 _pc = atof(optarg);
-                if(_pc < 0.0 || _pc > 1.0){
+                if(_pc < 0.0 || _pc > 1.1){
                     fprintf(stderr, "El porcentaje de cruce debe estar entre \
 0.0 y 1.0.\n");
                     fprintf(stderr, "%s no lo está.\n", optarg);
