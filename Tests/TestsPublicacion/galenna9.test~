@@ -1,0 +1,78 @@
+[
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (40, 40, 1),
+          LG (22, 22, 1),
+          LG (0.9, 0.9, 1),
+          LG (0.8, 0.8, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (35, 35, 1),
+          LG (24, 24, 1),
+          LG (0.1, 0.1, 1),
+          LG (0.9, 0.9, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (35, 35, 1),
+          LG (14, 14, 1),
+          LG (0.3, 0.3, 1),
+          LG (0.8, 0.8, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (5, 5, 1),
+          LG (4, 4, 1),
+          LG (0.4, 0.4, 1),
+          LG (0.8, 0.8, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (40, 40, 1),
+          LG (30, 30, 1),
+          LG (0.5, 0.5, 1),
+          LG (0.8, 0.8, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (40, 40, 1),
+          LG (22, 22, 1),
+          LG (0.9, 0.9, 1),
+          LG (0.7, 0.7, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (35, 35, 1),
+          LG (10, 10, 1),
+          LG (0.2, 0.2, 1),
+          LG (0.9, 0.9, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (40, 40, 1),
+          LG (22, 22, 1),
+          LG (0.9, 0.9, 1),
+          LG (1.0, 1.0, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 9, (Mn [0.0]), (Mx [255.0]) ),
+ ("GA", GAOpt (Reps 3,
+          LG (40, 40, 1),
+          LG (14, 14, 1),
+          LG (0.2, 0.2, 1),
+          LG (0.7, 0.7, 1)))
+),
+]
+40|14|0.2|0.7000001
+30|14|0.3|1.0000002
+40|4|0.7000001|0.7000001
+35|10|0.7000001|0.7000001
+40|14|0.50000006|0.90000015
+40|4|0.7000001|0.6000001
+30|22|0.50000006|1.0000002
+40|30|1.0000002|0.50000006
+35|22|0.1|0.7000001
+35|22|0.1|0.80000013
+30|16|0.50000006|0.7000001
+15|10|0.3|1.0000002
+

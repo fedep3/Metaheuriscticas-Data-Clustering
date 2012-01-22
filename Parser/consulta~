@@ -1,0 +1,33 @@
+SELECT AVG(ga_hib_fo), gap_i, gap_tt, gap_pc, gap_pm FROM genetico, geneticop WHERE ga_type = gap_id GROUP BY ga_type ORDER BY AVG(ga_hib_fo) DESC LIMIT 20;
+
+SELECT AVG(bee_hib_fo), beep_i, beep_m, beep_e, beep_eb, beep_ob FROM abeja, abejap WHERE bee_type = beep_id GROUP BY bee_type ORDER BY AVG(bee_hib_fo) DESC LIMIT 20;
+
+SELECT AVG(de_hib_fo), dep_i, dep_w1, dep_w2, dep_w3 FROM de, dep WHERE de_type = dep_id and (abs(dep_w1 + dep_w2 + dep_w3 - 1.0)) <= 0.01 GROUP BY de_type ORDER BY AVG(de_hib_fo) DESC LIMIT 20;
+
+SELECT AVG(sde_hib_fo), sdep_i, sdep_w1, sdep_w2, sdep_w3, sdep_f, sdep_pc FROM sde, sdep WHERE sde_type = sdep_id and (abs(sdep_w1 + sdep_w2 + sdep_w3 - 1.0)) <= 0.01 GROUP BY sde_type ORDER BY AVG(sde_hib_fo) DESC LIMIT 20;
+
+SELECT AVG(pso_hib_fo), psop_i, psop_w, psop_c1, psop_c2, psop_vmx FROM pso, psop WHERE pso_type = psop_id GROUP BY pso_type ORDER BY AVG(pso_hib_fo) DESC LIMIT 20;
+
+SELECT AVG(wpso_hib_fo), wpsop_i, wpsop_w1, wpsop_w2, wpsop_w3, wpsop_w, wpsop_c1, wpsop_c2, wpsop_vmx FROM wpso, wpsop WHERE wpso_type = wpsop_id and (abs(wpsop_w1 + wpsop_w2 + wpsop_w3 - 1.0)) <= 0.01 GROUP BY wpso_type ORDER BY AVG(wpso_hib_fo) DESC LIMIT 20;
+
+
+
+Publicación
+
+# Cambiar clusters finales.
+
+SELECT AVG(ga_hib_db), ga_cluster_i, gap_i, gap_tt, gap_pc, gap_pm FROM genetico, geneticop WHERE ga_type = gap_id and ga_cluster_f = 5 GROUP BY ga_type ORDER BY AVG(ga_hib_db) ASC LIMIT 20;
+SELECT gap_i, gap_tt, gap_pc, gap_pm FROM genetico, geneticop WHERE ga_type = gap_id and ga_cluster_f = 5 GROUP BY ga_type ORDER BY AVG(ga_hib_db) ASC LIMIT 20;
+
+SELECT AVG(bee_hib_db), bee_cluster_i, beep_i, beep_m, beep_e, beep_eb, beep_ob FROM abeja, abejap WHERE bee_type = beep_id and bee_cluster_f = 5 GROUP BY bee_type ORDER BY AVG(bee_hib_db) ASC LIMIT 20;
+SELECT beep_i, beep_m, beep_e, beep_eb, beep_ob FROM abeja, abejap WHERE bee_type = beep_id and bee_cluster_f = 5 GROUP BY bee_type ORDER BY AVG(bee_hib_db) ASC LIMIT 20;
+
+
+
+select (7600 * 3 + ga_type), ga_cluster_i, ga_alg_time, ga_hib_time, ga_cluster_f, ga_alg_eval, ga_alg_fo, ga_alg_db, ga_alg_je, ga_km_eval, ga_hib_eval, ga_hib_fo, ga_hib_db, ga_hib_je, ga_type from genetico;
+
+         \ beep_i         INTEGER NOT NULL,\
+         \ beep_m         INTEGER NOT NULL,\
+         \ beep_e         INTEGER NOT NULL,\
+         \ beep_eb        INTEGER NOT NULL,\
+         \ beep_ob        INTEGER NOT NULL)"
