@@ -1,52 +1,62 @@
+#!/bin/bash
+
+lc[1]=5
+lc[2]=7
+lc[3]=9
+lc[4]=11
+
+pc[1]=4
+pc[2]=6
+pc[3]=7
+pc[4]=11
+
 for (( i=1; i<5; i++ ))
 do
-    for (( j=1; j<6; j++ ))
+    mkdir GAL${lc[${i}]}
+    for (( j=1; j<31; j++ ))
     do
-        echo "GA LENNA TANDA ${i} CORRIDA ${j}"
-        ./runTests GAL${i}${j} OptPublicacion/galenna${i}.test
-        mkdir GAL${i}${j}
-        cp *.tiff GAL${i}${j}
+        echo "GA LENNA CLUSTERS ${lc[${i}]} CORRIDA ${j}"
+        ./runTests GAL${lc[${i}]} TestsPublicacion/galenna${lc[${i}]}.test
+        rename "s/GAL${lc[${i}]}/GAL${lc[${i}]}${j}/" *.tiff
+        mv *.tiff GAL${lc[${i}]}
+        ../Parser/parser TGA ../Parser/GAL${lc[${i}]}.sql GAL${lc[${i}]}.result
         rm .log
-        ../Parser/parser TGA ../Parser/GAL${i}${j}.sql GAL${i}${j}.result
     done
 done
 
 for (( i=1; i<5; i++ ))
 do
-    for (( j=1; j<6; j++ ))
+    mkdir GAP${lc[${i}]}
+    for (( j=1; j<31; j++ ))
     do
-        echo "GA PEPPERS TANDA ${i} CORRIDA ${j}"
-        ./runTests GAP${i}${j} OptPublicacion/gapeppers${i}.test
-        mkdir GAP${i}${j}
-        cp *.tiff GAP${i}${j}
+        echo "GA PEPPERS CLUSTERS ${pc[${i}]} CORRIDA ${j}"
+        ./runTests GAP${pc[${i}]} TestsPublicacion/gapepper${pc[${i}]}.test
+        rename "s/GAP${pc[${i}]}/GAP${pc[${i}]}${j}/" *.tiff
+        mv *.tiff GAP${pc[${i}]}
+        ../Parser/parser TGA ../Parser/GAP${pc[${i}]}.sql GAP${pc[${i}]}.result
         rm .log
-        ../Parser/parser TGA ../Parser/GAP${i}${j}.sql GAP${i}${j}.result
     done
 done
 
-for (( i=1; i<5; i++ ))
+mkdir BEEL${lc[1]}
+for (( j=1; j<31; j++ ))
 do
-    for (( j=1; j<6; j++ ))
-    do
-        echo "BEE LENNA TANDA ${i} CORRIDA ${j}"
-        ./runTests BEEL${i}${j} OptPublicacion/beelenna${i}.test
-        mkdir BEEL${i}${j}
-        cp *.tiff BEEL${i}${j}
-        rm .log
-        ../Parser/parser TBee ../Parser/BEEL${i}${j}.sql BEEL${i}${j}.result
-    done
+    echo "BEE LENNA CLUSTERS ${lc[1]} CORRIDA ${j}"
+    ./runTests BEEL${lc[1]} TestsPublicacion/beelenna${lc[1]}.test
+    rename "s/BEEL${lc[1]}/BEEL${lc[1]}${j}/" *.tiff
+    mv *.tiff BEEL${lc[1]}
+    ../Parser/parser TBee ../Parser/BEEL${lc[1]}.sql BEEL${lc[1]}.result
+    rm .log
 done
 
-for (( i=1; i<5; i++ ))
+mkdir BEEP${lc[1]}
+for (( j=1; j<31; j++ ))
 do
-    for (( j=1; j<6; j++ ))
-    do
-        echo "BEE PEPPERS TANDA ${i} CORRIDA ${j}"
-        ./runTests BEEP${i}${j} OptPublicacion/beepeppers${i}.test
-        mkdir BEEP${i}${j}
-        cp *.tiff BEEP${i}${j}
-        rm .log
-        ../Parser/parser TBee ../Parser/BEEP${i}${j}.sql BEEP${i}${j}.result
-    done
+    echo "BEE PEPPERS CLUSTERS ${lc[1]} CORRIDA ${j}"
+    ./runTests BEEP${lc[1]} TestsPublicacion/beepepper${lc[1]}.test
+    rename "s/BEEP${lc[1]}/BEEP${lc[1]}${j}/" *.tiff
+    mv *.tiff BEEP${lc[1]}
+    ../Parser/parser TBee ../Parser/BEEP${lc[1]}.sql BEEP${lc[1]}.result
+    rm .log
 done
 
