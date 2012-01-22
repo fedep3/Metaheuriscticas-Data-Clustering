@@ -1,9 +1,0 @@
-[
-(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 11, (Mn [0.0]), (Mx [255.0]) ),
- ("GA", GAOpt (Reps 3,
-          LG (40, 40, 1),
-          LG (22, 22, 1),
-          LG (0.1, 0.1, 1),
-          LG (0.9, 0.9, 1)))
-),
-]
