@@ -25,6 +25,14 @@
 ),
 (("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 5, (Mn [0.0]), (Mx [255.0]) ),
  ("Bee", BeeOpt (Reps 3,
+           LG (25, 25, 1),
+           LG (11, 11, 1),
+           LG (10, 10, 1),
+           LG (15, 15, 1),
+           LG (4, 4, 1)))
+),
+(("../mhs", (InputFile "../img/lennamedium.tiff" TIFF), Max, 5, (Mn [0.0]), (Mx [255.0]) ),
+ ("Bee", BeeOpt (Reps 3,
            LG (40, 40, 1),
            LG (5, 5, 1),
            LG (3, 3, 1),
@@ -152,4 +160,3 @@
            LG (13, 13, 1)))
 )
 ]
-
