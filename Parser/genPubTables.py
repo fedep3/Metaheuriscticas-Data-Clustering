@@ -103,7 +103,7 @@ if __name__ == "__main__":
     print 'BEEL5.sql'
 
     conn = sqlite3.connect('BEEL5.sql')
-    tableout = open('BEEL5.tex', 'w')
+    tableout = open('tableBEEL5.tex', 'w')
 
     latexTable = [[0.0,0.0,''] for i in range(20)]
     init = ''
@@ -116,8 +116,8 @@ if __name__ == "__main__":
     mins = conn.cursor()
     params = conn.cursor()
 
-    init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[0][2])+'}\n        \\hline\n'
-    init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[0][0]+'\\\\\n'
+    init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
+    init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
     init +='        \\hline\n'
     init +='        \\hline\n'
 
@@ -129,15 +129,15 @@ if __name__ == "__main__":
     finish +='    \\end{center}\n'
     finish +='\\end{table}\n'
 
-    initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[0][2])+'}\n        \\hline\n'
-    initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[0][0]+'\\\\\n'
+    initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
+    initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
     initC +='        \\hline\n'
     initC +='        \\hline\n'
 
     takeOut(table[1], parametros[1], algsinfo[0][1], avg, maxs, mins, params, latexTable, 15, 20)
 
     finishC +='        \\end{tabular}\n'
-    finishC +='        \\caption{Continuaci\'on resultados de las mejores corridas de \emph{BEEL5} hibridado para {\\bf Lenna}}\n'
+    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{BEEL5} hibridado para {\\bf Lenna}}\n'
     finishC +='        \\label{tb:ctableBEEL5}\n'
     finishC +='    \\end{center}\n'
     finishC +='\\end{table}\n'
@@ -170,7 +170,7 @@ if __name__ == "__main__":
     print 'BEEP5.sql'
 
     conn = sqlite3.connect('BEEP5.sql')
-    tableout = open('BEEP5.tex', 'w')
+    tableout = open('tableBEEP5.tex', 'w')
 
     latexTable = [[0.0,0.0,''] for i in range(20)]
     init = ''
@@ -183,12 +183,12 @@ if __name__ == "__main__":
     mins = conn.cursor()
     params = conn.cursor()
 
-    init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[0][2])+'}\n        \\hline\n'
-    init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[0][0]+'\\\\\n'
+    init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
+    init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
     init +='        \\hline\n'
     init +='        \\hline\n'
 
-    takeOut(table[1], parametros[1], algsinfo[1][1], avg, maxs, mins, params, latexTable, 0, 15)
+    takeOut(table[1], parametros[1], algsinfo[0][1], avg, maxs, mins, params, latexTable, 0, 15)
 
     finish +='        \\end{tabular}\n'
     finish +='        \\caption{Resultados de las mejores corridas de \emph{BEEP5} hibridado para {\\bf Peppers}}\n'
@@ -196,15 +196,15 @@ if __name__ == "__main__":
     finish +='    \\end{center}\n'
     finish +='\\end{table}\n'
 
-    initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[0][2])+'}\n        \\hline\n'
-    initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[0][0]+'\\\\\n'
+    initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
+    initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
     initC +='        \\hline\n'
     initC +='        \\hline\n'
 
-    takeOut(table[1], parametros[1], algsinfo[1][1], avg, maxs, mins, params, latexTable, 15, 20)
+    takeOut(table[1], parametros[1], algsinfo[0][1], avg, maxs, mins, params, latexTable, 15, 20)
 
     finishC +='        \\end{tabular}\n'
-    finishC +='        \\caption{Continuaci\'on resultados de las mejores corridas de \emph{BEEP5} hibridado para {\\bf Peppers}}\n'
+    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{BEEP5} hibridado para {\\bf Peppers}}\n'
     finishC +='        \\label{tb:ctableBEEP5}\n'
     finishC +='    \\end{center}\n'
     finishC +='\\end{table}\n'
@@ -278,9 +278,9 @@ if __name__ == "__main__":
 
             finishC +='        \\end{tabular}\n'
             if tn == 0:
-                finishC +='        \\caption{Continuaci\'on resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Lenna}}\n'
+                finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Lenna}}\n'
             else:
-                finishC +='        \\caption{Continuaci\'on resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Peppers}}\n'
+                finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Peppers}}\n'
             finishC +='        \\label{tb:tablec'+algi[0]+str(tanda)+'}\n'
             finishC +='    \\end{center}\n'
             finishC +='\\end{table}\n'
