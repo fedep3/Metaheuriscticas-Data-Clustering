@@ -28,7 +28,7 @@ done
 
 for (( i=1; i<5; i++ ))
 do
-    mkdir GAP${lc[${i}]}
+    mkdir GAP${pc[${i}]}
     for (( j=1; j<31; j++ ))
     do
         echo "GA PEPPERS CLUSTERS ${pc[${i}]} CORRIDA ${j}"
