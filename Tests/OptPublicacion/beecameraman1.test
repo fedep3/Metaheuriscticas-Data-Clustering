@@ -1,0 +1,10 @@
+[
+(("../mhs", (InputFile "../img/cameraman.png" PNG), Max, 4, (Mn [0.0]), (Mx [255.0]) ),
+ ("Bee", BeeOpt (Reps 3,
+           LG (5, 40, 5),
+           LG (5, 15, 1),
+           LG (1, 15, 1),
+           LG (5, 15, 1),
+           LG (1, 15, 1)))
+)]
+
