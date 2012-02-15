@@ -16,12 +16,12 @@ cac[4]=11
 #    done
 #done
 
-#echo "BEE CAMERAMAN CLUSTERS 4 CORRIDA 1"
-#./runTests BEEC4 OptPublicacion/beecameraman1.test
-#../Parser/parser TBee ../Parser/BEEC4.sql BEEC4.result
-#rm .log
-
-echo "BEE CAMERAMAN CLUSTERS 5 CORRIDA 1"
-./runTests BEEC5 OptPublicacion/beecameraman2.test
-../Parser/parser TBee ../Parser/BEEC5.sql BEEC5.result
+echo "BEE CAMERAMAN CLUSTERS 4 CORRIDA 1"
+./runTests BEEC4 OptPublicacion/beecameraman1.test
+../Parser/parser TBee ../Parser/BEEC4.sql BEEC4.result
 rm .log
+
+#echo "BEE CAMERAMAN CLUSTERS 5 CORRIDA 1"
+#./runTests BEEC5 OptPublicacion/beecameraman2.test
+#../Parser/parser TBee ../Parser/BEEC5.sql BEEC5.result
+#rm .log
