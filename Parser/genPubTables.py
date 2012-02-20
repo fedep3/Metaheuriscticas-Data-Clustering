@@ -92,148 +92,14 @@ def takeOut(table, parametros, nclust, avg, maxs, mins, params, latexTable, star
 
 if __name__ == "__main__":
 
-    algsinfo = [['GAL','5'],['GAP','4']]
-    tandas = [['5','7','9','11'],['4','6','7','11']]
+    algsinfo = [['GAL','5'],['GAP','4'],['GAC','4'],['BEEL','5'],['BEEP','4'],['BEEC','4']]
+    tandas = [['5','7','9','11'],['4','6','7','11'],['4','5','7','11'],['5'],['5'],['4','5','11']]
     table = [['ga','genetico'],['bee','abeja'],]
     parametros = [['$I$ & $tt$ & $pc$ & $pm$ ','gap_i, gap_tt, gap_pc, gap_pm',4],
                   ['$I$ & $m$ & $e$ & $eb$ & $ob$ ','beep_i, beep_m, beep_e, beep_eb, beep_ob',5]]
 
     tn = 0
 
-    print 'BEEL5.sql'
-
-    conn = sqlite3.connect('BEEL5.sql')
-    tableout = open('tableBEEL5.tex', 'w')
-
-    latexTable = [[0.0,0.0,''] for i in range(20)]
-    init = ''
-    initC = ''
-    finish = ''
-    finishC = ''
-
-    avg = conn.cursor()
-    maxs = conn.cursor()
-    mins = conn.cursor()
-    params = conn.cursor()
-
-    init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
-    init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
-    init +='        \\hline\n'
-    init +='        \\hline\n'
-
-    takeOut(table[1], parametros[1], algsinfo[0][1], avg, maxs, mins, params, latexTable, 0, 15)
-
-    finish +='        \\end{tabular}\n'
-    finish +='        \\caption{Resultados de las mejores corridas de \emph{BEEL5} hibridado para {\\bf Lenna}}\n'
-    finish +='        \\label{tb:tableBEEL5}\n'
-    finish +='    \\end{center}\n'
-    finish +='\\end{table}\n'
-
-    initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
-    initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
-    initC +='        \\hline\n'
-    initC +='        \\hline\n'
-
-    takeOut(table[1], parametros[1], algsinfo[0][1], avg, maxs, mins, params, latexTable, 15, 20)
-
-    finishC +='        \\end{tabular}\n'
-    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{BEEL5} hibridado para {\\bf Lenna}}\n'
-    finishC +='        \\label{tb:ctableBEEL5}\n'
-    finishC +='    \\end{center}\n'
-    finishC +='\\end{table}\n'
-
-    insertion_sort(latexTable)
-
-    tableout.write(init)
-
-    for i in range(15):
-        if i == 14:
-            tableout.write(latexTable[i][2][0:len(latexTable[i][2])-15])
-        else:
-            tableout.write(latexTable[i][2])
-
-    tableout.write(finish)
-
-    tableout.write(initC)
-    for i in range(15,20):
-        if i == 19:
-            tableout.write(latexTable[i][2][0:len(latexTable[i][2])-15])
-        else:
-            tableout.write(latexTable[i][2])
-
-
-    tableout.write(finishC)
-    tableout.close()
-    conn.close()
-
-
-    print 'BEEP5.sql'
-
-    conn = sqlite3.connect('BEEP5.sql')
-    tableout = open('tableBEEP5.tex', 'w')
-
-    latexTable = [[0.0,0.0,''] for i in range(20)]
-    init = ''
-    initC = ''
-    finish = ''
-    finishC = ''
-
-    avg = conn.cursor()
-    maxs = conn.cursor()
-    mins = conn.cursor()
-    params = conn.cursor()
-
-    init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
-    init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
-    init +='        \\hline\n'
-    init +='        \\hline\n'
-
-    takeOut(table[1], parametros[1], algsinfo[0][1], avg, maxs, mins, params, latexTable, 0, 15)
-
-    finish +='        \\end{tabular}\n'
-    finish +='        \\caption{Resultados de las mejores corridas de \emph{BEEP5} hibridado para {\\bf Peppers}}\n'
-    finish +='        \\label{tb:tableBEEP5}\n'
-    finish +='    \\end{center}\n'
-    finish +='\\end{table}\n'
-
-    initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[1][2])+'}\n        \\hline\n'
-    initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[1][0]+'\\\\\n'
-    initC +='        \\hline\n'
-    initC +='        \\hline\n'
-
-    takeOut(table[1], parametros[1], algsinfo[0][1], avg, maxs, mins, params, latexTable, 15, 20)
-
-    finishC +='        \\end{tabular}\n'
-    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{BEEP5} hibridado para {\\bf Peppers}}\n'
-    finishC +='        \\label{tb:ctableBEEP5}\n'
-    finishC +='    \\end{center}\n'
-    finishC +='\\end{table}\n'
-
-    insertion_sort(latexTable)
-
-    tableout.write(init)
-
-    for i in range(15):
-        if i == 14:
-            tableout.write(latexTable[i][2][0:len(latexTable[i][2])-15])
-        else:
-            tableout.write(latexTable[i][2])
-
-    tableout.write(finish)
-
-    tableout.write(initC)
-    for i in range(15,20):
-        if i == 19:
-            tableout.write(latexTable[i][2][0:len(latexTable[i][2])-15])
-        else:
-            tableout.write(latexTable[i][2])
-
-
-    tableout.write(finishC)
-    tableout.close()
-    conn.close()
-
-                 
     for algi in algsinfo:
 
         for tanda in tandas[tn]:
@@ -253,12 +119,12 @@ if __name__ == "__main__":
             mins = conn.cursor()
             params = conn.cursor()
 
-            init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[0][2])+'}\n        \\hline\n'
-            init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[0][0]+'\\\\\n'
+            init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[tn/3][2])+'}\n        \\hline\n'
+            init +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[tn/3][0]+'\\\\\n'
             init +='        \\hline\n'
             init +='        \\hline\n'
 
-            takeOut(table[0], parametros[0], algi[1], avg, maxs, mins, params, latexTable, 0, 15)
+            takeOut(table[tn/3], parametros[tn/3], algi[1], avg, maxs, mins, params, latexTable, 0, 15)
 
             finish +='        \\end{tabular}\n'
             if tn == 0:
@@ -269,12 +135,12 @@ if __name__ == "__main__":
             finish +='    \\end{center}\n'
             finish +='\\end{table}\n'
 
-            initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[0][2])+'}\n        \\hline\n'
-            initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[0][0]+'\\\\\n'
+            initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(parametros[tn/3][2])+'}\n        \\hline\n'
+            initC +='             & {\\bf FO} & {\\bf DB} & $J_e$ & {\\bf E} & {\\bf T} & {\\bf KE} & '+parametros[tn/3][0]+'\\\\\n'
             initC +='        \\hline\n'
             initC +='        \\hline\n'
 
-            takeOut(table[0], parametros[0], algi[1], avg, maxs, mins, params, latexTable, 15, 20)
+            takeOut(table[tn/3], parametros[tn/3], algi[1], avg, maxs, mins, params, latexTable, 15, 20)
 
             finishC +='        \\end{tabular}\n'
             if tn == 0:

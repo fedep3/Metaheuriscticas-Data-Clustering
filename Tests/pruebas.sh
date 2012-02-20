@@ -10,6 +10,11 @@ pc[2]=6
 pc[3]=7
 pc[4]=11
 
+cac[1]=4
+cac[2]=5
+cac[3]=11
+cac[4]=7
+
 rm .log 2> /dev/null
 
 for (( i=1; i<5; i++ ))
@@ -34,6 +39,17 @@ do
     done
 done
 
+for (( i=1; i<5; i++ ))
+do
+    for (( j=1; j<31; j++ ))
+    do
+        echo "GA CAMERAMAN CLUSTERS ${cac[${i}]} CORRIDA ${j}"
+        ./runTests GAC${cac[${i}]} TestsPublicacion/gacameraman${cac[${i}]}.test
+        ../Parser/parser TGA ../Parser/GAC${cac[${i}]}.sql GAC${cac[${i}]}.result
+        rm .log
+    done
+done
+
 for (( j=1; j<31; j++ ))
 do
     echo "BEE LENNA CLUSTERS ${lc[1]} CORRIDA ${j}"
@@ -49,6 +65,18 @@ do
     ../Parser/parser TBee ../Parser/BEEP${lc[1]}.sql BEEP${lc[1]}.result
     rm .log
 done
+
+for (( i=1; i<4; i++ ))
+do
+    for (( j=1; j<31; j++ ))
+    do
+        echo "BEE CAMERAMAN CLUSTERS ${cac[${i}]} CORRIDA ${j}"
+        ./runTests BEEC${cac[${i}]} TestsPublicacion/beecameraman${cac[${i}]}.test
+        ../Parser/parser TBee ../Parser/BEEC${cac[${i}]}.sql BEEC${cac[${i}]}.result
+        rm .log
+    done
+done
+
 
 cd ..
 cd Parser
