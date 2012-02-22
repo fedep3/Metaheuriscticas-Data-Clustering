@@ -127,10 +127,12 @@ if __name__ == "__main__":
             takeOut(table[tn/3], parametros[tn/3], algi[1], avg, maxs, mins, params, latexTable, 0, 15)
 
             finish +='        \\end{tabular}\n'
-            if tn == 0:
+            if tn%3 == 0:
                 finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Lenna}}\n'
-            else:
+            elif tn%3 == 1:
                 finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Peppers}}\n'
+            else:
+                finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Cameraman}}\n'
             finish +='        \\label{tb:table'+algi[0]+str(tanda)+'}\n'
             finish +='    \\end{center}\n'
             finish +='\\end{table}\n'
@@ -143,10 +145,12 @@ if __name__ == "__main__":
             takeOut(table[tn/3], parametros[tn/3], algi[1], avg, maxs, mins, params, latexTable, 15, 20)
 
             finishC +='        \\end{tabular}\n'
-            if tn == 0:
+            if tn%3 == 0:
                 finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Lenna}}\n'
-            else:
+            elif tn%3 == 1:
                 finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Peppers}}\n'
+            else:
+                finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+str(tanda)+'} hibridado para {\\bf Cameraman}}\n'
             finishC +='        \\label{tb:tablec'+algi[0]+str(tanda)+'}\n'
             finishC +='    \\end{center}\n'
             finishC +='\\end{table}\n'
