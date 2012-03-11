@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
-import math
 from decimal import Decimal
 
 def genSpaces(lenght):
@@ -29,17 +28,17 @@ def insertion_sort(lista):
     for i in range(len(lista)):
         save = lista[i]
         j = i
-        while j > 0 and compL(lista[j - 1], save):
+        while j > 0 and comp(lista[j - 1], save):
             lista[j] = lista[j - 1]
             j -= 1
             lista[j] = save
 
-def compL(felem,selem):
-    if felem[0] < selem[0]:
+def comp(felem,selem):
+    if felem[0] > selem[0]:
         return True
     else:
         return False
-        
+       
 def takeOut(table, parametros, nclust, statistics, maxs, mins, params, latexTable, start, end):
     for i in range(start,end):
 
@@ -57,7 +56,7 @@ def takeOut(table, parametros, nclust, statistics, maxs, mins, params, latexTabl
         rowmins = mins.fetchone()
         rowparams = params.fetchone()
 
-        latexTable[i][0] = rowstatistics[0]
+        latexTable[i][0] = rowstatistics[1]
 
         interval = (Decimal('1.959964') * (Decimal(str(rowstatistics[0])) / Decimal(str(rowstatistics[5]))).sqrt()).quantize(Decimal('1.0000'))
 
@@ -138,7 +137,6 @@ if __name__ == "__main__":
             finishC +='\\end{table}\n'
 
             insertion_sort(latexTable)
-
             tableout.write(init)
 
             for i in range(15):
