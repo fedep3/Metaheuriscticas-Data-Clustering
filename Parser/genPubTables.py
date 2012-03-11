@@ -42,7 +42,7 @@ def comp(felem,selem):
 def takeOut(table, parametros, nclust, statistics, maxs, mins, params, latexTable, start, end):
     for i in range(start,end):
 
-        consulta = 'SELECT ROUND(SUM( (tabla.'+table[0]+'_hib_db - averages.averageDB) * (tabla.'+table[0]+'_hib_db - averages.averageDB) )/ (COUNT(tabla.'+table[0]+'_hib_db) - 1),4), averages.averageDB,  averages.averageE, averages.averageT, averages.averageC, COUNT(tabla.'+table[0]+'_hib_db) FROM '+table[1]+' AS tabla, (SELECT ROUND(AVG('+table[0]+'_hib_db),4) AS averageDB, ROUND(AVG('+table[0]+'_hib_eval),4) AS averageE, ROUND(AVG('+table[0]+'_hib_time),4) AS averageT, ROUND(AVG('+table[0]+'_cluster_f),4) AS averageC FROM '+table[1]+' WHERE '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_cluster_f >= '+nclust+') AS averages WHERE '+table[0]+'_type = '+str(i+1)
+        consulta = 'SELECT SUM( (tabla.'+table[0]+'_hib_db - averages.averageDB) * (tabla.'+table[0]+'_hib_db - averages.averageDB) )/ (COUNT(tabla.'+table[0]+'_hib_db) - 1), averages.averageDB,  averages.averageE, averages.averageT, averages.averageC, COUNT(tabla.'+table[0]+'_hib_db) FROM '+table[1]+' AS tabla, (SELECT AVG('+table[0]+'_hib_db) AS averageDB, ROUND(AVG('+table[0]+'_hib_eval),4) AS averageE, ROUND(AVG('+table[0]+'_hib_time),4) AS averageT, ROUND(AVG('+table[0]+'_cluster_f),4) AS averageC FROM '+table[1]+' WHERE '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_cluster_f >= '+nclust+') AS averages WHERE '+table[0]+'_type = '+str(i+1)
         statistics.execute(consulta)
         consulta = 'SELECT '+table[0]+'_hib_db, '+table[0]+'_hib_eval, '+table[0]+'_hib_time, '+table[0]+'_cluster_f FROM '+table[1]+' WHERE '+table[0]+'_cluster_f >= '+nclust+' AND '+table[0]+'_type = '+str(i+1)+' ORDER BY '+table[0]+'_hib_fo DESC LIMIT 1'
         maxs.execute(consulta)
@@ -56,11 +56,11 @@ def takeOut(table, parametros, nclust, statistics, maxs, mins, params, latexTabl
         rowmins = mins.fetchone()
         rowparams = params.fetchone()
 
-        latexTable[i][0] = rowstatistics[1]
-
+        latexTable[i][0] = Decimal(str(rowstatistics[1]))
+        mean = latexTable[i][0].quantize(Decimal('1.0000'))
         interval = (Decimal('1.959964') * (Decimal(str(rowstatistics[0])) / Decimal(str(rowstatistics[5]))).sqrt()).quantize(Decimal('1.0000'))
 
-        latexTable[i][1] +='            Promedio  & $' +str(rowstatistics[1])+' \\pm ' + str(interval)+ '$ & '+str(rowstatistics[2])+' & '+str(rowstatistics[3])+' & '+str(rowstatistics[4])+genSpaces(parametros[2])+'\\\\\n'
+        latexTable[i][1] +='            Promedio  & $' +str(mean)+' \\pm ' +str(interval)+ '$ & '+str(rowstatistics[2])+' & '+str(rowstatistics[3])+' & '+str(rowstatistics[4])+genSpaces(parametros[2])+'\\\\\n'
         latexTable[i][1] +='            \\cline{1-5}\n'
         latexTable[i][1] +='            Mejor & '+str(rowmaxs[0])+' & '+str(rowmaxs[1])+'  & '+str(rowmaxs[2])+' & '+str(rowmaxs[3])+' & '+genParams(rowparams)+'\\\\\n'
         latexTable[i][1] +='            \\cline{1-5}\n'
