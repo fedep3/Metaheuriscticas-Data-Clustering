@@ -261,7 +261,7 @@ void Bee::selectSites(int type){
     for(i = 0; i < e_bees; ++i){
         r = rarr.get();
 
-        j = rand() % e_sites;
+        j = randomInteger(0, e_sites);
 
         bees[r] = sites[j];
     }
@@ -270,7 +270,7 @@ void Bee::selectSites(int type){
     for(i = 0; i < o_bees; ++i){
         r = rarr.get();
 
-        j = rand() % o_sites;
+        j = randomInteger(0, o_sites);
 
         if(e_sites + j >= m_sites)
             continue;
@@ -308,7 +308,7 @@ void Bee::selectSites(int type){
  */
 void Bee::neighbor(int a, int type){
     int i;
-    int r = rand() % N;
+    int r = randomInteger(0, N);
     int c = solution[a][r];
 
     for(i = 0; i < M; ++i)

@@ -214,40 +214,40 @@ void DE::run(int type){
 
         if(var){
             Cr = (CrMAX-CrMIN) * ((float) (maxit - it))/((float) maxit) + CrMIN;
-            F = 0.5 * ( 1.0 + ((float)rand())/((float)RAND_MAX) );
+            F = 0.5 * ( 1.0 + drand());
         }
 
         for(i = 0; i < I; i++){
 
-            m = rand() % I;
+            m = randomInteger(0, I);
 
             while( m == i )
-                m = rand() % I;
+                m = randomInteger(0, I);
 
-            k = rand() % I;
+            k = randomInteger(0, I);
 
             while( k == m  || k == i)
-                k = rand() % I;
+                k = randomInteger(0, I);
 
-            j = rand() % I;
+            j = randomInteger(0, I);
 
             while( j == k || j == m || j == i)
-                j = rand() % I;
+                j = randomInteger(0, I);
 
-            p = rand()%Kmax;
+            p = randomInteger(0, Kmax);
 
             for(l = 0; l < Kmax; l++){
-                if(((float)rand())/((float)RAND_MAX) < Cr || l == p){
+                if(drand() < Cr || l == p){
                     for(h = 0; h < M; h++){
                         auxCent[l][h] = centroid[m][l][h] + F*(centroid[j][l][h] - centroid[k][l][h]);
                         if(auxCent[l][h] > zmx[h] || auxCent[l][h] < zmn[h])
-                            auxCent[l][h] = (zmx[h]-zmn[h]) * (((float)rand())/((float)RAND_MAX)) + zmn[h];
+                            auxCent[l][h] = (zmx[h]-zmn[h]) * drand() + zmn[h];
                     }
                 }else{
                     for(h = 0; h < M; h++){
                         auxCent[l][h] = centroid[i][l][h];
                         if(auxCent[l][h] > zmx[h] || auxCent[l][h] < zmn[h])
-                            auxCent[l][h] = (zmx[h]-zmn[h]) * (((float)rand())/((float)RAND_MAX)) + zmn[h];
+                            auxCent[l][h] = (zmx[h]-zmn[h]) * drand() + zmn[h];
                     }
                 }
             }

@@ -335,8 +335,8 @@ void PSO::updateVelocity(int p){
 
     for(i = 0; i < Kmax; ++i){
         for(j = 0; j < M; ++j){
-            r1 = ( (float)rand() ) / ( (float)RAND_MAX );
-            r2 = ( (float)rand() ) / ( (float)RAND_MAX );
+            r1 = drand();
+            r2 = drand();
             v = W * velocity[p][i][j] +
                 c1 * r1 * (bestParticle[p][i][j] - centroid[p][i][j]) +
                 c2 * r2 * (bestCentroids[i][j]   - centroid[p][i][j]);
@@ -366,7 +366,7 @@ void PSO::updateParticle(int p){
             if(zmn[j] <= t && t <= zmx[j])
                 centroid[p][i][j] = t;
             else{
-                r = rand() % N;
+                r = randomInteger(0, N);
                 centroid[p][i][j] = data[r][j];
             }
                 

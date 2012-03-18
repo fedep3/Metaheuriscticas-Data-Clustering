@@ -15,6 +15,8 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <fcntl.h>
+#include "mtrand.h"
 
 #ifndef _METAHEURISTIC_
 #define _METAHEURISTIC_
@@ -372,6 +374,8 @@ class Metaheuristic{
          */
         void updateBetter(int i, float* best, int* count, int type);
 
+        int randomInteger(int start, int end);
+
         /**
          * Cantidad de clusters inicial.
          */
@@ -406,5 +410,8 @@ class Metaheuristic{
          * Arreglo necesario para el recálculo de centroides.
          */
         int* size;
+
+        MTRand drand;
+
 }; 
 #endif

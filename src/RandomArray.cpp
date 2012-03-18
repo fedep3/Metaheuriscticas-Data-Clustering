@@ -18,7 +18,12 @@
  */
 RandomArray::RandomArray(int size){
 
-    srand(time(NULL));
+    int randomData = open("/dev/random", O_RDONLY);
+    int seed;
+    read(randomData, &seed, sizeof seed);
+    close(randomData);
+
+    drand.seed(seed);
 
     int i;
 
@@ -55,7 +60,7 @@ void RandomArray::reset(int size){
 int RandomArray::get(){
     if(length == 0) return 0;
 
-    int r = rand() % length;
+    int r = (length-1)*drand();
 
     int out = rarr[r];
 

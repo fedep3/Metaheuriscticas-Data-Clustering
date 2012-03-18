@@ -158,14 +158,14 @@ void GA::run(int type){
 
         ////////////////////////////
         // Crossover.
-        cp = ( (float)rand() )/( (float)RAND_MAX );
+        cp = drand();
         if(cp > CP) continue;
         else{
             crossover(p1, p2, type);
 
             ////////////////////////////
             // Mutación.
-            mut = ( (float)rand() )/( (float)RAND_MAX );
+            mut = drand();
             if(mut <= MUT){
                 mutation(type);
             }
@@ -219,7 +219,7 @@ void GA::torneo(int* p, int type){
     }
 
     for(i = 0; i < torneoSize; ++i){
-        current = rand() % I;
+        current = randomInteger(0, I);
 
         switch(type){
             case T_MAX:
@@ -245,8 +245,8 @@ void GA::torneo(int* p, int type){
  * @param type Tipo de función objetivo.
  */
 void GA::mutation(int type){
-    int t = rand() % 3;
-    int i = rand() % I;
+    int t = randomInteger(0, 3);
+    int i = randomInteger(0, I);
 
     switch(t){
         case 0:
@@ -281,10 +281,10 @@ void GA::mutation(int type){
 */
 void GA::crandom(int i){
     int j, rn;
-    int cn = rand() % Ks[i];
+    int cn = randomInteger(0, Ks[i]);
     
     for(j = 0; j < M; ++j){
-        rn = rand() % N;
+        rn = randomInteger(0, N);
         centroid[i][cn][j] = data[rn][j];
     }
 }
@@ -296,7 +296,7 @@ void GA::crandom(int i){
 */
 void GA::split(int i){
     int j;
-    int cn = rand() % N;
+    int cn = randomInteger(0, N);
 
     for(j = 0; j < M; ++j)
         centroid[i][Ks[i]][j] = data[cn][j];
@@ -311,11 +311,11 @@ void GA::split(int i){
 */
 void GA::merge(int i){
     int j;
-    int cn1 = rand() % Ks[i];
-    int cn2 = rand() % Ks[i];
+    int cn1 = randomInteger(0, Ks[i]);
+    int cn2 = randomInteger(0, Ks[i]);
     
     while(cn2 == cn1)
-        cn2 = rand() % Ks[i];
+        cn2 = randomInteger(0, Ks[i]);
     
     for(j = 0; j < M; ++j)
         centroid[i][cn2][j] = centroid[i][cn1][j];
@@ -399,10 +399,10 @@ void GA::crossover(int p1, int p2, int type){
     int greater = Kmax;
 
     if(Ks[p1] <= Ks[p2]){
-        index   = rand() % Ks[p1];
+        index   = randomInteger(0, Ks[p1]);
         greater = Ks[p1];
     }else{
-        index   = rand() % Ks[p2];
+        index   = randomInteger(0, Ks[p2]);
         greater = Ks[p2];
     }
     int k1 = Kmax, k2 = Kmax;

@@ -9,9 +9,9 @@
  * Clase para arreglos aleatorios.
  *
  */
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
+#include <iostream>
+#include <fcntl.h>
+#include "mtrand.h"
 
 #ifndef _RANDOM_ARRAY_
 #define _RANDOM_ARRAY_
@@ -61,5 +61,7 @@ class RandomArray{
          * Arreglo.
          */
         int* rarr;
+
+        MTRand drand;
 };
 #endif

@@ -105,7 +105,7 @@ void AntA::run(int type){
     
     for(i = 0; i < maxit; i++){
 
-        ra = rand()%nA;
+        ra = randomInteger(0, nA);
         
         if(ants[ra].free)
             pickAnt(ra);
@@ -128,14 +128,14 @@ void AntA::pickAnt(int ra){
     float rn = 0.0;
     vector<int>::iterator it;
 
-    rp = rand()%N;
+    rp = randomInteger(0, N);
     
     while(free[rp] == -1)
-        rp = rand()%N;
+        rp = randomInteger(0, N);
         
     rc = free[rp];
 
-    rn = ((float)rand())/((float)RAND_MAX);
+    rn = drand();
 
     if(rn <= ppick(rp, rc)){
 
@@ -376,7 +376,7 @@ void AntA::dropAnt(int ra){
         }
 
         rc = best;
-        rn = ((float)rand())/((float)RAND_MAX);
+        rn = drand();
 
         if(rn <= (1 - pow(cos(PIH * max),2 )) ){
 
@@ -391,9 +391,9 @@ void AntA::dropAnt(int ra){
 
         if(!done && msize < MM){
 
-            rc = rand()%cellsSize;
+            rc = randomInteger(0, cellsSize);
 
-            rn = ((float)rand())/((float)RAND_MAX);
+            rn = drand();
 
             if(rn <= pdrop(rp, rc)){
 
@@ -409,9 +409,9 @@ void AntA::dropAnt(int ra){
 
     }else{
 
-        rc = rand()%cellsSize;
+        rc = randomInteger(0, cellsSize);
 
-        rn = ((float)rand())/((float)RAND_MAX);
+        rn = drand();
 
         if(rn <= pdrop(rp, rc)){
 
@@ -561,7 +561,7 @@ void AntA::initialize(){
     }
 
     for(i = 0; i <= r.last; i++){
-        c = rand()%cellsSize;
+        c = randomInteger(0, cellsSize);
         free[r.rarr[i]] = c;
         cells[c].push_back(r.rarr[i]);
     }
