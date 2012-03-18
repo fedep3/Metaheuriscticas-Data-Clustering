@@ -271,6 +271,8 @@ float Metaheuristic::DB(int* sol, float** cent, int k){
             case 0:
                 S[j] = S[j] / MIN_DIST;
                 break;
+            case 1:
+                return numeric_limits<float>::infinity();
             default:
                 S[j] = S[j] / ( (float) csize[j] );
         }
