@@ -90,11 +90,6 @@ Metaheuristic::~Metaheuristic(){
     delete [] size;
 }
 
-int Metaheuristic::randomInteger(int start, int end){
-    return (end-start)*drand() + start;
-
-}
-
 //////////////////////////////
 // Cálculos de distancias.
 ////
@@ -796,4 +791,15 @@ float Metaheuristic::calcJe(){
 
     //Cálculo final.
     return (sum / K);
+}
+
+/**
+ * Devuelve un número entero aletorio en el intervalo [start, end).
+ *
+ * @param start Inicio del intervalo.
+ * @param end   Fin del intervalo.
+ * @return      El número aleatorio en el intervalo.
+ */
+int Metaheuristic::randomInteger(int start, int end){
+    return (end-start)*drand() + start;
 }

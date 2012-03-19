@@ -84,6 +84,9 @@ class RandomArray{
          */
         int* rarr;
 
+        /**
+          * Generador de números aleatorios.
+          */
         MTRand drand;
 };
 #endif

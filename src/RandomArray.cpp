@@ -82,7 +82,7 @@ void RandomArray::reset(int size){
 int RandomArray::get(){
     if(length == 0) return 0;
 
-    int r = (length-1)*drand();
+    int r = length*drand();
 
     int out = rarr[r];
 

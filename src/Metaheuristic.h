@@ -396,6 +396,13 @@ class Metaheuristic{
          */
         void updateBetter(int i, float* best, int* count, int type);
 
+        /**
+         * Devuelve un número entero aletorio en el intervalo [start, end).
+         *
+         * @param start Inicio del intervalo.
+         * @param end   Fin del intervalo.
+         * @return      El número aleatorio en el intervalo.
+         */
         int randomInteger(int start, int end);
 
         /**
@@ -433,6 +440,9 @@ class Metaheuristic{
          */
         int* size;
 
+        /**
+          * Generador de números aleatorios.
+          */
         MTRand drand;
 
 }; 
