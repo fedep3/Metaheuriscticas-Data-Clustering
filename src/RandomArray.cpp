@@ -40,12 +40,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 RandomArray::RandomArray(int size){
 
-    int randomData = open("/dev/random", O_RDONLY);
+    int randomData = open("/dev/urandom", O_RDONLY);
     int seed;
     read(randomData, &seed, sizeof seed);
     close(randomData);
 
     drand.seed(seed);
+
 
     int i;
 

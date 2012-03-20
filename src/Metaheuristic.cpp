@@ -66,12 +66,13 @@ Metaheuristic::Metaheuristic(float** _d, int _m, int _n, int _k, int _met){
 
     ofEval = 0;
 
-    int randomData = open("/dev/random", O_RDONLY);
+    int randomData = open("/dev/ruandom", O_RDONLY);
     int seed;
     read(randomData, &seed, sizeof seed);
     close(randomData);
 
     drand.seed(seed);
+
 
 }
 
