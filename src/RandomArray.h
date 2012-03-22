@@ -33,7 +33,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #include <iostream>
 #include <fcntl.h>
-#include "mtrand.h"
+#include "mt.h"
 
 #ifndef _RANDOM_ARRAY_
 #define _RANDOM_ARRAY_
@@ -87,6 +87,6 @@ class RandomArray{
         /**
           * Generador de números aleatorios.
           */
-        MTRand drand;
+        MTStore * drand;
 };
 #endif

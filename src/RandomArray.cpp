@@ -40,13 +40,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 RandomArray::RandomArray(int size){
 
-    int randomData = open("/dev/urandom", O_RDONLY);
-    int seed;
-    read(randomData, &seed, sizeof seed);
-    close(randomData);
-
-    drand.seed(seed);
-
+    drand = new MTStore();
+    drand->mtRandomInit(drand, time(NULL), K_2M31);
 
     int i;
 
@@ -83,7 +78,7 @@ void RandomArray::reset(int size){
 int RandomArray::get(){
     if(length == 0) return 0;
 
-    int r = length*drand();
+    int r = length*mtGetRandomFloat(drand);
 
     int out = rarr[r];
 

@@ -38,7 +38,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <limits>
 #include <vector>
 #include <fcntl.h>
-#include "mtrand.h"
+#include "mt.h"
 
 #ifndef _METAHEURISTIC_
 #define _METAHEURISTIC_
@@ -443,7 +443,7 @@ class Metaheuristic{
         /**
           * Generador de números aleatorios.
           */
-        MTRand drand;
+        MTStore *drand;
 
 }; 
 #endif

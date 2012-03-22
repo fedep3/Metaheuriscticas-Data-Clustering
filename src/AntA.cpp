@@ -157,7 +157,7 @@ void AntA::pickAnt(int ra){
         
     rc = free[rp];
 
-    rn = drand();
+    rn = mtGetRandomFloat(drand);
 
     if(rn <= ppick(rp, rc)){
 
@@ -398,7 +398,7 @@ void AntA::dropAnt(int ra){
         }
 
         rc = best;
-        rn = drand();
+        rn = mtGetRandomFloat(drand);
 
         if(rn <= (1 - pow(cos(PIH * max),2 )) ){
 
@@ -415,7 +415,7 @@ void AntA::dropAnt(int ra){
 
             rc = randomInteger(0, cellsSize);
 
-            rn = drand();
+            rn = mtGetRandomFloat(drand);
 
             if(rn <= pdrop(rp, rc)){
 
@@ -433,7 +433,7 @@ void AntA::dropAnt(int ra){
 
         rc = randomInteger(0, cellsSize);
 
-        rn = drand();
+        rn = mtGetRandomFloat(drand);
 
         if(rn <= pdrop(rp, rc)){
 

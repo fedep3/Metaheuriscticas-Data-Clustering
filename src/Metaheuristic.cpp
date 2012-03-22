@@ -66,12 +66,8 @@ Metaheuristic::Metaheuristic(float** _d, int _m, int _n, int _k, int _met){
 
     ofEval = 0;
 
-    int randomData = open("/dev/ruandom", O_RDONLY);
-    int seed;
-    read(randomData, &seed, sizeof seed);
-    close(randomData);
-
-    drand.seed(seed);
+    drand = new MTStore();
+    drand->mtRandomInit(drand, time(NULL), K_2M31);
 
 
 }
@@ -802,5 +798,5 @@ float Metaheuristic::calcJe(){
  * @return      El número aleatorio en el intervalo.
  */
 int Metaheuristic::randomInteger(int start, int end){
-    return (end-start)*drand() + start;
+    return (end-start)*mtGetRandomFloat(drand) + start;
 }

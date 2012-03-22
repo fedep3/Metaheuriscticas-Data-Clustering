@@ -180,14 +180,14 @@ void GA::run(int type){
 
         ////////////////////////////
         // Crossover.
-        cp = drand();
+        cp = mtGetRandomFloat(drand);
         if(cp > CP) continue;
         else{
             crossover(p1, p2, type);
 
             ////////////////////////////
             // Mutación.
-            mut = drand();
+            mut = mtGetRandomFloat(drand);
             if(mut <= MUT){
                 mutation(type);
             }

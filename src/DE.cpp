@@ -236,7 +236,7 @@ void DE::run(int type){
 
         if(var){
             Cr = (CrMAX-CrMIN) * ((float) (maxit - it))/((float) maxit) + CrMIN;
-            F = 0.5 * ( 1.0 + drand());
+            F = 0.5 * ( 1.0 + mtGetRandomFloat(drand));
         }
 
         for(i = 0; i < I; i++){
@@ -259,17 +259,17 @@ void DE::run(int type){
             p = randomInteger(0, Kmax);
 
             for(l = 0; l < Kmax; l++){
-                if(drand() < Cr || l == p){
+                if(mtGetRandomFloat(drand) < Cr || l == p){
                     for(h = 0; h < M; h++){
                         auxCent[l][h] = centroid[m][l][h] + F*(centroid[j][l][h] - centroid[k][l][h]);
                         if(auxCent[l][h] > zmx[h] || auxCent[l][h] < zmn[h])
-                            auxCent[l][h] = (zmx[h]-zmn[h]) * drand() + zmn[h];
+                            auxCent[l][h] = (zmx[h]-zmn[h]) * mtGetRandomFloat(drand) + zmn[h];
                     }
                 }else{
                     for(h = 0; h < M; h++){
                         auxCent[l][h] = centroid[i][l][h];
                         if(auxCent[l][h] > zmx[h] || auxCent[l][h] < zmn[h])
-                            auxCent[l][h] = (zmx[h]-zmn[h]) * drand() + zmn[h];
+                            auxCent[l][h] = (zmx[h]-zmn[h]) * mtGetRandomFloat(drand) + zmn[h];
                     }
                 }
             }

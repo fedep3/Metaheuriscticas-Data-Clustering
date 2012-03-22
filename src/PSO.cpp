@@ -357,8 +357,8 @@ void PSO::updateVelocity(int p){
 
     for(i = 0; i < Kmax; ++i){
         for(j = 0; j < M; ++j){
-            r1 = drand();
-            r2 = drand();
+            r1 = mtGetRandomFloat(drand);
+            r2 = mtGetRandomFloat(drand);
             v = W * velocity[p][i][j] +
                 c1 * r1 * (bestParticle[p][i][j] - centroid[p][i][j]) +
                 c2 * r2 * (bestCentroids[i][j]   - centroid[p][i][j]);
