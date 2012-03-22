@@ -50,32 +50,32 @@ do
     done
 done
 
-for (( j=1; j<31; j++ ))
-do
-    echo "BEE LENNA CLUSTERS ${lc[1]} CORRIDA ${j}"
-    ./runTests BEEL${lc[1]} TestsPublicacion/beelenna${lc[1]}.test
-    ../Parser/parser TBee ../Parser/BEEL${lc[1]}.sql BEEL${lc[1]}.result
-    rm .log
-done
+#for (( j=1; j<31; j++ ))
+#do
+#    echo "BEE LENNA CLUSTERS ${lc[1]} CORRIDA ${j}"
+#    ./runTests BEEL${lc[1]} TestsPublicacion/beelenna${lc[1]}.test
+#    ../Parser/parser TBee ../Parser/BEEL${lc[1]}.sql BEEL${lc[1]}.result
+#    rm .log
+#done
 
-for (( j=1; j<31; j++ ))
-do
-    echo "BEE PEPPERS CLUSTERS ${lc[1]} CORRIDA ${j}"
-    ./runTests BEEP${lc[1]} TestsPublicacion/beepepper${lc[1]}.test
-    ../Parser/parser TBee ../Parser/BEEP${lc[1]}.sql BEEP${lc[1]}.result
-    rm .log
-done
+#for (( j=1; j<31; j++ ))
+#do
+#    echo "BEE PEPPERS CLUSTERS ${lc[1]} CORRIDA ${j}"
+#    ./runTests BEEP${lc[1]} TestsPublicacion/beepepper${lc[1]}.test
+#    ../Parser/parser TBee ../Parser/BEEP${lc[1]}.sql BEEP${lc[1]}.result
+#    rm .log
+#done
 
-for (( i=1; i<4; i++ ))
-do
-    for (( j=1; j<31; j++ ))
-    do
-        echo "BEE CAMERAMAN CLUSTERS ${cac[${i}]} CORRIDA ${j}"
-        ./runTests BEEC${cac[${i}]} TestsPublicacion/beecameraman${cac[${i}]}.test
-        ../Parser/parser TBee ../Parser/BEEC${cac[${i}]}.sql BEEC${cac[${i}]}.result
-        rm .log
-    done
-done
+#for (( i=1; i<4; i++ ))
+#do
+#    for (( j=1; j<31; j++ ))
+#    do
+#        echo "BEE CAMERAMAN CLUSTERS ${cac[${i}]} CORRIDA ${j}"
+#        ./runTests BEEC${cac[${i}]} TestsPublicacion/beecameraman${cac[${i}]}.test
+#        ../Parser/parser TBee ../Parser/BEEC${cac[${i}]}.sql BEEC${cac[${i}]}.result
+#        rm .log
+#    done
+#done
 
 
 cd ..

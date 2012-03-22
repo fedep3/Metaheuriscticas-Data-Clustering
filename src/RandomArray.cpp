@@ -94,4 +94,5 @@ int RandomArray::get(){
  */
 RandomArray::~RandomArray(){
     delete [] rarr;
+    delete drand;
 }

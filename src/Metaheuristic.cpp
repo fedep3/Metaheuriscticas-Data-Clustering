@@ -85,6 +85,7 @@ Metaheuristic::~Metaheuristic(){
     free(bestCentroids);
 
     delete [] size;
+    delete drand;
 }
 
 //////////////////////////////

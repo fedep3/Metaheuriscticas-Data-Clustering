@@ -38,6 +38,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <limits>
 #include <vector>
 #include <fcntl.h>
+#include <string.h>
 #include "mt.h"
 
 #ifndef _METAHEURISTIC_
