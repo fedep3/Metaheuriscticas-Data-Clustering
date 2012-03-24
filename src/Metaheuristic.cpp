@@ -243,7 +243,8 @@ int Metaheuristic::bestCluster(float **centroid, int e){
 ////
 
 /**
- * Métrica DB. A menor valor de DB, mejor es la solución.
+ * Métrica 
+. A menor valor de DB, mejor es la solución.
  *
  * @param i Individuo.
  * @param k Cantidad de clusters.
@@ -265,7 +266,7 @@ float Metaheuristic::DB(int i, int k){
  */
 float Metaheuristic::DB(int* sol, float** cent, int k){
     int j, l, cluster;
-    float m, t1, t2;
+    float maximal, denominator, R;
     float sum = 0.0;
 
     if(k <= 1) return (numeric_limits<float>::infinity());
@@ -300,29 +301,113 @@ float Metaheuristic::DB(int* sol, float** cent, int k){
 
     //Cálculo de max R_{i,j}
     for(j = 0; j < k; ++j){
-        m = -1.0;
+        maximal = -1.0;
         for(l = 0; l < k; ++l){
             if(l == j) continue;
 
             //Si dos centroides están a 0 distancia, probablemente
             //haya que unirlos.
-            t1 = d(cent[j], cent[l]);
-            if(t1 == 0.0){
-                t1 = MIN_DIST;
+            denominator = d(cent[j], cent[l]);
+            if(denominator == 0.0){
+                denominator = MIN_DIST;
             }
 
-            t2 = ( (S[j] + S[l]) / t1 );
-            if(m < t2){
-                m = t2;
+            R = ( (S[j] + S[l]) / denominator );
+            if(maximal < R){
+                maximal = R;
             }
         }
-        sum += m;
+        sum += maximal;
     }
 
     delete [] S;
     delete [] csize;
 
-    return ( sum / ( (float) k ) );
+    return (sum / k);
+}
+
+/**
+ * Métrica Turi. A menor valor de Turi, mejor es la solución.
+ *
+ * @param sol  Vector solución.
+ * @param cent Centroides asociados al vector solución.
+ * @param k    Cantidad de clusters en el vector solución.
+ *
+ * @return Valor de métrica.
+ */
+float Metaheuristic::Turi(int* sol, float** cent, int k){
+    return y(k)*(intra(sol,cent)/inter(sol, cent, k));
+}
+
+/**
+ * Devuelve el valor intra(disntacia dentro los clusters) de la funcion de Turi.
+ *
+ * @param sol  Vector solución.
+ * @param cent Centroides asociados al vector solución.
+ * @return La suma de la distancia de cada lemento a su centroide entre el 
+ * total.
+ */
+float Metaheuristic::intra(int* sol, float** cent){
+    float sum = 0.0;
+    int cluster = 0;
+
+    for(int j = 0; j < N; ++j){
+        cluster = sol[j];
+        sum += d(data[j], cent[cluster]);
+    }
+
+    float result = (sum / N);
+    return result;
+}
+
+/**
+ * Devuelve el valor inter(disntacia entre los clusters) de la funcion de Turi.
+ *
+ * @param sol  Vector solución.
+ * @param cent Centroides asociados al vector solución.
+ * @param mean Media.
+ * @return  La suma de las menos distancia entre cada centroide y el resto.
+ */
+float Metaheuristic::inter(int* sol, float** cent, int k){
+    float minimal, dist, sum = 0.0;
+
+    for(int j = 0; j < k; ++j){
+        minimal = numeric_limits<float>::infinity();
+        for(int l = 0; l < k; ++l){
+            if(l == j) continue;
+
+            //Si dos centroides están a 0 distancia, probablemente
+            //haya que unirlos.
+            dist = d(cent[j], cent[l]);
+            if(dist == 0.0){
+                dist = MIN_DIST;
+            }
+
+            if(minimal > dist){
+                minimal = dist;
+            }
+        }
+        sum += minimal;
+    }
+    return sum;
+}
+
+/**
+ * Devuelve el valor y de la funcion de Turi.
+ *
+ * @param k        Numero de clusters.
+ * @param mean     Media.
+ * @param variance Varianza.
+ * @return  El valor devuelto equivale a C*N(1,2)+1.
+ */
+float Metaheuristic::y(int k, float mean, float variance){
+    float numerator = (K - mean);
+    float variance_exp_2 = variance*variance;
+    float denominator = 2*variance_exp_2;
+
+    numerator *= numerator;
+
+    return C*((1/sqrt(TPI*variance_exp_2))*exp(numerator/denominator)) + 1;
 }
 
 /**
@@ -746,6 +831,14 @@ void Metaheuristic::calcGFO(){
 float Metaheuristic::calcDB(){
     return ( DB(bestSolution, bestCentroids, K) );
 }
+
+/**
+ * Métrica Turi de la mejor solución.
+ */
+float Metaheuristic::calcTuri(){
+    return ( Turi(bestSolution, bestCentroids, K) );
+}
+
 
 /**
  * Métrica CS de la mejor solución.

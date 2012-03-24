@@ -224,10 +224,12 @@ int evalhib;
 
 // Métricas de calidad del algoritmo.
 float algDB;
+float algTuri;
 float algJe;
 
 // Métricas de calidad del híbrido.
 float hibDB;
+float hibTuri;
 float hibJe;
 
 /**
@@ -377,6 +379,8 @@ void restoreHandlers(){
 
         printf("-- Índice DB del algoritmo: %.4f\n", algDB);
 
+        printf("-- Índice Turi del algoritmo: %.4f\n", algTuri);
+
         printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
         r->write(_output, m->bestSolution, m->K);
@@ -421,6 +425,7 @@ void longEnough(int sig){
             foalg = m->bestFO;
 
             algDB = m->calcDB();
+            algTuri = m->calcTuri();
             algJe = m->calcJe();
         }
 
@@ -433,6 +438,8 @@ void longEnough(int sig){
         printf("-- Valor de la función objetivo del algoritmo: %.4f\n", foalg);
 
         printf("-- Índice DB del algoritmo: %.4f\n", algDB);
+
+        printf("-- Índice Turi del algoritmo: %.4f\n", algTuri);
 
         printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
@@ -466,6 +473,9 @@ void killIt(int sig){
             foalg = m->bestFO;
 
             algDB = m->calcDB();
+            algTuri = m->calcTuri();
+            printf("%4f\n", algTuri);
+            exit(-1);
             algJe = m->calcJe();
 
             if(algorithm != M_KMEANS){
@@ -490,6 +500,7 @@ void killIt(int sig){
             fohib = m->bestFO;
 
             hibDB = m->calcDB();
+            hibTuri = m->calcTuri();
             hibJe = m->calcJe();
         }
 
@@ -502,6 +513,8 @@ void killIt(int sig){
         printf("-- Valor de la función objetivo del algoritmo: %.4f\n", foalg);
 
         printf("-- Índice DB del algoritmo: %.4f\n", algDB);
+
+        printf("-- Índice Turi del algoritmo: %.4f\n", algTuri);
 
         printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
@@ -516,6 +529,8 @@ void killIt(int sig){
             printf("-- Valor de la función objetivo del híbrido: %.4f\n", fohib);
 
             printf("-- Índice DB del híbrido: %.4f\n", hibDB);
+
+            printf("-- Índice Turi del híbrido: %.4f\n", hibTuri);
 
             printf("-- Error Je del híbrido: %.4f\n", hibJe);
         }
@@ -1366,6 +1381,7 @@ void runIt(){
     foalg = m->bestFO;
 
     algDB = m->calcDB();
+    algTuri = m->calcTuri();
     algJe = m->calcJe();
 
     
@@ -1383,6 +1399,7 @@ void runIt(){
         fohib = m->bestFO;
 
         hibDB = m->calcDB();
+        hibTuri = m->calcTuri();
         hibJe = m->calcJe();
 
     }
@@ -1397,6 +1414,8 @@ void runIt(){
 
     printf("-- Índice DB del algoritmo: %.4f\n", algDB);
 
+    printf("-- Índice Turi del algoritmo: %.4f\n", hibTuri);
+
     printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
     if(algorithm != M_KMEANS){
@@ -1410,6 +1429,8 @@ void runIt(){
         printf("-- Valor de la función objetivo del híbrido: %.4f\n", fohib);
 
         printf("-- Índice DB del híbrido: %.4f\n", hibDB);
+
+        printf("-- Índice Turi del híbrido: %.4f\n", hibTuri);
 
         printf("-- Error Je del híbrido: %.4f\n", hibJe);
     }

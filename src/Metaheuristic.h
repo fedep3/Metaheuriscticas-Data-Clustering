@@ -36,6 +36,9 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #ifndef _METAHEURISTIC_
 #define _METAHEURISTIC_
 
+#define TPI 6.283185307
+#define C 25.0
+
 //Qué tipo de distancia será usada.
 #define COSINE_DISTANCE    0
 #define EUCLIDEAN_DISTANCE 1
@@ -88,6 +91,11 @@ class Metaheuristic{
          * Métrica DB de la mejor solución.
          */
         float calcDB();
+
+        /**
+         * Métrica Turi de la mejor solución.
+         */
+        float calcTuri();
 
         /**
          * Métrica CS de la mejor solución.
@@ -252,6 +260,47 @@ class Metaheuristic{
          * @return Valor de métrica.
          */
         float DB(int* sol, float** cent, int k);
+
+        /**
+         * Métrica Turi. A menor valor de Turi, mejor es la solución.
+         *
+         * @param sol  Vector solución.
+         * @param cent Centroides asociados al vector solución.
+         * @param k    Cantidad de clusters en el vector solución.
+         *
+         * @return Valor de métrica.
+         */
+        float Turi(int* sol, float** cent, int k);
+
+        /**
+         * Devuelve el valor intra(disntacia dentro los clusters) de la funcion de Turi.
+         *
+         * @param sol  Vector solución.
+         * @param cent Centroides asociados al vector solución.
+         * @return La suma de la distancia de cada lemento a su centroide entre el 
+         * total.
+         */
+        float intra(int* sol, float** cent);
+
+        /**
+         * Devuelve el valor inter(disntacia entre los clusters) de la funcion de Turi.
+         *
+         * @param sol  Vector solución.
+         * @param cent Centroides asociados al vector solución.
+         * @param mean Media.
+         * @return  La suma de las menos distancia entre cada centroide y el resto.
+         */
+        float inter(int* sol, float** cent, int k);
+
+        /**
+         * Devuelve el valor y de la funcion de Turi.
+         *
+         * @param k        Numero de clusters.
+         * @param mean     Media.
+         * @param variance Varianza.
+         * @return  El valor devuelto equivale a C*N(1,2)+1.
+         */
+        float y(int k, float mean = 1.0, float variance = 2.0);
 
         /**
          * Métrica CS. A menor valor de CS, mejor es la solución.
