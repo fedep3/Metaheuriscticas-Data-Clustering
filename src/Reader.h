@@ -57,7 +57,7 @@ class Reader{
          * @param sol    Solución final.
          * @param k      Cantidad de clusters.
          */
-        virtual void write(char* output, int* sol, int k) = 0;
+        virtual void write(char* output, int* sol, float** cent, int k) = 0;
 
         /**
          * Dimensiones de cada objeto.

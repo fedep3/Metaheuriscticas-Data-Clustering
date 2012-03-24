@@ -103,7 +103,7 @@ void Csv::read(char* input){
  * @param sol    Solución final.
  * @param k      Cantidad de clusters.
  */
-void Csv::write(char* output, int* sol, int k){
+void Csv::write(char* output, int* sol, float** cent, int k){
     int i, j, l;
     ofstream lines(output);
 

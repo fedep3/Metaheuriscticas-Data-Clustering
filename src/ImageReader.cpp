@@ -65,22 +65,24 @@ void ImageReader::generateColors(float **colors, int k){
  * @param sol    Solución final.
  * @param k      Cantidad de clusters.
  */
-void ImageReader::write(char* output, int* sol, int k){
+void ImageReader::write(char* output, int* sol, float** colors, int k){
     int i;
-    float **colors;
+    //float **colors;
     vector<unsigned char> image;
     image.resize(N * 4);
     vector<unsigned char>::iterator imageIterator = image.begin();
 
-    if( (colors = (float **) calloc(k, sizeof(float *) )) == NULL){
-        fprintf(stderr, "Error pidiendo memoria.\n");
-        exit(1);
+    if(GENERATION) {
+        if( (colors = (float **) calloc(k, sizeof(float *) )) == NULL){
+            fprintf(stderr, "Error pidiendo memoria.\n");
+            exit(1);
+        }
+
+        for(i = 0; i < k; ++i)
+            colors[i] = new float[M];
+
+        generateColors(colors, k);
     }
-
-    for(i = 0; i < k; ++i)
-        colors[i] = new float[M];
-
-    generateColors(colors, k);
 
     i = 0;
     while (imageIterator != image.end()) {
@@ -99,7 +101,9 @@ void ImageReader::write(char* output, int* sol, int k){
     //Hacer Tabla de resultados. Probablemente hay que agregar
     //parámetros.
 
-    for(i = 0; i < k; ++i)
-        delete [] colors[i];
-    free(colors);
+    if(GENERATION) {
+        for(i = 0; i < k; ++i)
+            delete [] colors[i];
+        free(colors);
+    }
 }

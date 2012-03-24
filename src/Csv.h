@@ -62,6 +62,6 @@ class Csv: public Reader{
          * @param sol    Solución final.
          * @param k      Cantidad de clusters.
          */
-        virtual void write(char* output, int* sol, int k);
+        virtual void write(char* output, int* sol, float** cent, int k);
 };
 #endif
