@@ -33,6 +33,9 @@ using namespace std;
 
 #ifndef _IMAGE_READER_
 #define _IMAGE_READER_
+
+#define GENERATION 0
+
 class ImageReader: public Reader{
     public:
         /**
@@ -60,7 +63,7 @@ class ImageReader: public Reader{
          * @param sol    Solución final.
          * @param k      Cantidad de clusters.
          */
-        virtual void write(char* output, int* sol, int k);
+        virtual void write(char* output, int* sol, float** cent, int k);
 
     protected:
         /**

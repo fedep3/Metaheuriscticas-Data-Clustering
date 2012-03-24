@@ -383,7 +383,7 @@ void restoreHandlers(){
 
         printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
-        r->write(_output, m->bestSolution, m->K);
+        r->write(_output, m->bestSolution, m->bestCentroids, m->K);
 
         exit(0);
     }
@@ -443,7 +443,7 @@ void longEnough(int sig){
 
         printf("-- Error Je del algoritmo: %.4f\n", algJe);
 
-        r->write(_output, m->bestSolution, m->K);
+        r->write(_output, m->bestSolution, m->bestCentroids, m->K);
 
         exit(0);
     }catch(exception& e){
@@ -535,7 +535,7 @@ void killIt(int sig){
             printf("-- Error Je del híbrido: %.4f\n", hibJe);
         }
 
-        r->write(_output, m->bestSolution, m->K);
+        r->write(_output, m->bestSolution, m->bestCentroids, m->K);
 
         exit(0);
     }catch(exception& e){
@@ -1435,7 +1435,7 @@ void runIt(){
         printf("-- Error Je del híbrido: %.4f\n", hibJe);
     }
 
-    r->write(_output, m->bestSolution, m->K);
+    r->write(_output, m->bestSolution, m->bestCentroids, m->K);
 }
 
 /**
