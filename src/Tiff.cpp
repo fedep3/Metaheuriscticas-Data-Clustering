@@ -103,6 +103,7 @@ void Tiff::read(char* input){
                 }
                 break;
             case 1:
+                isBAW = true;
                 for(i = 0; i < N; ++i)
                     data[i] = new float[1];
 

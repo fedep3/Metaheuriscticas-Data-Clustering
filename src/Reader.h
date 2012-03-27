@@ -30,6 +30,7 @@ using namespace std;
 
 #ifndef _READER_
 #define _READER_
+
 class Reader{
     public:
         /**

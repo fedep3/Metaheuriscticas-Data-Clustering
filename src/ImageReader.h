@@ -34,7 +34,7 @@ using namespace std;
 #ifndef _IMAGE_READER_
 #define _IMAGE_READER_
 
-#define GENERATION 0
+#define GENERATION
 
 class ImageReader: public Reader{
     public:
@@ -61,9 +61,10 @@ class ImageReader: public Reader{
          *
          * @param output Archivo de salida.
          * @param sol    Solución final.
+         * @param colors Colores a usar.
          * @param k      Cantidad de clusters.
          */
-        virtual void write(char* output, int* sol, float** cent, int k);
+        virtual void write(char* output, int* sol, float** colors, int k);
 
     protected:
         /**
@@ -84,5 +85,10 @@ class ImageReader: public Reader{
          * Alto de la imagen.
          */
         int height;
+
+        /**
+         * Indica si la imagen es en blanco y negro.
+         */
+        bool isBAW;
 };
 #endif

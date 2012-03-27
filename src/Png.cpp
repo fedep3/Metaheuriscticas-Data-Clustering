@@ -55,7 +55,7 @@ void Png::read(char* input){
     LodePNG::Decoder decoder; 
     decoder.inspect(buffer);
     if(!decoder.hasError()){
-        if(decoder.isGreyscaleType()) M = 1;
+        if(decoder.isGreyscaleType()){M = 1; isBAW = true;}
         else                          M = 3;
     }else{
         printf("Error al leer la imagen.\n");

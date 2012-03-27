@@ -36,6 +36,7 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 #ifndef _METAHEURISTIC_
 #define _METAHEURISTIC_
 
+//Cosas usadas en la metrica de Turi
 #define TPI 6.283185307
 #define C 25.0
 

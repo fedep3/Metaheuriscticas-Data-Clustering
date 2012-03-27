@@ -63,35 +63,42 @@ void ImageReader::generateColors(float **colors, int k){
  *
  * @param output Archivo de salida.
  * @param sol    Solución final.
+ * @param colors Colores a usar.
  * @param k      Cantidad de clusters.
  */
 void ImageReader::write(char* output, int* sol, float** colors, int k){
     int i;
-    //float **colors;
     vector<unsigned char> image;
     image.resize(N * 4);
     vector<unsigned char>::iterator imageIterator = image.begin();
 
-    if(GENERATION) {
-        if( (colors = (float **) calloc(k, sizeof(float *) )) == NULL){
-            fprintf(stderr, "Error pidiendo memoria.\n");
-            exit(1);
-        }
-
-        for(i = 0; i < k; ++i)
-            colors[i] = new float[M];
-
-        generateColors(colors, k);
+#ifndef GENERATION
+    if( (colors = (float **) calloc(k, sizeof(float *) )) == NULL){
+        fprintf(stderr, "Error pidiendo memoria.\n");
+        exit(1);
     }
+
+    for(i = 0; i < k; ++i)
+        colors[i] = new float[M];
+
+    generateColors(colors, k);
+#endif
 
     i = 0;
     while (imageIterator != image.end()) {
         *imageIterator = (unsigned char) (colors[sol[i]][0]);
         imageIterator++;
-        *imageIterator = (unsigned char) (colors[sol[i]][1]);
-        imageIterator++;
-        *imageIterator = (unsigned char) (colors[sol[i]][2]);
-        imageIterator++;
+        if(isBAW){
+            *imageIterator = (unsigned char) (colors[sol[i]][0]);
+            imageIterator++;
+            *imageIterator = (unsigned char) (colors[sol[i]][0]);
+            imageIterator++;
+        }else{
+            *imageIterator = (unsigned char) (colors[sol[i]][1]);
+            imageIterator++;
+            *imageIterator = (unsigned char) (colors[sol[i]][2]);
+            imageIterator++;
+            }
         *imageIterator = (unsigned char) 255;
         imageIterator++;
         ++i;
@@ -101,9 +108,9 @@ void ImageReader::write(char* output, int* sol, float** colors, int k){
     //Hacer Tabla de resultados. Probablemente hay que agregar
     //parámetros.
 
-    if(GENERATION) {
-        for(i = 0; i < k; ++i)
-            delete [] colors[i];
-        free(colors);
-    }
+#ifndef GENERATION
+    for(i = 0; i < k; ++i)
+        delete [] colors[i];
+    free(colors);
+#endif
 }

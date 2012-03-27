@@ -39,7 +39,6 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
  * @param _k Cantidad de clusters (iniciales).
  */
 Metaheuristic::Metaheuristic(float** _d, int _m, int _n, int _k, int _met){
-    int i;
     data     = _d;
     M        = _m;
     N        = _n;
@@ -51,7 +50,7 @@ Metaheuristic::Metaheuristic(float** _d, int _m, int _n, int _k, int _met){
 
     bestCentroids = (float **) calloc(K, sizeof(float*));
     if(bestCentroids == NULL) exit(1);
-    for(i = 0; i < K; ++i)
+    for(int i = 0; i < K; ++i)
         bestCentroids[i] = new float[M];
 
     size = new int[K];
@@ -68,11 +67,9 @@ Metaheuristic::Metaheuristic(float** _d, int _m, int _n, int _k, int _met){
  * Destructor de la clase Metaheuristic.
  */
 Metaheuristic::~Metaheuristic(){
-    int i;
-
     delete [] bestSolution;
 
-    for(i = 0; i < Kmax; ++i)
+    for(int i = 0; i < Kmax; ++i)
         delete [] bestCentroids[i];
     free(bestCentroids);
 
@@ -133,10 +130,9 @@ float Metaheuristic::d(float* v1, float* v2){
  * @return Distancia del coseno entre los dos vectores dados.
  */
 float Metaheuristic::cosineDistance(float* v1, float* v2){
-    int k;
     float sum = 0.0;
 
-    for(k = 0; k < M; ++k){
+    for(int k = 0; k < M; ++k){
         sum += v1[k] * v2[k];
     }
 
@@ -169,15 +165,13 @@ float Metaheuristic::cosineDistance(float* v1, float* v2){
  * @return Distancia euclideana entre los dos vectores dados.
  */
 float Metaheuristic::euclideanDistance(float* v1, float* v2){
-    int k;
     float sum = 0.0;
-    float t;
-
-    for(k = 0; k < M; ++k){
-        t = v1[k] - v2[k];
-        sum += t*t;
-    }
-
+ 
+    for(register int k = 0; k < M; ++k){
+        float sub = v1[k] - v2[k];
+        sum += sub*sub;
+     }
+ 
     return sqrt(sum);
 }
 
