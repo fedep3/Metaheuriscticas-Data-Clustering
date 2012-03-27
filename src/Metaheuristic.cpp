@@ -350,8 +350,7 @@ float Metaheuristic::intra(int* sol, float** cent){
         sum += d(data[j], cent[cluster]);
     }
 
-    float result = (sum / N);
-    return result;
+    return result = (sum / N);
 }
 
 /**
@@ -383,6 +382,7 @@ float Metaheuristic::inter(int* sol, float** cent, int k){
         }
         sum += minimal;
     }
+
     return sum;
 }
 
