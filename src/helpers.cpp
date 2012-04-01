@@ -1414,7 +1414,7 @@ void runIt(){
 
     printf("-- Índice DB del algoritmo: %.4f\n", algDB);
 
-    printf("-- Índice Turi del algoritmo: %.4f\n", hibTuri);
+    printf("-- Índice Turi del algoritmo: %.4f\n", algTuri);
 
     printf("-- Error Je del algoritmo: %.4f\n", algJe);
 

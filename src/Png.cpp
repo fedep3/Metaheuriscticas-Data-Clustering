@@ -92,10 +92,10 @@ void Png::read(char* input){
 
     vector<unsigned char>::iterator imageIterator = image.begin();
 
+    i = 0;
+
     switch(M){
         case 3:
-            i = 0;
-
             while (imageIterator != image.end()) {
                 for(j = 0; j < 3; ++j){
                     data[i][j] = (float) (*imageIterator);
@@ -107,8 +107,11 @@ void Png::read(char* input){
             break;
         case 1:
             while (imageIterator != image.end()) {
-                data[i][0] = (*imageIterator);
+                data[i][0] = (float) (*imageIterator);
                 imageIterator++;
+                imageIterator++; 
+                imageIterator++; 
+                imageIterator++; 
                 ++i;
             }
     }
