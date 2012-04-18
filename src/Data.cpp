@@ -21,17 +21,19 @@
  *
  * @section Description
  *
- * Abstract class to read the data set for a data clustering algorithm
- * and write its results in a output file.
+ * Container for the data of an instance of the clustering problem.
  */
-#include "Reader.h"
+#include "Data.h"
 
-/**
- * Constructor.
- */
-Reader::Reader(){ }
+Data::Data() {
+    this->pattern = NULL;
+    this->N       = 0;
+    this->M       = 0;
+}
 
-/**
- * Destructor.
- */
-Reader::~Reader(){ }
+Data::~Data() {
+    int i;
+    for(i = 0; i < N; ++i)
+        delete [] pattern[i];
+    delete [] pattern;
+}

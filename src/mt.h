@@ -51,4 +51,8 @@ mtGetRandomFloat (MTStore *st)
 	return rn[c];
     }
 }
+
+inline static int randomInteger(MTStore* drand, int start, int end) {
+    return (end-start) * mtGetRandomFloat(drand) + start;
+}
 #endif

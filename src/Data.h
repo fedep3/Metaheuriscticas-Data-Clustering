@@ -21,49 +21,49 @@
  *
  * @section Description
  *
- * Abstract class to read the data set for a data clustering algorithm
- * and write its results in a output file.
+ * Container for the data of an instance of the clustering problem.
  */
 #include <cstdio>
 #include <cstdlib>
-#include "Data.h"
+#ifndef _DATA_
+#define _DATA_
 
 using namespace std;
 
-#ifndef _READER_
-#define _READER_
-class Reader{
+class Data {
     public:
         /**
-         * Constructor.
+         * Instantiates an empty pattern container.
          */
-        Reader();
-        
-        /**
-         * Destructor.
-         */
-        ~Reader();
+        Data();
 
         /**
-         * Reads the file.
+         * Sets the Data information.
          *
-         * @param inputFile Input file.
+         * @param pattern Instance patterns.
+         * @param N       Quantity of patters.
+         * @param M       Size of every pattern.
          */
-        virtual void read(const char* inputFile) = 0;
+        void setDataInfo(float** pattern, int N, int M);
 
         /**
-         * Writes the results in an output file.
-         *
-         * @param outputFile Output file.
-         * @param solution   Solution to be written.
-         * @param centroid   Centroids for the solution.
-         * @param K          Quantity of clusters for the solution.
+         * Data destructor.
          */
-        virtual void write(const char* outputFile, int* solution, float** centroid, int K) = 0;
+        ~Data();
 
         /**
-         * Data set information.
+         * Patterns.
          */
-        Data data;
+        float** pattern;
+
+        /**
+         * Quantity of patterns.
+         */
+        int N;
+
+        /**
+         * Size of every patterns.
+         */
+        int M;
 };
 #endif

@@ -1,26 +1,28 @@
-/*
-Data Clustering Metaheuristics focused on images.
-Copyright (C) 2011 Alexander De Sousa(prof.etadel2@gmail.com), 
-                                                Federico Ponte(fedep3@gmail.com)
-
-This program is free software; you can redistribute it and/or modify it under 
-the terms of the GNU General Public License as published by the Free Software 
-Foundation; either version 2 of the License, or (at your option) any later 
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
-*/
 /**
- * @file
+ * @copyright
  *
- * @author Alexander De Sousa 06-39439, 
- *         Federico Ponte     06-40108
+ * Project Athena for Data Clustering Metaheuristics focused on images.
  *
- * @section Descripción
+ * Copyright (C) 2011 Alexander De Sousa (alexanderjosedesousa@gmail.com),
+ *                    Federico Ponte     (fedep3@gmail.com)
  *
- * Clase concreta para lectura de CSVs.
+ * This program is free software; you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free Software 
+ * Foundation; either version 2 of the License, or (at your option) any later 
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * @author Alexander De Sousa (alexanderjosedesousa@gmail.com),
+ *         Federico Ponte     (fedep3@gmail.com)
+ *
+ * @section Description
+ *
+ * Concrete class to read CSV files for a data clustering algorithm and
+ * write its results in a file.
  */
 #include <cstdio>
 #include <cstdlib>
@@ -38,30 +40,30 @@ using namespace std;
 class Csv: public Reader{
     public:
         /**
-         * Constructor de la clase Reader.
+         * Constructor.
          */
         Csv();
-        
+
         /**
-         * Destructor de la clase Reader.
+         * Destructor.
          */
         ~Csv();
 
         /**
-         * Lee el archivo y arma las estructuras de datos
-         * necesarias.
+         * Reads the file.
          *
-         * @param input Archivo de entrada.
+         * @param inputFile Input file.
          */
-        virtual void read(char* input);
+        virtual void read(const char* inputFile);
 
         /**
-         * Escribe los resultados en el archivo dado.
+         * Writes the results in an output file.
          *
-         * @param output Archivo de salida.
-         * @param sol    Solución final.
-         * @param k      Cantidad de clusters.
+         * @param outputFile Output file.
+         * @param solution   Solution to be written.
+         * @param centroid   Centroids for the solution.
+         * @param K          Quantity of clusters for the solution.
          */
-        virtual void write(char* output, int* sol, float** cent, int k);
+        virtual void write(const char* outputFile, int* solution, float** centroid, int K);
 };
 #endif

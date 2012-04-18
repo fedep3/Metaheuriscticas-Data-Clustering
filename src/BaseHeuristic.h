@@ -21,49 +21,50 @@
  *
  * @section Description
  *
- * Abstract class to read the data set for a data clustering algorithm
- * and write its results in a output file.
+ * Definition of the abstract class BaseHeuristic. All the algorithms inherit
+ * the base methods defined here.
  */
 #include <cstdio>
 #include <cstdlib>
-#include "Data.h"
+#include "Individual.h"
+
+#ifndef _BASE_HEURISTIC_
+#define _BASE_HEURISTIC_
 
 using namespace std;
 
-#ifndef _READER_
-#define _READER_
-class Reader{
+class BaseHeuristic {
     public:
-        /**
-         * Constructor.
-         */
-        Reader();
-        
+        BaseHeuristic() { }
+
         /**
          * Destructor.
          */
-        ~Reader();
+        virtual ~BaseHeuristic() { }
 
         /**
-         * Reads the file.
-         *
-         * @param inputFile Input file.
+         * Executes the heuristic.
          */
-        virtual void read(const char* inputFile) = 0;
+        virtual void run() = 0;
 
         /**
-         * Writes the results in an output file.
-         *
-         * @param outputFile Output file.
-         * @param solution   Solution to be written.
-         * @param centroid   Centroids for the solution.
-         * @param K          Quantity of clusters for the solution.
+         * @return Best solution Davies-Bouldin validity index value.
          */
-        virtual void write(const char* outputFile, int* solution, float** centroid, int K) = 0;
+        virtual float finalDB() = 0;
 
         /**
-         * Data set information.
+         * @return Best solution Turi validity index value.
          */
-        Data data;
+        virtual float finalTuri() = 0;
+
+        /**
+         * @return Number of evaluations of the objective function.
+         */
+        virtual int getNumberOfEvaluations() = 0;
+
+        /**
+         * Best individual found by the algorithm.
+         */
+        Individual bestIndividual;
 };
 #endif

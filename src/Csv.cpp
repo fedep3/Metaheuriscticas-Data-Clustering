@@ -1,52 +1,52 @@
-/*
-Data Clustering Metaheuristics focused on images.
-Copyright (C) 2011 Alexander De Sousa(prof.etadel2@gmail.com), 
-                                                Federico Ponte(fedep3@gmail.com)
-
-This program is free software; you can redistribute it and/or modify it under 
-the terms of the GNU General Public License as published by the Free Software 
-Foundation; either version 2 of the License, or (at your option) any later 
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
-*/
 /**
- * @file
+ * @copyright
  *
- * @author Alexander De Sousa 06-39439, 
- *         Federico Ponte     06-40108
+ * Project Athena for Data Clustering Metaheuristics focused on images.
  *
- * @section Descripción
+ * Copyright (C) 2011 Alexander De Sousa (alexanderjosedesousa@gmail.com),
+ *                    Federico Ponte     (fedep3@gmail.com)
  *
- * Clase concreta para lectura de CSVs.
+ * This program is free software; you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free Software 
+ * Foundation; either version 2 of the License, or (at your option) any later 
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * @author Alexander De Sousa (alexanderjosedesousa@gmail.com),
+ *         Federico Ponte     (fedep3@gmail.com)
+ *
+ * @section Description
+ *
+ * Concrete class to read CSV files for a data clustering algorithm and
+ * write its results in a file.
  */
-
 #include "Csv.h"
 
 /**
- * Constructor de la clase Reader.
+ * Constructor.
  */
 Csv::Csv(){ }
 
 /**
- * Destructor de la clase Reader.
+ * Destructor.
  */
 Csv::~Csv(){ }
 
 /**
- * Lee el archivo y arma las estructuras de datos
- * necesarias.
+ * Reads the file.
  *
- * @param input Archivo de entrada.
+ * @param inputFile Input file.
  */
-void Csv::read(char* input){
+void Csv::read(const char* inputFile){
     int I = 0;
     int J = 0;
     int i, j, k;
     bool first = true;
-    ifstream lines(input);
+    ifstream lines(inputFile);
     vector<float> v;
 
     string line;
@@ -65,7 +65,7 @@ void Csv::read(char* input){
 
         if(!first){
             if(J != j){
-                fprintf(stderr, "Error en la línea %d de %s.\n", (I + 1), input);
+                fprintf(stderr, "Error en la línea %d de %s.\n", (I + 1), inputFile);
                 fprintf(stderr, "Cantidad de atributos no concuerda.\n");
                 exit(1);
             }
@@ -76,46 +76,49 @@ void Csv::read(char* input){
         ++I;
     }
 
-    N = I;
-    M = J;
+    data.N = I;
+    data.M = J;
 
     lines.close();
 
-    data = (float**) calloc(I, sizeof(float*));
-    if(data == NULL){
-        fprintf(stderr, "No se pudo reservar memoria.\n");
-        exit(1);
-    }
+    data.pattern = new float*[data.N];
     k = 0;
-    for(i = 0; i < I; ++i){
-        data[i] = new float[J];
-        for(j = 0; j < J; ++j){
-            data[i][j] = v[k];
+    for(i = 0; i < data.N; ++i){
+        data.pattern[i] = new float[data.M];
+        for(j = 0; j < data.M; ++j){
+            data.pattern[i][j] = v[k];
             ++k;
         }
     }
 }
 
 /**
- * Escribe los resultados en el archivo dado.
+ * Writes the results in an output file.
  *
- * @param output Archivo de salida.
- * @param sol    Solución final.
- * @param k      Cantidad de clusters.
+ * @param outputFile Output file.
+ * @param solution   Solution to be written.
+ * @param centroid   Centroids for the solution.
+ * @param K          Quantity of clusters for the solution.
  */
-void Csv::write(char* output, int* sol, float** cent, int k){
+void Csv::write(const char* outputFile, int* solution, float** centroid, int K){
     int i, j, l;
-    ofstream lines(output);
+    ofstream lines(outputFile);
 
-    for(l = 0; l < k; ++l){
+    for(l = 0; l < K; ++l){
         lines << "Cluster " << l << endl;
-        for(i = 0; i < N; ++i){
-            if(sol[i] == l){
+
+        j = 0;
+        lines << "Centroid " << ":\t" << centroid[l][j];
+        for(j = 0; j < data.M; ++j)
+            lines << ", " << centroid[l][j];
+        lines << endl;
+
+        for(i = 0; i < data.N; ++i){
+            if(solution[i] == l){
                 j = 0;
-                lines << "Objeto " << i << ":\t" << data[i][j]; 
-                for(j = 1; j < M; ++j){
-                    lines << ", " << data[i][j];
-                }
+                lines << "Object " << i << ":\t" << data.pattern[i][j]; 
+                for(j = 1; j < data.M; ++j)
+                    lines << ", " << data.pattern[i][j];
                 lines << endl;
             }
         }

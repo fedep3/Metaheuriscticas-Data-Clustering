@@ -1,94 +1,96 @@
-/*
-Data Clustering Metaheuristics focused on images.
-Copyright (C) 2011 Alexander De Sousa(prof.etadel2@gmail.com), 
-                                                Federico Ponte(fedep3@gmail.com)
-
-This program is free software; you can redistribute it and/or modify it under 
-the terms of the GNU General Public License as published by the Free Software 
-Foundation; either version 2 of the License, or (at your option) any later 
-version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY 
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
-*/
 /**
- * @file
+ * @copyright
  *
- * @author Alexander De Sousa 06-39439, 
- *         Federico Ponte     06-40108
+ * Project Athena for Data Clustering Metaheuristics focused on images.
  *
- * @section Descripción
+ * Copyright (C) 2011 Alexander De Sousa (alexanderjosedesousa@gmail.com),
+ *                    Federico Ponte     (fedep3@gmail.com)
  *
- * Clase abstracta en donde se definen las funciones básicas de
- * lectura de imágenes.
+ * This program is free software; you can redistribute it and/or modify it under 
+ * the terms of the GNU General Public License as published by the Free Software 
+ * Foundation; either version 2 of the License, or (at your option) any later 
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * @author Alexander De Sousa (alexanderjosedesousa@gmail.com),
+ *         Federico Ponte     (fedep3@gmail.com)
+ *
+ * @section Description
+ *
+ * Concrete class to read images files for a data clustering algorithm and
+ * write its results in a image file.
  */
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <Magick++.h>
 #include "Reader.h"
-#include "lodepng.h"
 
 using namespace std;
 
 #ifndef _IMAGE_READER_
 #define _IMAGE_READER_
 
-#define GENERATION
-
 class ImageReader: public Reader{
     public:
         /**
-         * Constructor de la clase ImageReader.
+         * @param generate Whether the colors should be generated or not for the output.
          */
-        ImageReader(){};
+        ImageReader(bool generate = false) : Reader() {
+            this->generate = generate;
+        }
         
         /**
-         * Destructor de la clase ImageReader.
+         * Destructor.
          */
-        ~ImageReader(){};
+        ~ImageReader(){}
 
         /**
-         * Lee el archivo y arma las estructuras de datos
-         * necesarias.
+         * Reads the file.
          *
-         * @param input Archivo de entrada.
+         * @param inputFile Input file.
          */
-        virtual void read(char* input) = 0;
+        virtual void read(const char* inputFile);
 
         /**
-         * Escribe los resultados en el archivo dado.
+         * Writes the results in an output file.
          *
-         * @param output Archivo de salida.
-         * @param sol    Solución final.
-         * @param colors Colores a usar.
-         * @param k      Cantidad de clusters.
+         * @param outputFile Output file.
+         * @param solution   Solution to be written.
+         * @param centroid   Centroids for the solution.
+         * @param K          Quantity of clusters for the solution.
          */
-        virtual void write(char* output, int* sol, float** colors, int k);
+        void write(const char* outputFile, int* solution, float** centroid, int K);
+
+    private:
+        /**
+         * Generates RGB colors depending on the quantity of clusters.
+         *
+         * @param K Quantity of clusters.
+         *
+         * @return Generated colors.
+         */
+        float** generateColors(int K);
+
+        /**
+         * Whether the colors should be generated or not when the output
+         * image is created.
+         */
+        bool generate;
 
     protected:
         /**
-         * Genera colores dependiendo de la cantidad de clusters
-         * dado.
-         *
-         * @param colors Arreglo de colores.
-         * @param k      Cantidad de clusters.
-         */
-        void generateColors(float **colors, int k);
-
-        /**
-         * Ancho de la imagen.
+         * Width of the image.
          */
         int width;
 
         /**
-         * Alto de la imagen.
+         * Height of the image.
          */
         int height;
-
-        /**
-         * Indica si la imagen es en blanco y negro.
-         */
-        bool isBAW;
 };
 #endif
