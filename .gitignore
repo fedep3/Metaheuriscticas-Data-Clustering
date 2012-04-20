@@ -1,7 +1,6 @@
 *.o
 *.tiff
 *pdf
-mhs
 runTests
-parser
 *~
+athena
