@@ -136,7 +136,7 @@ Heuristic<IndividualT>::~Heuristic(){
  */
 template <class IndividualT>
 float Heuristic<IndividualT>::finalDB() {
-    return bestIndividual.DB();
+    return bestIndividual.indexValue;
 }
 
 /**

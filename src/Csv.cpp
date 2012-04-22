@@ -113,8 +113,8 @@ void Csv::write(const char* outputFile, int* solution, float** centroid, int K){
             lines << ", " << centroid[l][j];
         lines << endl;
 
-        for(i = 0; i < data.N; ++i){
-            if(solution[i] == l){
+        for(i = 0; i < data.N; ++i) {
+            if(solution[i] == l) {
                 j = 0;
                 lines << "Object " << i << ":\t" << data.pattern[i][j]; 
                 for(j = 1; j < data.M; ++j)

@@ -166,11 +166,11 @@ Individual & Individual::operator=(const Individual & individual) {
         if(!initialized)
             centroid = new float*[Kmax];
 
-        for(i = 0; i < K; ++i) {
+        for(i = 0; i < Kmax; ++i) {
             if(!initialized)
                 centroid[i] = new float[data->M];
 
-            for(j = 0; j < data->M; ++j)
+            for(j = 0; i < K && j < data->M; ++j)
                 centroid[i][j] = individual.centroid[i][j];
         }
 
