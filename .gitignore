@@ -1,5 +1,6 @@
 *.o
 *.tiff
+*.png
 *pdf
 runTests
 *~
