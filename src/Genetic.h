@@ -74,7 +74,7 @@ class Genetic : public Heuristic<GeneticIndividual>{
         /**
          * @return Chosen individual identificator.
          */
-        int chooseIndividualByTournament();
+        int chooseIndividualByTournament(int bannedID = -1);
 
         /**
          * Crosses over tho individuals of the population.

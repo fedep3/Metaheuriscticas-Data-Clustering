@@ -61,7 +61,7 @@ void RandomArray::reset(){
  *         the array is reset.
  */
 int RandomArray::get() {
-    if(length == 0) return 0;
+    if(length == 0) return -1;
 
     int r = length * mtGetRandomFloat(&drand);
 

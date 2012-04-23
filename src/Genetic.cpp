@@ -94,13 +94,22 @@ bool Genetic::isThereMutation() {
 /**
  * @return Chosen individual identificator.
  */
-int Genetic::chooseIndividualByTournament() {
+int Genetic::chooseIndividualByTournament(int bannedID) {
     int i, currentIndividualID;
 
-    int bestIndividualID = randomInteger(&drand, 0, I);
+    RandomArray rarr(I);
+
+    int bestIndividualID = rarr.get();
+    if(bestIndividualID == bannedID)
+        bestIndividualID = rarr.get();
 
     for(i = 0; i < (tournamentSize - 1); ++i) {
-        currentIndividualID = randomInteger(&drand, 0, I);
+        currentIndividualID = rarr.get();
+        if(currentIndividualID == bannedID)
+            currentIndividualID = rarr.get();
+
+        if(currentIndividualID == -1)
+            break;
 
         if( individual[currentIndividualID].isBetterThan(individual[bestIndividualID]) )
             bestIndividualID = currentIndividualID;
@@ -114,7 +123,7 @@ int Genetic::chooseIndividualByTournament() {
  */
 void Genetic::crossover() {
     int firstParentID  = chooseIndividualByTournament();
-    int secondParentID = chooseIndividualByTournament();
+    int secondParentID = chooseIndividualByTournament(firstParentID);
 
     individual[firstParentID].crossover(individual[secondParentID], firstChild, secondChild);
 }
