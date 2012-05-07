@@ -131,7 +131,6 @@ run' l n hs cmds (i, f) = do
             let s' = case parseResult s of
                         Left c -> "Hubo un error al recolectar los datos."
                         Right r -> r
-            putStrLn $ unwords (e:o)
             insert (hresult hs) (prepareResults (e:o) s')
             hPutStrLn (hlog hs) $ show $ (UNFINISHED, (n ++ ".info"), i + 1)
             run' l n hs cmds (i + 1, f)
