@@ -9,5 +9,5 @@ rm .log
 
 echo "GA LENNA TURI"
 date
-./runTests GALTURI second_tests_turi.test
+./runTests GALTURIsecond_tests_turi.test
 rm .log
