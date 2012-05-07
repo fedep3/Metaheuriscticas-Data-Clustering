@@ -12,7 +12,7 @@ if __name__ == "__main__":
         first_results = conn.cursor()
         second_results = conn.cursor()
 
-        query = 'SELECT A.ga_type, A.ga_ki, A.ga_ki FROM (SELECT DISTINCT ga_type FROM genetico WHERE ga_kf >= 5 GROUP BY ga_type, ga_ki ORDER BY AVG(ga_'+metric+') ASC) B LEFT JOIN genetico A WHERE A.ga_type = B.ga_type AND A.ga_kf >= 5 GROUP BY A.ga_type, A.ga_ki ORDER BY AVG(A.ga_'+metric+') ASC LIMIT 20;'
+        query = 'SELECT A.ga_type, A.ga_ki FROM (SELECT DISTINCT ga_type FROM genetico WHERE ga_kf >= 5 GROUP BY ga_type, ga_ki ORDER BY AVG(ga_'+metric+') ASC) B LEFT JOIN genetico A WHERE A.ga_type = B.ga_type AND A.ga_kf >= 5 GROUP BY A.ga_type, A.ga_ki ORDER BY AVG(A.ga_'+metric+') ASC LIMIT 20;'
         first_results.execute(query)
 
         tests = '['
@@ -26,10 +26,10 @@ if __name__ == "__main__":
             tests += '(("../athena", "../img/lennamedium.tiff", Image, '+str(first_result[1])+'),\n'
             tests += ' ("Genetic",\n'
             tests += '    GeneticOpt (Improvement 3,\n'
-            tests += '                LG('+str(int(second_result[0]))+', '+str(second_result[0])+', 1),\n'
-            tests += '                LG('+str(second_result[1])+', '+str(second_result[1])+', 0.1),\n'
-            tests += '                LG('+str(second_result[2])+', '+str(second_result[2])+', 0.1),\n'
-            tests += '                LG('+str(second_result[3])+', '+str(second_result[3])+', 1),\n'
+            tests += '                LG ('+str(int(second_result[0]))+', '+str(second_result[0])+', 1),\n'
+            tests += '                LG ('+str(second_result[1])+', '+str(second_result[1])+', 0.1),\n'
+            tests += '                LG ('+str(second_result[2])+', '+str(second_result[2])+', 0.1),\n'
+            tests += '                LG ('+str(int(second_result[3]))+', '+str(int(second_result[3]))+', 1)\n'
             tests += '               )\n'
             tests += ')),\n' if (count != 19) else '))\n'
             count += 1
