@@ -42,15 +42,14 @@ def comp(felem,selem):
 def takeOut(table, params, nclust, turi_or_db, statistics, maxs, mins, param_values, latexTable, start, end):
     for i in range(start,end):
 
-        consulta = 'SELECT SUM( (tabla.'+table[0]+'_db - averages.averageDB) * (tabla.'+table[0]+'_db - averages.averageDB) )/ (COUNT(tabla.'+table[0]+'_db) - 1), SUM( (tabla.'+table[0]+'_turi - averages.averageTuri) * (tabla.'+table[0]+'_turi - averages.averageTuri) )/ (COUNT(tabla.'+table[0]+'_turi) - 1), averages.averageDB, averages.averageTuri,  averages.averageE, averages.averageT, averages.averageC, COUNT(tabla.'+table[0]+'_db) FROM '+table[1]+' AS tabla, (SELECT AVG('+table[0]+'_db) AS averageDB, AVG('+table[0]+'_turi) AS averageTuri, ROUND(AVG('+table[0]+'_eval),4) AS averageE, ROUND(AVG('+table[0]+'_time),4) AS averageT, ROUND(AVG('+table[0]+'_kf),4) AS averageC FROM '+table[1]+' WHERE '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_kf >= '+nclust+') AS averages WHERE '+table[0]+'_type = '+str(i+1)
-        print consulta; exit()
-        statistics.execute(consulta)
-        consulta = 'SELECT '+table[0]+'_db, '+table[0]+'_turi, '+table[0]+'_eval, '+table[0]+'_time, '+table[0]+'_kf FROM '+table[1]+' WHERE '+table[0]+'_kf >= '+nclust+' AND '+table[0]+'_type = '+str(i+1)+' ORDER BY '+table[0]+'_db ASC LIMIT 1'
-        maxs.execute(consulta)
-        consulta = 'SELECT '+table[0]+'_db, '+table[0]+'_turi, '+table[0]+'_eval, '+table[0]+'_time, '+table[0]+'_kf FROM '+table[1]+' WHERE '+table[0]+'_kf >= '+nclust+' AND '+table[0]+'_type = '+str(i+1)+' ORDER BY '+table[0]+'_db DESC LIMIT 1'
-        mins.execute(consulta)
-        consulta = 'SELECT '+params[1]+' FROM '+table[1]+', '+table[1]+'p WHERE '+table[0]+'_type = '+table[0]+'p_id AND '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_kf >= '+nclust
-        param_values.execute(consulta)
+        query = 'SELECT SUM( (tabla.'+table[0]+'_db - averages.averageDB) * (tabla.'+table[0]+'_db - averages.averageDB) )/ (COUNT(tabla.'+table[0]+'_db) - 1), SUM( (tabla.'+table[0]+'_turi - averages.averageTuri) * (tabla.'+table[0]+'_turi - averages.averageTuri) )/ (COUNT(tabla.'+table[0]+'_turi) - 1), averages.averageDB, averages.averageTuri,  averages.averageE, averages.averageT, averages.averageC, COUNT(tabla.'+table[0]+'_db) FROM '+table[1]+' AS tabla, (SELECT AVG('+table[0]+'_db) AS averageDB, AVG('+table[0]+'_turi) AS averageTuri, ROUND(AVG('+table[0]+'_eval),4) AS averageE, ROUND(AVG('+table[0]+'_time),4) AS averageT, ROUND(AVG('+table[0]+'_kf),4) AS averageC FROM '+table[1]+' WHERE '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_kf >= '+nclust+') AS averages WHERE '+table[0]+'_type = '+str(i+1)
+        statistics.execute(query)
+        query = 'SELECT '+table[0]+'_db, '+table[0]+'_turi, '+table[0]+'_eval, '+table[0]+'_time, '+table[0]+'_kf FROM '+table[1]+' WHERE '+table[0]+'_kf >= '+nclust+' AND '+table[0]+'_type = '+str(i+1)+' ORDER BY '+table[0]+'_db ASC LIMIT 1'
+        maxs.execute(query)
+        query = 'SELECT '+table[0]+'_db, '+table[0]+'_turi, '+table[0]+'_eval, '+table[0]+'_time, '+table[0]+'_kf FROM '+table[1]+' WHERE '+table[0]+'_kf >= '+nclust+' AND '+table[0]+'_type = '+str(i+1)+' ORDER BY '+table[0]+'_db DESC LIMIT 1'
+        mins.execute(query)
+        query = 'SELECT '+params[1]+' FROM '+table[1]+', '+table[1]+'p WHERE '+table[0]+'_type = '+table[0]+'p_id AND '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_kf >= '+nclust
+        param_values.execute(query)
 
         rowstatistics = statistics.fetchone()
         rowmaxs = maxs.fetchone()
