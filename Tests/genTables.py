@@ -87,82 +87,78 @@ if __name__ == "__main__":
 
     for algi in algsinfo:
 
-        for run in runs[tn]:
+        for metric in metrics:
 
-            for metric in metrics:
+            print algi[0]+'|Metric:'+metric[0]
+            conn = sqlite3.connect(algi[0]+metric[0]+'.db')
+            tableout = open('table'+algi[0]+metric[0]+'.tex', 'w')
 
-                print algi[0]+'|Metric:'+metric[0]+'|K:' + str(run)
-                conn = sqlite3.connect(algi[0]+metric[0]+'.db')
-                tableout = open('table'+algi[0]+metric[0]+str(run)+'.tex', 'w')
+            latexTable = [[0.0,''] for i in range(20)]
+            init = ''
+            initC = ''
+            finish = ''
+            finishC = ''
 
-                latexTable = [[0.0,''] for i in range(20)]
-                init = ''
-                initC = ''
-                finish = ''
-                finishC = ''
+            statistics = conn.cursor()
+            maxs = conn.cursor()
+            mins = conn.cursor()
+            param_values = conn.cursor()
 
-                statistics = conn.cursor()
-                maxs = conn.cursor()
-                mins = conn.cursor()
-                param_values = conn.cursor()
+            init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
+            init +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
+            init +='        \\hline\n'
+            init +='        \\hline\n'
 
-                init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
-                init +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
-                init +='        \\hline\n'
-                init +='        \\hline\n'
+            takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
 
-                takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
+            finish +='        \\end{tabular}\n'
+            if tn%3 == 0:
+                finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Lenna}}\n'
+            elif tn%3 == 1:
+                finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Peppers}}\n'
+            else:
+                finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Cameraman}}\n'
+            finish +='        \\label{tb:table'+algi[0]+'}\n'
+            finish +='    \\end{center}\n'
+            finish +='\\end{table}\n'
 
-                finish +='        \\end{tabular}\n'
-                if tn%3 == 0:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+str(run)+'} hibridado para {\\bf Lenna}}\n'
-                elif tn%3 == 1:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+str(run)+'} hibridado para {\\bf Peppers}}\n'
+            initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
+            initC +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
+            initC +='        \\hline\n'
+            initC +='        \\hline\n'
+
+            takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
+
+            finishC +='        \\end{tabular}\n'
+            if tn%3 == 0:
+                finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Lenna}}\n'
+            elif tn%3 == 1:
+                finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Peppers}}\n'
+            else:
+                finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Cameraman}}\n'
+            finishC +='        \\label{tb:tablec'+algi[0]+'}\n'
+            finishC +='    \\end{center}\n'
+            finishC +='\\end{table}\n'
+
+            insertion_sort(latexTable)
+            tableout.write(init)
+
+            for i in range(15):
+                if i == 14:
+                    tableout.write(latexTable[i][1][0:len(latexTable[i][1])-15])
                 else:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+str(run)+'} hibridado para {\\bf Cameraman}}\n'
-                finish +='        \\label{tb:table'+algi[0]+str(run)+'}\n'
-                finish +='    \\end{center}\n'
-                finish +='\\end{table}\n'
+                    tableout.write(latexTable[i][1])
 
-                initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
-                initC +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
-                initC +='        \\hline\n'
-                initC +='        \\hline\n'
+            tableout.write(finish)
 
-                takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
-
-                finishC +='        \\end{tabular}\n'
-                if tn%3 == 0:
-                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+str(run)+'} hibridado para {\\bf Lenna}}\n'
-                elif tn%3 == 1:
-                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+str(run)+'} hibridado para {\\bf Peppers}}\n'
+            tableout.write(initC)
+            for i in range(15,20):
+                if i == 19:
+                    tableout.write(latexTable[i][1][0:len(latexTable[i][1])-15])
                 else:
-                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+str(run)+'} hibridado para {\\bf Cameraman}}\n'
-                finishC +='        \\label{tb:tablec'+algi[0]+str(run)+'}\n'
-                finishC +='    \\end{center}\n'
-                finishC +='\\end{table}\n'
-
-                insertion_sort(latexTable)
-                tableout.write(init)
-
-                for i in range(15):
-                    if i == 14:
-                        tableout.write(latexTable[i][1][0:len(latexTable[i][1])-15])
-                    else:
-                        tableout.write(latexTable[i][1])
-
-                tableout.write(finish)
-
-                tableout.write(initC)
-                for i in range(15,20):
-                    if i == 19:
-                        tableout.write(latexTable[i][1][0:len(latexTable[i][1])-15])
-                    else:
-                        tableout.write(latexTable[i][1])
+                    tableout.write(latexTable[i][1])
 
 
-                tableout.write(finishC)
-                tableout.close()
-                conn.close()
-
-        tn += 1
+            tableout.write(finishC)
+            tableout.close()
+            conn.close()
