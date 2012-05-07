@@ -39,7 +39,7 @@ def comp(felem,selem):
     else:
         return False
        
-def takeOut(table, params, nclust, turi_or_db, statistics, maxs, mins, param_values, latexTable, start, end):
+def takeOut(table, params, nclust, turi_or_db_column, statistics, maxs, mins, param_values, latexTable, start, end):
     for i in range(start,end):
 
         query = 'SELECT SUM( (tabla.'+table[0]+'_db - averages.averageDB) * (tabla.'+table[0]+'_db - averages.averageDB) )/ (COUNT(tabla.'+table[0]+'_db) - 1), SUM( (tabla.'+table[0]+'_turi - averages.averageTuri) * (tabla.'+table[0]+'_turi - averages.averageTuri) )/ (COUNT(tabla.'+table[0]+'_turi) - 1), averages.averageDB, averages.averageTuri,  averages.averageE, averages.averageT, averages.averageC, COUNT(tabla.'+table[0]+'_db) FROM '+table[1]+' AS tabla, (SELECT AVG('+table[0]+'_db) AS averageDB, AVG('+table[0]+'_turi) AS averageTuri, ROUND(AVG('+table[0]+'_eval),4) AS averageE, ROUND(AVG('+table[0]+'_time),4) AS averageT, ROUND(AVG('+table[0]+'_kf),4) AS averageC FROM '+table[1]+' WHERE '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_kf >= '+nclust+') AS averages WHERE '+table[0]+'_type = '+str(i+1)
@@ -56,7 +56,7 @@ def takeOut(table, params, nclust, turi_or_db, statistics, maxs, mins, param_val
         rowmins = mins.fetchone()
         rowparam_values = param_values.fetchone()
 
-        latexTable[i][0] = Decimal(str(rowstatistics[turi_or_db]))
+        latexTable[i][0] = Decimal(str(rowstatistics[turi_or_db_column]))
        
         dbmean = latexTable[i][0].quantize(Decimal('1.0000'))
         dbinterval = (Decimal('1.959964') * (Decimal(str(rowstatistics[0])) / Decimal(str(rowstatistics[7]))).sqrt()).quantize(Decimal('1.0000'))
@@ -92,7 +92,7 @@ if __name__ == "__main__":
             for metric in metrics:
 
                 print algi[0]+'|Metric:'+metric[0]+'|K:' + str(run)
-                conn = sqlite3.connect(algi[0]+'.db')
+                conn = sqlite3.connect(algi[0]+metric[0]+'.db')
                 tableout = open('table'+algi[0]+metric[0]+str(run)+'.tex', 'w')
 
                 latexTable = [[0.0,''] for i in range(20)]
