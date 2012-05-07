@@ -202,9 +202,9 @@ selectParamGA :: String
 selectParamGA = "SELECT gap_id\
                 \ FROM geneticop WHERE\
                 \ gap_i = ?\
-                \ AND gap_ts = ?\
                 \ AND gap_cr = ?\
-                \ AND gap_mr = ?"
+                \ AND gap_mr = ?\
+                \ AND gap_ts = ?"
 
 -- | Comando para insertar un conjunto de parámetros.
 insertParamGA :: String
