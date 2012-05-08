@@ -58,13 +58,13 @@ def takeOut(table, params, nclust, turi_or_db_column, statistics, maxs, mins, pa
 
         latexTable[i][0] = Decimal(str(rowstatistics[turi_or_db_column]))
        
-        dbmean = latexTable[i][0].quantize(Decimal('1.0000'))
+        dbmean = Decimal(str(rowstatistics[2])).quantize(Decimal('1.0000'))
         dbinterval = (Decimal('1.959964') * (Decimal(str(rowstatistics[0])) / Decimal(str(rowstatistics[7]))).sqrt()).quantize(Decimal('1.0000'))
 
-        turimean = latexTable[i][0].quantize(Decimal('1.0000'))
+        turimean = Decimal(str(rowstatistics[3])).quantize(Decimal('1.0000'))
         turiinterval = (Decimal('1.959964') * (Decimal(str(rowstatistics[1])) / Decimal(str(rowstatistics[7]))).sqrt()).quantize(Decimal('1.0000'))
 
-        latexTable[i][1] +='            Promedio  & $' +str(dbmean)+' \\pm ' +str(dbinterval)+ '$ & $' +str(turimean)+' \\pm ' +str(turiinterval)+ '$ & '+str(rowstatistics[2])+' & '+str(rowstatistics[3])+' & '+str(rowstatistics[4])+genSpaces(params[2])+'\\\\\n'
+        latexTable[i][1] +='            Promedio  & $' +str(dbmean)+' \\pm ' +str(dbinterval)+ '$ & $' +str(turimean)+' \\pm ' +str(turiinterval)+ '$ & '+str(rowstatistics[4])+' & '+str(rowstatistics[5])+' & '+str(rowstatistics[6])+genSpaces(params[2])+'\\\\\n'
         latexTable[i][1] +='            \\cline{1-6}\n'
         latexTable[i][1] +='            Mejor & '+str(rowmaxs[0])+' & '+str(rowmaxs[1])+'  & '+str(rowmaxs[2])+' & '+str(rowmaxs[3])+' & '+str(rowmaxs[4])+' & '+genParams(rowparam_values)+'\\\\\n'
         latexTable[i][1] +='            \\cline{1-6}\n'
@@ -77,10 +77,9 @@ def takeOut(table, params, nclust, turi_or_db_column, statistics, maxs, mins, pa
 
 if __name__ == "__main__":
 
-    algsinfo = [['GAL','5']]
-    runs = [['5','7','9','11']]
-    table = [['ga','genetico']]
-    params = [['$i$ & $ts$ & $cr$ & $mr$ ','ROUND(gap_i,4), ROUND(gap_ts,4), ROUND(gap_cr,4), ROUND(gap_mr,4)',4]]
+    algsinfo = [['GAL','5'], ['GAP','5'], ['GAC','5']]
+    table = ['ga','genetico']
+    params = ['$i$ & $ts$ & $cr$ & $mr$ ','ROUND(gap_i,4), ROUND(gap_ts,4), ROUND(gap_cr,4), ROUND(gap_mr,4)',4]
     metrics = [['DB', 2],['TURI',3]]
 
     tn = 0
@@ -104,12 +103,12 @@ if __name__ == "__main__":
             mins = conn.cursor()
             param_values = conn.cursor()
 
-            init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
-            init +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
+            init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[2])+'}\n        \\hline\n'
+            init +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[0]+'\\\\\n'
             init +='        \\hline\n'
             init +='        \\hline\n'
 
-            takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
+            takeOut(table, params, algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
 
             finish +='        \\end{tabular}\n'
             if tn%3 == 0:
@@ -122,12 +121,12 @@ if __name__ == "__main__":
             finish +='    \\end{center}\n'
             finish +='\\end{table}\n'
 
-            initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
-            initC +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
+            initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[2])+'}\n        \\hline\n'
+            initC +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[0]+'\\\\\n'
             initC +='        \\hline\n'
             initC +='        \\hline\n'
 
-            takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
+            takeOut(table, params, algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
 
             finishC +='        \\end{tabular}\n'
             if tn%3 == 0:
@@ -162,3 +161,4 @@ if __name__ == "__main__":
             tableout.write(finishC)
             tableout.close()
             conn.close()
+    tn += 1
