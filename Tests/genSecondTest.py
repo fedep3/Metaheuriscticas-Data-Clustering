@@ -33,6 +33,7 @@ if __name__ == "__main__":
             tests += '               )\n'
             tests += ')),\n' if (count != 19) else '))\n'
             count += 1
+
         tests += ']'
 
         testsfile.write(tests)
