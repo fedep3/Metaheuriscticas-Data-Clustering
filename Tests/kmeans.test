@@ -1,0 +1,16 @@
+[(("../athena", "../img/lennamedium.tiff", Image, 5),
+ ("Kmeans",
+    KmeansOpt (Improvement 3, 30)
+)),
+(("../athena", "../img/lennamedium.tiff", Image, 7),
+ ("Kmeans",
+    GeneticOpt (Improvement 3, 30)
+)),
+(("../athena", "../img/lennamedium.tiff", Image, 9),
+ ("Kmeans",
+    GeneticOpt (Improvement 3, 30)
+)),
+(("../athena", "../img/lennamedium.tiff", Image, 11),
+ ("Kmeans",
+    GeneticOpt (Improvement 3, 30)
+))]
