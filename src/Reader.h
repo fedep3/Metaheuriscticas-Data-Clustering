@@ -42,7 +42,7 @@ class Reader{
         /**
          * Destructor.
          */
-        ~Reader();
+        virtual ~Reader();
 
         /**
          * Reads the file.

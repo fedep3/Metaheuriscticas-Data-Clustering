@@ -1,0 +1,4 @@
+[(("../athena", "../img/peppersmedium.tiff", Image, 5),
+ ("Kmeans",
+    KmeansOpt (Improvement 3, 30)
+))]
