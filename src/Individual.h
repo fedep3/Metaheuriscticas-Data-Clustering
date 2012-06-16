@@ -209,6 +209,13 @@ class Individual {
         float d(float* a, float* b);
 
         /**
+         * Checks whether if two vectors are different or not.
+         * @param a    First pattern.
+         * @param b    Second pattern.
+         */
+        bool equal(float* a, float* b);
+
+        /**
          * Calculates the euclidean distance between two patterns.
          *
          * @param a    First pattern.

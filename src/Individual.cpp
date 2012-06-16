@@ -25,6 +25,8 @@
  */
 #include "Individual.h"
 
+#define FORCEDRATIO 0.7
+
 Individual::Individual() {
     data = NULL;
     K    = 0;
@@ -44,31 +46,7 @@ Individual::Individual() {
  * @param K    Maximum quantity of clusters in the final solution.
  */
 Individual::Individual(Data* data, int K) {
-    int i, j, p;
-
-    this->data = data;
-    this->K    = K;
-
-    Kmax = K;
-    evaluationOfDB = 0;
-    indexValue = numeric_limits<float>::infinity();
-
-    RandomArray rarr((*data).N);
-
-    centroid = new float*[K];
-    for(i = 0; i < K; ++i) {
-        p = rarr.get();
-
-        centroid[i] = new float[(*data).M];
-        for(j = 0; j < (*data).M; ++j)
-            centroid[i][j] = (*data).pattern[p][j];
-    }
-
-    solution = new int[(*data).N];
-
-    drand.mtRandomInit(&drand, time(NULL), K_2M31);
-
-    rearrange();
+    initialize(data, K);
 }
 
 /**
@@ -76,7 +54,7 @@ Individual::Individual(Data* data, int K) {
  * @param K    Maximum quantity of clusters in the final solution.
  */
 void Individual::initialize(Data* data, int K) {
-    int i, j, p;
+    int i, j, k, p;
 
     this->data = data;
     this->K    = K;
@@ -87,9 +65,22 @@ void Individual::initialize(Data* data, int K) {
 
     RandomArray rarr((*data).N);
 
+    drand.mtRandomInit(&drand, time(NULL), K_2M31);
+
+    float type = mtGetRandomFloat(&drand);
+
     centroid = new float*[K];
     for(i = 0; i < K; ++i) {
         p = rarr.get();
+
+        if(FORCEDRATIO >= type) {
+            for(k = 0; k < i; ++k) {
+                if(equal(centroid[k], (*data).pattern[p])) {
+                    k = 0;
+                    p = rarr.get();
+                }
+            }
+        }
 
         centroid[i] = new float[(*data).M];
         for(j = 0; j < (*data).M; ++j)
@@ -98,11 +89,7 @@ void Individual::initialize(Data* data, int K) {
 
     solution = new int[(*data).N];
 
-    drand.mtRandomInit(&drand, time(NULL), K_2M31);
-
     rearrange();
-
-    
 }
 
 /**
@@ -291,12 +278,27 @@ float Individual::d(int i, int j){
  *
  * @param a    First pattern.
  * @param b    Second pattern.
- * @param size Size of the patterns.
  *
  * @return Distance between patterns.
  */
-float Individual::d(float* a, float* b){
+float Individual::d(float* a, float* b) {
     return euclideanDistance(a, b, data->M);
+}
+
+/**
+ * Checks whether if two vectors are different or not.
+ * @param a    First pattern.
+ * @param b    Second pattern.
+ */
+bool Individual::equal(float* a, float* b) {
+    int i;
+
+    for(i = 0; i < (*data).M; ++i) {
+        if(a[i] != b[i])
+            return false;
+    }
+
+    return true;
 }
 
 /**
