@@ -1,0 +1,12 @@
+[(("../athena", "../img/lena.tiff", Image, 5),
+ ("Kmeans",
+    KmeansOpt (Improvement 3, 100)
+)),
+(("../athena", "../img/lena.tiff", Image, 7),
+ ("Kmeans",
+    KmeansOpt (Improvement 3, 100)
+)),
+(("../athena", "../img/lena.tiff", Image, 9),
+ ("Kmeans",
+    KmeansOpt (Improvement 3, 100)
+))]

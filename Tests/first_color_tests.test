@@ -1,0 +1,24 @@
+[(("../athena", "../img/lena.tiff", Image, 5),
+ ("Genetic",
+    GeneticOpt (Improvement 3,
+                LG (5, 40, 5),
+                LG (0.0, 1.0, 0.1),
+                LG (0.0, 1.0, 0.1),
+                LG (4, 40, 2))
+)),
+(("../athena", "../img/lena.tiff", Image, 7),
+ ("Genetic",
+    GeneticOpt (Improvement 3,
+                LG (5, 40, 5),
+                LG (0.0, 1.0, 0.1),
+                LG (0.0, 1.0, 0.1),
+                LG (4, 40, 2))
+)),
+(("../athena", "../img/lena.tiff", Image, 9),
+ ("Genetic",
+    GeneticOpt (Improvement 3,
+                LG (5, 40, 5),
+                LG (0.0, 1.0, 0.1),
+                LG (0.0, 1.0, 0.1),
+                LG (4, 40, 2))
+))]
