@@ -5,64 +5,44 @@ rm .log 2> /dev/null
 date
 for (( i=1; i<31; i++ ))
 do
-    echo "GA LENNA DB ${i}"
-    ./runTests GALDB second_tests_lenna_db.test
+    echo "GA MANDRILL DB ${i}"
+    ./runTests GAMDB second_tests_mandrill_db.test
     rm .log
 done
 
 date
 for (( i=1; i<31; i++ ))
 do
-    echo "GA LENNA TURI ${i}"
-    ./runTests GALTURI second_tests_lenna_turi.test
+    echo "GA MANDRILL TURI ${i}"
+    ./runTests GAMTURI second_tests_mandrill_turi.test
     rm .log
 done
 
 date
 for (( i=1; i<31; i++ ))
 do
-    echo "GA PEPPERS DB ${i}"
-    ./runTests GAPDB second_tests_peppers_db.test
+    echo "GA JET DB ${i}"
+    ./runTests GAJDB second_tests_jet_db.test
     rm .log
 done
 
 date
 for (( i=1; i<31; i++ ))
 do
-    echo "GA PEPPERS TURI ${i}"
-    ./runTests GAPTURI second_tests_peppers_turi.test
+    echo "GA JET TURI ${i}"
+    ./runTests GAJTURI second_tests_jet_turi.test
     rm .log
 done
 
-date
-for (( i=1; i<31; i++ ))
-do
-    echo "GA CAMERAMAN DB ${i}"
-    ./runTests GACDB second_tests_cameraman_db.test
-    rm .log
-done
-
-date
-for (( i=1; i<31; i++ ))
-do
-    echo "GA CAMERAMAN TURI ${i}"
-    ./runTests GACTURI second_tests_cameraman_turi.test
-    rm .log
-done
-
-./runTests KMEANSL kmeans_lenna.test
+./runTests KMEANSM kmeans_mandrill.test
 rm .log
-./runTests KMEANSP kmeans_peppers.test
-rm .log
-./runTests KMEANSC kmeans_cameraman.test
+./runTests KMEANSJ kmeans_jet.test
 rm .log
 
-cp KMEANSL.db KMEANSLDB.db
-cp KMEANSP.db KMEANSPDB.db
-cp KMEANSC.db KMEANSCDB.db
+cp KMEANSM.db KMEANSMDB.db
+cp KMEANSJ.db KMEANSJDB.db
 
-cp KMEANSL.db KMEANSLTURI.db
-cp KMEANSP.db KMEANSPTURI.db
-cp KMEANSC.db KMEANSCTURI.db
+cp KMEANSM.db KMEANSMTURI.db
+cp KMEANSJ.db KMEANSJTURI.db
 
-rm KMEANSL.db KMEANSP.db KMEANSC.db
+rm KMEANSM.db KMEANSJ.db

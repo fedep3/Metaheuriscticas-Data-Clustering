@@ -6,6 +6,7 @@
 #include <ctime>
 #include <sys/time.h>
 #include <signal.h>
+#include <unistd.h>
 #include "Data.h"
 #include "ImageReader.h"
 #include "Csv.h"

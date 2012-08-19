@@ -43,7 +43,6 @@ def takeOut(table, params, nclust, turi_or_db_column, statistics, maxs, mins, pa
     for i in range(start,end):
 
         query = 'SELECT SUM( (tabla.'+table[0]+'_db - averages.averageDB) * (tabla.'+table[0]+'_db - averages.averageDB) )/ (COUNT(tabla.'+table[0]+'_db) - 1), SUM( (tabla.'+table[0]+'_turi - averages.averageTuri) * (tabla.'+table[0]+'_turi - averages.averageTuri) )/ (COUNT(tabla.'+table[0]+'_turi) - 1), averages.averageDB, averages.averageTuri,  averages.averageE, averages.averageT, averages.averageC, COUNT(tabla.'+table[0]+'_db) FROM '+table[1]+' AS tabla, (SELECT AVG('+table[0]+'_db) AS averageDB, AVG('+table[0]+'_turi) AS averageTuri, ROUND(AVG('+table[0]+'_eval),4) AS averageE, ROUND(AVG('+table[0]+'_time),4) AS averageT, ROUND(AVG('+table[0]+'_kf),4) AS averageC FROM '+table[1]+' WHERE '+table[0]+'_type = '+str(i+1)+' AND '+table[0]+'_kf >= '+nclust+') AS averages WHERE '+table[0]+'_type = '+str(i+1)
-        print query
         statistics.execute(query)
         query = 'SELECT '+table[0]+'_db, '+table[0]+'_turi, '+table[0]+'_eval, '+table[0]+'_time, '+table[0]+'_kf FROM '+table[1]+' WHERE '+table[0]+'_kf >= '+nclust+' AND '+table[0]+'_type = '+str(i+1)+' ORDER BY '+table[0]+'_db ASC LIMIT 1'
         maxs.execute(query)
@@ -108,7 +107,7 @@ def takeOutKmeans(table, nclust, turi_or_db_column, statistics, maxs, mins, late
 
 if __name__ == "__main__":
 
-    algsinfo = [['GAL','5'], ['GAP','5'], ['GAC','5'], ['KMEANSL','5'], ['KMEANSP','5'], ['KMEANSC','5']]
+    algsinfo = [['GAM','5'], ['GAJ','5'], ['KMEANSM','5'], ['KMEANSJ','5']]
     table = [['ga','genetico'],
              ['kmeans']]
     params = [['$i$ & $ts$ & $cr$ & $mr$ ','ROUND(gap_i,4), ROUND(gap_ts,4), ROUND(gap_cr,4), ROUND(gap_mr,4)',4]]
@@ -135,39 +134,37 @@ if __name__ == "__main__":
             mins = conn.cursor()
             param_values = conn.cursor()
 
-            if tn < 3:
-                init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
-                init +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
+            if tn < 2:
+                init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[0][2])+'}\n        \\hline\n'
+                init +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[0][0]+'\\\\\n'
                 init +='        \\hline\n'
                 init +='        \\hline\n'
 
-                takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
+                takeOut(table[0], params[0], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
 
                 finish +='        \\end{tabular}\n'
                 if tn%3 == 0:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Lenna}}\n'
-                elif tn%3 == 1:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Peppers}}\n'
+                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Mandrill}}\n'
                 else:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Cameraman}}\n'
+                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Jet}}\n'
+
                 finish +='        \\label{tb:table'+algi[0]+'}\n'
                 finish +='    \\end{center}\n'
                 finish +='\\end{table}\n'
 
-                initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[tn/3][2])+'}\n        \\hline\n'
-                initC +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[tn/3][0]+'\\\\\n'
+                initC +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[0][2])+'}\n        \\hline\n'
+                initC +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[0][0]+'\\\\\n'
                 initC +='        \\hline\n'
                 initC +='        \\hline\n'
 
-                takeOut(table[tn/3], params[tn/3], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
+                takeOut(table[0], params[0], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
 
                 finishC +='        \\end{tabular}\n'
                 if tn%3 == 0:
-                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Lenna}}\n'
-                elif tn%3 == 1:
-                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Peppers}}\n'
+                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Mandrill}}\n'
                 else:
-                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Cameraman}}\n'
+                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Jet}}\n'
+
                 finishC +='        \\label{tb:tablec'+algi[0]+'}\n'
                 finishC +='    \\end{center}\n'
                 finishC +='\\end{table}\n'
@@ -198,15 +195,14 @@ if __name__ == "__main__":
                 init +='        \\hline\n'
                 init +='        \\hline\n'
 
-                takeOutKmeans(table[tn/3][0], algi[1], metric[1], statistics, maxs, mins, latexTable)
+                takeOutKmeans(table[1][0], algi[1], metric[1], statistics, maxs, mins, latexTable)
 
                 finish +='        \\end{tabular}\n'
                 if tn%3 == 0:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Lenna}}\n'
-                elif tn%3 == 1:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Peppers}}\n'
+                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Mandrill}}\n'
                 else:
-                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Cameraman}}\n'
+                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Jet}}\n'
+
                 finish +='        \\label{tb:table'+algi[0]+'}\n'
                 finish +='    \\end{center}\n'
                 finish +='\\end{table}\n'
