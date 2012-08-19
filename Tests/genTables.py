@@ -143,7 +143,7 @@ if __name__ == "__main__":
                 takeOut(table[0], params[0], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
 
                 finish +='        \\end{tabular}\n'
-                if tn%3 == 0:
+                if tn%2 == 0:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Mandrill}}\n'
                 else:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Jet}}\n'
@@ -160,7 +160,7 @@ if __name__ == "__main__":
                 takeOut(table[0], params[0], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
 
                 finishC +='        \\end{tabular}\n'
-                if tn%3 == 0:
+                if tn%2 == 0:
                     finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Mandrill}}\n'
                 else:
                     finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Jet}}\n'
@@ -198,7 +198,7 @@ if __name__ == "__main__":
                 takeOutKmeans(table[1][0], algi[1], metric[1], statistics, maxs, mins, latexTable)
 
                 finish +='        \\end{tabular}\n'
-                if tn%3 == 0:
+                if tn%2 == 0:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Mandrill}}\n'
                 else:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Jet}}\n'
