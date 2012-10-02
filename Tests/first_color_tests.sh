@@ -2,7 +2,7 @@
 
 rm .log 2> /dev/null
 
-for (( i=1; i<3; i++ ))
+for (( i=1; i<2; i++ ))
 do
     echo "GA LENNA RUN ${i}"
     date

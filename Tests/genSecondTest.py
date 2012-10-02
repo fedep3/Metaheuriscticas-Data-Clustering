@@ -7,8 +7,8 @@ if __name__ == "__main__":
     params = 'gap_i, ROUND(gap_ts, 2), ROUND(gap_cr, 2), ROUND(gap_mr, 2)'
 
     for metric in ['db','turi']:
-        testsfile = open('second_tests_jet_' + metric + '.test', 'w')
-        conn = sqlite3.connect('GAJ.db')
+        testsfile = open('second_tests_color_' + metric + '.test', 'w')
+        conn = sqlite3.connect('GALCOLOR.db')
         first_results = conn.cursor()
         second_results = conn.cursor()
 
@@ -23,7 +23,7 @@ if __name__ == "__main__":
             second_results.execute(query)
             second_result = second_results.fetchone()
 
-            tests += '(("../athena", "../img/jet.tiff", Image, '+str(first_result[1])+'),\n'
+            tests += '(("../athena", "../img/lena.tiff", Image, '+str(first_result[1])+'),\n'
             tests += ' ("Genetic",\n'
             tests += '    GeneticOpt (Improvement 3,\n'
             tests += '                LG ('+str(int(second_result[0]))+', '+str(second_result[0])+', 1),\n'
