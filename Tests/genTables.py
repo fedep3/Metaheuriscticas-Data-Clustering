@@ -107,7 +107,7 @@ def takeOutKmeans(table, nclust, turi_or_db_column, statistics, maxs, mins, late
 
 if __name__ == "__main__":
 
-    algsinfo = [['GAM','5'], ['GAJ','5'], ['KMEANSM','5'], ['KMEANSJ','5']]
+    algsinfo = [['GAM','5'], ['GAJ','5'],['GALCOLOR','5'], ['KMEANSM','5'], ['KMEANSJ','5'], ['KMEANSLCOLOR','5']]
     table = [['ga','genetico'],
              ['kmeans']]
     params = [['$i$ & $ts$ & $cr$ & $mr$ ','ROUND(gap_i,4), ROUND(gap_ts,4), ROUND(gap_cr,4), ROUND(gap_mr,4)',4]]
@@ -134,7 +134,7 @@ if __name__ == "__main__":
             mins = conn.cursor()
             param_values = conn.cursor()
 
-            if tn < 2:
+            if tn < 3:
                 init +='\\begin{table}[h!]\n    \\footnotesize\n    \\begin{center}\n        \\begin{tabular}{'+genCols(params[0][2])+'}\n        \\hline\n'
                 init +='             & {\\bf DB} & {\\bf Turi} & {\\bf E} & {\\bf T} & {\\bf KE} & '+params[0][0]+'\\\\\n'
                 init +='        \\hline\n'
@@ -143,10 +143,12 @@ if __name__ == "__main__":
                 takeOut(table[0], params[0], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 0, 15)
 
                 finish +='        \\end{tabular}\n'
-                if tn%2 == 0:
+                if tn%3 == 0:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Mandrill}}\n'
-                else:
+                elif tn%3 == 1:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Jet}}\n'
+                else:
+                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Lenna color}}\n'
 
                 finish +='        \\label{tb:table'+algi[0]+'}\n'
                 finish +='    \\end{center}\n'
@@ -160,10 +162,12 @@ if __name__ == "__main__":
                 takeOut(table[0], params[0], algi[1], metric[1], statistics, maxs, mins, param_values, latexTable, 15, 20)
 
                 finishC +='        \\end{tabular}\n'
-                if tn%2 == 0:
+                if tn%3 == 0:
                     finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Mandrill}}\n'
-                else:
+                elif tn%3 == 1:
                     finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Jet}}\n'
+                else:
+                    finishC +='        \\caption{Continuaci\\\'on resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} hibridado para {\\bf Lenna color}}\n'
 
                 finishC +='        \\label{tb:tablec'+algi[0]+'}\n'
                 finishC +='    \\end{center}\n'
@@ -198,10 +202,12 @@ if __name__ == "__main__":
                 takeOutKmeans(table[1][0], algi[1], metric[1], statistics, maxs, mins, latexTable)
 
                 finish +='        \\end{tabular}\n'
-                if tn%2 == 0:
+                if tn%3 == 0:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Mandrill}}\n'
-                else:
+                elif tn%3 == 1:
                     finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Jet}}\n'
+                else:
+                    finish +='        \\caption{Resultados de las mejores corridas de \emph{'+algi[0]+metric[0]+'} para {\\bf Lenna} color}\n'
 
                 finish +='        \\label{tb:table'+algi[0]+'}\n'
                 finish +='    \\end{center}\n'
