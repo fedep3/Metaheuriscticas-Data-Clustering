@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Para correrlo asegurate de:
+Be sure to have this:
 sudo aptitude install python-matplotlib python-numpy python-scipy
 """
 
@@ -12,7 +12,7 @@ from scipy import cluster
 from matplotlib import pyplot
 
 def print_help():
-    print "Se debe usar de la siguiente manera:\n./graphic_solution archivo_csv dimension1 dimension2"
+    print "It must be used in the following way:\n./graphic_solution csv_file dimension1 dimension2"
     exit(-1)
 
 if __name__ == "__main__":
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         print_help()
 
     cluster_re = re.compile('Cluster \d+')
-    object_re = re.compile('(Objeto \d+:\t)([a-zA-Z0-9_, \.]+)')
+    object_re = re.compile('(Objet \d+:\t)([a-zA-Z0-9_, \.]+)')
     x_values = []
     y_values = []
     assignment = []

@@ -65,8 +65,8 @@ void Csv::read(const char* inputFile){
 
         if(!first){
             if(J != j){
-                fprintf(stderr, "Error en la línea %d de %s.\n", (I + 1), inputFile);
-                fprintf(stderr, "Cantidad de atributos no concuerda.\n");
+                fprintf(stderr, "Error en the line %d of %s.\n", (I + 1), inputFile);
+                fprintf(stderr, "Quantity of attributes does not coincide.\n");
                 exit(1);
             }
         }
