@@ -341,7 +341,7 @@ void showResults() {
     printf("-- Solution's Turi validity index:          %.5f\n", (*heuristic).finalTuri());
     printf("-- Execution time (in secs):                %1.4f\n", runtime);
 
-    printf("** Generating image...\n");
+    printf("** Generating %s...\n", is_image ? "image ": "resulting file ");
     (*file).write( outputFile.c_str(),
                    (*heuristic).bestIndividual.solution,
                    (*heuristic).bestIndividual.centroid,
