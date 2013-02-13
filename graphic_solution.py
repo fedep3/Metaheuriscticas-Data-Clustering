@@ -27,7 +27,7 @@ if __name__ == "__main__":
         print_help()
 
     cluster_re = re.compile('Cluster \d+')
-    object_re = re.compile('(Objet \d+:\t)([a-zA-Z0-9_, \.]+)')
+    object_re = re.compile('(Object \d+:\t)([a-zA-Z0-9_, \.]+)')
     x_values = []
     y_values = []
     assignment = []
