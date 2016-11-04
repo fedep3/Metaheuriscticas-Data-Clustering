@@ -8,7 +8,7 @@ You can download the book [here](https://www.dropbox.com/s/gvek7s4rbwvraxe/thesi
 
 ##Required packages
 
-    * libmagick++-dev (On Debian)
+    - libmagick++-dev (On Debian)
 
 ##Usage
 
@@ -40,10 +40,11 @@ You can download the book [here](https://www.dropbox.com/s/gvek7s4rbwvraxe/thesi
 
 ###Examples:
 * Kmeans algorithm:
-	./athena --csv -i csv/iris.csv -o output -k 3
-	./athena -i img/lena.png -o output.png -k 32 --improvement-level 10 --generate-colors
+
+	- ./athena --csv -i csv/iris.csv -o output -k 3
+	- ./athena -i img/lena.png -o output.png -k 32 --improvement-level 10 --generate-colors
 
 * Genetic algorithm:
-	./athena --csv -i csv/iris.csv -o output -k 3
-	./athena -i img/lena.png -o output.png -k 32 -I 30 -c 0.9 -m 0.1 -t 1
+	- ./athena --csv -i csv/iris.csv -o output -k 3
+	- ./athena -i img/lena.png -o output.png -k 32 -I 30 -c 0.9 -m 0.1 -t 1
 
