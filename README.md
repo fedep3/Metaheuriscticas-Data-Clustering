@@ -2,7 +2,7 @@
 
 Part of undergrad thesis done by Federico Ponte and Alexander De Sousa. We were both Computer Engineering students from Universidad Simón Bolívar in Venezuela.
 
-This is a clean code for the Genetic Algorithm and Kmeans with a better image I/O library.
+This code does numeric data clustering. This is a clean code for the Genetic Algorithm and Kmeans with a better image I/O library.
 
 You can download the book [here](https://www.dropbox.com/s/gvek7s4rbwvraxe/thesis.pdf?dl=0), it is in Spanish.
 
