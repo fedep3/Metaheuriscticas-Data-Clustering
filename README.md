@@ -8,7 +8,7 @@ You can download the book [here](https://www.dropbox.com/s/gvek7s4rbwvraxe/thesi
 
 ##Required packages
 
-    - libmagick++-dev (On Debian)
+    libmagick++-dev (On Debian)
 
 ##Usage
 
